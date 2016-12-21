@@ -1,0 +1,30 @@
+#displayedCentral {
+  display: block;
+  margin: 10px auto;
+}
+
+#footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.alignedCenter {
+  text-align: center;
+}
+
+.checkNacht {
+  color: #001a3a;
+}
+
+.checkFlieder {
+  color: #8da6d6;
+}
+
+.minfontsize {
+  font-size: 9pt;
+}
+
+.normalfontsize {
+  font-size: 13pt;
+}
