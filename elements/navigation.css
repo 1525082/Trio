@@ -1,0 +1,36 @@
+header1
+{
+    margin:auto;
+    padding-top: 12px;
+    background-color: rgb(0,27,59);
+    
+}
+.navbar .less {
+    margin-bottom: 0px;
+}
+.navbar-header {
+    float: none;
+    min-height: 48px;
+}
+.navbar-default {
+    padding-top:12px;
+    background-color: rgb(0,27,59);
+    border:none;
+    margin-bottom: 0px;
+}
+.logo{
+    text-align: center;
+}
+.right {
+    text-align: right;
+}
+
+body{
+    margin: auto;
+    min-width : 768px;
+    max-width: 1080px;
+    min-height: 768;
+}
+.navbar navbar-default{
+   
+}
