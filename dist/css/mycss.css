@@ -1,16 +1,58 @@
+body {
+  font-size: 13pt;
+  font-family: verdana;
+}
+
 #displayedCentral {
   display: block;
   margin: 10px auto;
 }
 
 #footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100%;
 }
 
+input {
+  width: 300px;
+  height: 40px;
+  padding: 0 15px;
+  margin: 2px 0;
+  border: 3px solid #d3ddf2;
+  border-radius: 4px;
+  color: grey;
+}
+
+input[type = password] {
+  border-color: #4565ad;
+  color: #001a3a;
+}
+
+input[type = submit] {
+  width: 150px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  border: none;
+  background-color: #001a3a;
+  color: white;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.displayedCentral {
+  margin: auto;
+}
+
 .alignedCenter {
   text-align: center;
+}
+
+.checkViolett {
+  color: #4565ad;
 }
 
 .checkNacht {
@@ -21,10 +63,18 @@
   color: #8da6d6;
 }
 
-.minfontsize {
-  font-size: 9pt;
+.checkBlau {
+  color: #005468;
 }
 
-.normalfontsize {
-  font-size: 13pt;
+.checkGrau {
+  color: #d3ddf2;
+}
+
+.checkGruen {
+  color: #76b82d;
+}
+
+.minfontsize {
+  font-size: 9pt;
 }
