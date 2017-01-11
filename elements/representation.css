@@ -1,1 +1,45 @@
-lol
+body {
+  background-color: #f7bed2;
+}
+
+#representation {
+  width: 1005px;
+  margin: auto;
+}
+
+#representationLeftElement {
+  display: inline-block;
+  width: 340px;
+}
+
+#representationMiddleElement {
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 15px;
+  width: 340px;
+}
+
+#representationRightElement {
+  display: inline-block;
+  padding-top: 45px;
+  width: 310px;
+}
+
+.textbubble {
+  display: block;
+  margin: 5px auto;
+}
+
+.placeholderHeader {
+  width: 100%;
+  height: 60px;
+  background-color: #001a3a;
+}
+
+.placeholderFooter {
+  width: 100%;
+  height: 50px;
+  background-color: #001a3a;
+  bottom: 0;
+  position: fixed;
+}

@@ -5,11 +5,11 @@ body {
 
 #displayedCentral {
   display: block;
-  margin: 10px auto;
+  margin: 3.5px auto;
 }
 
 #footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
 }
