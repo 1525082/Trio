@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang = "de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset = UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkonline Schülerversion</title>
+
+  <link rel = "stylesheet" type = "text/css" href = "../dist/css/bootstrap.min.css">
+  <link rel = "stylesheet" type = "text/css" href = "../dist/css/mycss.css">
+
+  <style>
+    input[type = submit] {
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+    
+    #buttonCancel {
+      background-color: #8da6d6;
+      color: #4565ad;
+    }
+
+    .avatarButton {
+      border: 0px;
+      background-color: white;
+    }
+  </style>
+
+</head>
+<body>
+  <header class = "placeholderHeader">
+  </header>
+
+  <main>
+    <img class = "displayedCentralImage icon" id = "avatar" src = "../images/student/superhero-robin-big-active.png" alt = "Your Avatar">
+
+    <form id="changeAvatar">
+
+      <div class = "alignedCenter">
+        <label class = "headline checkNacht" form = "changeAvatar">PROFILBILD &Auml;NDERN</label>
+      </div>
+
+      <div class = "alignedCenter">
+        <input id = "buttonCancel" type="submit" value = "ABBRECHEN">
+        <input type="submit" value = "SPEICHERN">
+      </div>
+
+    </form>
+
+    <div class = "alignedCenter"  id = "div1" >
+    </div>
+
+  </main>
+
+  <footer class = "placeholderFooter">
+    <img id = "displayedCentral" src = "../images/login/footer.png" alt = "CHECK! Logo">
+    <p class = "alignedCenter checkViolett minfontsize">edition 2016 dark night blue 1.0</p>
+  </footer>
+
+  <script src = "../dist/js/jquery-3.1.1.min.js"></script>
+  <script src = "../dist/js/bootstrap.min.js"></script>
+
+  <script>
+    var avatars = ["batman", "catwoman", "gandalf", "greenlantern", "hulk", "kickass", "luke", "robin", "skeletor", "spiderman", "superman", "superwoman"];
+    var amount = avatars.length;
+    var hero;
+    var path;
+
+    function appendImages() {
+      for(i = 0; i < 40; i++) {
+        hero = avatars[i%amount];
+        path = "<button type = 'button' class = 'avatarButton'><img src='../images/student/superhero-"+hero+"-big-active.png'></button>";
+        if((i+1)%8 == 0) {
+          $("#div1").append(path);
+          $("#div1").append("<br>");
+        }
+        else {
+          $("#div1").append(path);
+        }
+      }
+    }
+
+    function findAvatar(searchString) {
+      var result;
+      for(i = 0; i < amount; i++) {
+        if(searchString.indexOf(avatars[i]) != -1) {
+          result = avatars[i];
+        }
+      }
+      return result;
+    }
+  </script>
+
+  <script>
+    $(document).ready(function(){
+      appendImages();
+      $(".avatarButton").click(function(){
+        var code = $(this).html();
+        var choice = findAvatar(code);
+        var value = "../images/student/superhero-"+choice+"-big-active.png";
+        $("#avatar").attr("src", value);
+      });
+    });
+  </script>
+
+</body>
+</html>
