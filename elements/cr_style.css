@@ -1,6 +1,20 @@
+body{
+    margin: auto;
+    min-width : 768px;
+    max-width: 1080px;
+    min-height: 768;
+}
+div.container-fluid{
+    margin:auto;
+    padding-top: 12px;
+    background-color: rgb(0,27,59);
+}
+div.collapse.navbar-collapse{
+    padding-top: 0px;
+}
+
 .show-mobile {
-    width: 137px;
-    height: 42px;
+    
     display: inline-block;
     background-image: url("../../images/logo.png");
     background-repeat: no-repeat;
@@ -9,6 +23,7 @@
     min-height: 60px;
     border: none;
     background-color: #001a3a;
+    margin-bottom: 0px;
 }
 
 .navbar-nav {
