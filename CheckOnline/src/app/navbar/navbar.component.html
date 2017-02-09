@@ -1,3 +1,110 @@
-<p>
-  navbar works!
-</p>
+<nav class="navbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="show-mobile"></span>
+            <button type="button" class="navbar-toggle" (click)="isCollapsed = !isCollapsed">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse" [collapse]="isCollapsed">
+            <ul class="nav navbar-nav col-sm-4">
+                <li dropdown>
+                    <a dropdownToggle id="navCompetences"></a>
+                    <ul dropdownMenu>
+                        <span>
+                            Hier kommen weitere Informationen rein..
+                        </span>
+                        <li *ngFor="let chapter of checkService.chapters"
+                            id="chapter{{chapter._id}}" (click)="onSelect(chapter)">
+                            <a>{{chapter.name}}</a>
+                        </li>
+                    </ul>
+                </li>
+                <li dropdown>
+                    <a dropdownToggle id="navFoerderplan"></a>
+                    <ul dropdownMenu>
+                        <span>
+                            Hier kommen weitere Informationen rein..
+                        </span>
+                    </ul>
+                </li>
+                <li dropdown>
+                    <a dropdownToggle id="navMyCompetences"></a>
+                    <ul dropdownMenu>
+                        <span>
+                            Hier kommen weitere Informationen rein..
+                        </span>
+                    </ul>
+                </li>
+            </ul>
+            <span class="nav navbar-nav col-sm-4 center">
+                <img src="../../images/logo.png"/>
+            </span>
+            <ul class="nav navbar-nav navbar-right col-sm-4">
+                <li dropdown>
+                    <a dropdownToggle id="navLogout"></a>
+                    <ul dropdownMenu>
+                        <span>
+                            Willst du wirklich gehen, Penner?
+                        </span>
+                        <li>
+                            <a (click)="logout()">Ja</a>
+                        </li>
+                        <li>
+                            <a>Nein</a>
+                        </li>
+                    </ul>
+                </li>
+                <li dropdown>
+                    <a dropdownToggle id="navHelp"></a>
+                    <ul dropdownMenu>
+                        <span>
+                            Brauchst du Hilfe?
+                        </span>
+                        <li>
+                            <a>So geht's!</a>
+                        </li>
+                        <li>
+                            <a>Video-Tutorials</a>
+                        </li>
+                        <li>
+                            <a>Häufig gestellte Fragen</a>
+                        </li>
+                        <li>
+                            <a>Kontakt</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    |
+                </li>
+                <li dropdown>
+                    <a dropdownToggle id="navClass"></a>
+                    <ul dropdownMenu>
+                        <span>
+                            Hier kommen weitere Informationen rein..
+                        </span>
+                    </ul>
+                </li>
+                <li dropdown>
+                    <a dropdownToggle id="navSchool"></a>
+                    <ul dropdownMenu>
+                        <span>
+                            Hier kommen weitere Informationen rein..
+                        </span>
+                    </ul>
+                </li>
+                <li dropdown>
+                    <a dropdownToggle id="navAvatar"></a>
+                    <ul dropdownMenu>
+                        <span>
+                            Hier kommen weitere Informationen rein..
+                        </span>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

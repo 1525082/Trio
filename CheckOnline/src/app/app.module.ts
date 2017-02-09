@@ -20,7 +20,6 @@ import {CollapseModule, DropdownModule} from "ng2-bootstrap";
 
 const routes: Routes = [
     {path: '', component: LoginComponent},
-    {path: '**', component: PageNotFoundComponent},
     {path: 'home', component: ChapterComponent},
     {path: 'chapter', component: ChapterComponent},
     {path: 'chapter/:id', component: ChapterComponent},
@@ -29,7 +28,8 @@ const routes: Routes = [
     {path: 'achieved/:chaoterId', component: ChapterComponent}, // TODO: entsprechende Komponente erstellen
     {path: 'changeavatar', component: ChangeAvatarComponent},
     {path: 'changepw', component: ChangePwComponent},
-    {path: 'deleteprofile', component: DeleteProfileComponent}
+    {path: 'deleteprofile', component: DeleteProfileComponent},
+    {path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({

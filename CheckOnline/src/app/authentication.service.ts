@@ -21,10 +21,8 @@ export class AuthenticationService {
                 private http: Http,
                 private checkService: CheckDataService) {
         let token = localStorage.getItem(this.localStorageTokenID);
-        console.log(localStorage.getItem(this.localStorageTokenID));
         if (token != null) {
             this.success(token);
-
             console.log("EINGELOGGT");
         } else {
             // not logged in
@@ -41,23 +39,28 @@ export class AuthenticationService {
             {headers: headers})
             .map((res: Response) => res.json())
             .subscribe(
-                data => this.handleSuccess(data, this, this.checkService),
+                data => this.handleSuccess(data, this),
                 this.handleError
             );
     }
 
-    private handleSuccess(data, obj: AuthenticationService, check: CheckDataService) {
+    public logout() {
+        localStorage.removeItem(this.localStorageTokenID);
+        this.redirect(this.logoutPath);
+    }
+
+    private handleSuccess(data, obj:AuthenticationService) {
         if (data) {
             if (data.token) {
-                if(obj.checkService) {
-                    obj.checkService.preloadData(data.token);
-                }
-                this.success(data.token);
+                obj.success(data.token);
             }
         }
     }
 
     private success(token) {
+        if(this.checkService) {
+            this.checkService.preloadData(token);
+        }
         localStorage.setItem(this.localStorageTokenID, token);
         this.setToken(token);
         this.setIsAuth(true);

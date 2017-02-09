@@ -10,67 +10,26 @@ import {Competence} from "./classes/chapterCompetence.class";
 
 @Injectable()
 export class CheckDataService {
-    private chapters: Chapter[] = [];
-    private avatare: Avatar[] = [];
-    private student: Student = null;
+    public chapters: Chapter[] = [];
+    public avatare: Avatar[] = [];
+    public student: Student = null;
 
     constructor(private http: Http) {
     }
 
     public preloadData(token) {
         if (token) {
-            /*
-             // Verarbeitung...
-             this.getStudent(token).subscribe(
-             stud => this.student = stud,
-             this.handleError);
-             this.getChapters(token).subscribe(
-             chaps => this.chapters = chaps,
-             this.handleError);
-             this.getAvatare(token).subscribe(
-             avas => this.avatare = avas,
-             this.handleError);
-             this.getChapterById(token, 1).subscribe(
-             comps => {
-             console.log("Kompetenzen eines Kapitels:");
-             console.log(comps);
-             },
-             this.handleError);
-             */
-            console.log(token);
-            this.getIllustrationByChapterId(token, 1).subscribe(illus => {
-                var illustrations = illus as ChapterIllustration[];
-                for (var illu of illustrations) {
-                    console.log(illu);
-                }
-            });
-
-            this.getCompetences(token).subscribe(comps => {
-                console.log(comps);
-                for (var comp of comps as Competence[]) {
-                    console.log(comp);
-                }
-            });
-
-            this.getAchievedCompetences(token).subscribe(comps => {
-                console.log(comps);
-                for (var comp of comps as Competence[]) {
-                    console.log(comp);
-                }
-            });
-            this.getCompetencesByChapterId(token, 1).subscribe(comps => {
-                console.log(comps);
-                for (var comp of comps as Competence[]) {
-                    console.log(comp);
-                }
-            });
-
-            this.getAchevedCompetencesByChapterId(token, 1).subscribe(comps => {
-                console.log(comps);
-                for (var comp of comps as Competence[]) {
-                    console.log(comp);
-                }
-            });
+            // Verarbeitung...
+            this.getStudent(token).subscribe(
+                stud => this.student = stud as Student,
+                this.handleError);
+            this.getChapters(token).subscribe(
+                chaps => this.chapters = chaps as Chapter[],
+                this.handleError
+            );
+            this.getAvatare(token).subscribe(
+                avas => this.avatare = avas as Avatar[],
+                this.handleError);
         }
     }
 
@@ -133,9 +92,11 @@ export class CheckDataService {
      * @returns {Observable<R>}
      */
     getStudent(token) {
-        return this.http.get(restUrls.getStudentUrl(),
+        var stud = this.http.get(restUrls.getStudentUrl(),
             this.getAuthenticateHeaders(token))
             .map((res: Response) => res.json());
+        stud.subscribe(stud => this.student = stud as Student);
+        return stud;
     }
 
     /**
@@ -144,9 +105,11 @@ export class CheckDataService {
      * @returns {Observable<R>}
      */
     getChapters(token) {
-        return this.http.get(restUrls.getChaptersUrl(),
+        let chapters = this.http.get(restUrls.getChaptersUrl(),
             this.getAuthenticateHeaders(token))
             .map((res: Response) => res.json());
+        chapters.subscribe(chaps => this.chapters = chaps as Chapter[]);
+        return chapters;
     }
 
     /**
