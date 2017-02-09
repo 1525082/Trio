@@ -33,7 +33,7 @@ export class AuthenticationService {
         }
     }
 
-    private login(username, password) {
+    public login(username, password) {
         var headers = new Headers();
         headers.append("Content-Type", "application/json");
         this.http.put(restUrls.getLoginUrl(),
@@ -41,14 +41,17 @@ export class AuthenticationService {
             {headers: headers})
             .map((res: Response) => res.json())
             .subscribe(
-                this.handleSuccess,
+                data => this.handleSuccess(data, this, this.checkService),
                 this.handleError
             );
     }
 
-    private handleSuccess(data) {
+    private handleSuccess(data, obj: AuthenticationService, check: CheckDataService) {
         if (data) {
             if (data.token) {
+                if(obj.checkService) {
+                    obj.checkService.preloadData(data.token);
+                }
                 this.success(data.token);
             }
         }
@@ -77,7 +80,7 @@ export class AuthenticationService {
         this.token = token;
     }
 
-    private getToken() {
+    public getToken() {
         return this.token;
     }
 
@@ -85,7 +88,7 @@ export class AuthenticationService {
         this.isAuth = isAuth;
     }
 
-    private isAuthenticated() {
+    public isAuthenticated(): boolean {
         return this.isAuth;
     }
 }

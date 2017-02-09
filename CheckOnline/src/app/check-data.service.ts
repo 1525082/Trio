@@ -14,11 +14,10 @@ export class CheckDataService {
     private avatare: Avatar[] = [];
     private student: Student = null;
 
-    constructor(private http: Http,
-                private authService: AuthenticationService) {
+    constructor(private http: Http) {
     }
 
-    public proloadData(token) {
+    public preloadData(token) {
         if (token) {
             /*
              // Verarbeitung...
