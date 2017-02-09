@@ -12,6 +12,7 @@ import { ChapterComponent } from './chapter/chapter.component';
 import { ChangePwComponent } from './change-pw/change-pw.component';
 import { ChangeAvatarComponent } from './change-avatar/change-avatar.component';
 import { EducationalPlanComponent } from './educational-plan/educational-plan.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { EducationalPlanComponent } from './educational-plan/educational-plan.co
     ChapterComponent,
     ChangePwComponent,
     ChangeAvatarComponent,
-    EducationalPlanComponent
+    EducationalPlanComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
