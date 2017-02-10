@@ -1,11 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {Chapter} from "../classes/chapter.class";
-import {Router} from "@angular/router";
-import {CheckDataService} from "../check-data.service";
-import {AuthenticationService} from "../authentication.service";
-import {Student} from "../classes/student.class";
-import {Avatar} from "../classes/avatar.class";
-import {isEmpty} from "rxjs/operator/isEmpty";
+import { Component } from '@angular/core';
+import { Chapter } from "../classes/chapter.class";
+import { Router } from "@angular/router";
+import { CheckDataService } from "../check-data.service";
+import { AuthenticationService } from "../authentication.service";
+import { Student } from "../classes/student.class";
+import { Avatar } from "../classes/avatar.class";
 
 @Component({
     selector: 'app-navbar',
@@ -74,7 +73,7 @@ export class NavbarComponent {
 
     private appendAvatar(style) {
         for (let avatar of this.checkService.avatare) {
-            if (avatar._id = this.checkService.student.avatarId) {
+            if (avatar._id == this.checkService.student.avatarId) {
                 // generate style for navigation items
                 style.appendChild(document.createTextNode(
                     this.getClass("navAvatar",
@@ -120,13 +119,13 @@ export class NavbarComponent {
      * @returns {string}
      */
     getNavCompetenceClass(chapterId: number, color: string, colorHover: string) {
-        return `li#chapter${chapterId} > a {
-            background-color: ${color};
-            color: #FFF;
+        return `li.chapter${chapterId} > a {
+            background-color: ${color} !important;
+            color: #FFF !important;
         }
-        li#chapter${chapterId} > a:hover {
-            background-color: ${colorHover};
-            color: #FFF;
+        li.chapter${chapterId} > a:hover {
+            background-color: ${colorHover} !important;
+            color: #FFF !important;
         }`;
     }
 
@@ -134,18 +133,15 @@ export class NavbarComponent {
         this.authService.logout();
     }
 
-    onSelect(chapter: Chapter) {
-        this.router.navigate(['/chapters', chapter._id]);
+    onClickAllAchievedCompetences() {
+        // TODO: redirect to page for all achieved competences
     }
 
-    onLoad(chapter: Chapter) {
-        console.log(chapter);
-        let style = document.createElement('style');
-        // generate style for navigation items
-        style.appendChild(document.createTextNode(
-            this.getNavCompetenceClass(chapter._id,
-                chapter.strongcolor,
-                chapter.weakcolor)));
-        document.getElementsByTagName('head')[0].appendChild(style);
+    onClickAchievedCompetences(chapter: Chapter) {
+        this.router.navigate(['/achieved', chapter._id]);
+    }
+
+    onClickChapterCompetences(chapter: Chapter) {
+        this.router.navigate(['/chapter', chapter._id]);
     }
 }

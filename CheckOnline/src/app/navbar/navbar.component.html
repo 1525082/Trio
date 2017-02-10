@@ -17,7 +17,7 @@
                             Hier kommen weitere Informationen rein..
                         </span>
                         <li *ngFor="let chapter of checkService.chapters"
-                            id="chapter{{chapter._id}}" (click)="onSelect(chapter)">
+                            class="chapter{{chapter._id}}" (click)="onClickChapterCompetences(chapter)">
                             <a>{{chapter.name}}</a>
                         </li>
                     </ul>
@@ -36,6 +36,13 @@
                         <span>
                             Hier kommen weitere Informationen rein..
                         </span>
+                        <li>
+                            <a (click)="onClickAllAchievedCompetences()">ALLE KOMPETENZEN</a>
+                        </li>
+                        <li *ngFor="let chapter of checkService.chapters"
+                            class="chapter{{chapter._id}}" (click)="onClickAchievedCompetences(chapter)">
+                            <a>{{chapter.name}}</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -50,7 +57,7 @@
                             Willst du wirklich gehen, Penner?
                         </span>
                         <li>
-                            <a (click)="logout()">Ja</a>
+                            <a (click)="authService.logout()">Ja</a>
                         </li>
                         <li>
                             <a>Nein</a>

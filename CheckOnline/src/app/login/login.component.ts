@@ -16,7 +16,7 @@ export class LoginComponent {
     }
 
     login() {
-        // TODO: Anpassen fÃ¼r modalen Dialog
+        // TODO: Anpassen für modalen Dialog
         if (!isNullOrUndefined(this.username) && !isNullOrUndefined(this.password)) {
             this.authService.login(this.username, this.password);
 

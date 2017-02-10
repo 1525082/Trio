@@ -1,18 +1,21 @@
-import {Injectable} from '@angular/core';
-import {Http, Headers, Response} from "@angular/http";
-import {restUrls} from "./classes/restUrls.class";
-import {Chapter} from "./classes/chapter.class";
-import {AuthenticationService} from "./authentication.service";
-import {Avatar} from "./classes/avatar.class";
-import {Student} from "./classes/student.class";
-import {ChapterIllustration} from "./classes/chapterIllustration.class";
-import {Competence} from "./classes/chapterCompetence.class";
+import { Injectable } from '@angular/core';
+import { Http, Headers, Response } from "@angular/http";
+import { restUrls } from "./classes/restUrls.class";
+import { Chapter } from "./classes/chapter.class";
+import { AuthenticationService } from "./authentication.service";
+import { Avatar } from "./classes/avatar.class";
+import { Student } from "./classes/student.class";
+import { ChapterIllustration } from "./classes/chapterIllustration.class";
+import { Competence } from "./classes/chapterCompetence.class";
+import { ChapterData } from './classes/chapterData.class'
+import { forEachComment } from 'tslint'
 
 @Injectable()
 export class CheckDataService {
     public chapters: Chapter[] = [];
     public avatare: Avatar[] = [];
     public student: Student = null;
+    public competences: Competence[] = [];
 
     constructor(private http: Http) {
     }
@@ -25,12 +28,36 @@ export class CheckDataService {
                 this.handleError);
             this.getChapters(token).subscribe(
                 chaps => this.chapters = chaps as Chapter[],
-                this.handleError
-            );
+                this.handleError);
             this.getAvatare(token).subscribe(
                 avas => this.avatare = avas as Avatar[],
                 this.handleError);
+            this.getCompetences(token).subscribe(
+                comps => {
+                    this.competences = comps as Competence[];
+                    // TODO: sort competences on chapters
+                    /*
+                     * this should happen before the first chapter will be
+                     * viewed. So the user don't have to wait again.
+                     * 
+                     */ 
+                },
+                this.handleError);
         }
+    }
+
+    /**
+     * Searchs the chapter of the given id in the stored data.
+     * @returns {Headers}
+     */
+    public getChapter(id: number) {
+        let chapter: Chapter = null;
+        for (chapter of this.chapters) {
+            if (chapter._id == id) {
+                break;
+            }
+        }
+        return chapter;
     }
 
     /**
@@ -48,7 +75,7 @@ export class CheckDataService {
      * @returns {{headers: Headers}}
      */
     private getStandardHeaders() {
-        return {headers: this.getStandardHeadersObj()};
+        return { headers: this.getStandardHeadersObj() };
     }
 
     /**
@@ -59,7 +86,7 @@ export class CheckDataService {
     private getAuthenticateHeaders(token) {
         var authHeaders = this.getStandardHeadersObj();
         authHeaders.append("Authorization", token);
-        return {headers: authHeaders};
+        return { headers: authHeaders };
     }
 
     /**
@@ -70,7 +97,7 @@ export class CheckDataService {
      */
     public authenticate(username, password) {
         return this.http.put(restUrls.getLoginUrl(),
-            JSON.stringify({username, password}),
+            JSON.stringify({ username, password }),
             this.getStandardHeaders())
             .map((res: Response) => res.json());
     }
@@ -175,7 +202,7 @@ export class CheckDataService {
      * @param id selected chapter
      * @returns {Observable<R>}
      */
-    getAchevedCompetencesByChapterId(token, id: number) {
+    getAchievedCompetencesByChapterId(token, id: number) {
         return this.getStudentCompetences(token, id, true);
     }
 
@@ -206,6 +233,7 @@ export class CheckDataService {
     }
 
     private handleError(error: any) {
+        console.log(JSON.stringify(error));
         console.error("FEHLER:", error);
     }
 }

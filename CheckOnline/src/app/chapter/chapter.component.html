@@ -1,2 +1,26 @@
 <app-navbar></app-navbar>
+<main class="pre-scrollable">
+    <div class="container-fluid" *ngFor="let compGroup of construction; let i = index">
+        <div *ngIf="i == 0">
+            <img src="{{flagUrl}}" alt="Chapter Flag">
+        </div>
+        <div class="col-sm-4 leftCol">
+            <img src="../..{{compGroup.illustration.illustrationLeft}}" alt="Illustration Left">
+        </div>
+        <div class="col-sm-4">
+            <div *ngFor="let comp of compGroup.competences; let j = index" style="background-image: url('../../images/contentTextBubble.png'); width:369px; height:120px;">
+                <div style="width: 341px; height: 120px;">
+                    {{comp.studentText}}<br/>
+                    {{comp.teacherText}}<br/>
+                    {{comp.fromDate}}<br/>
+                    <img src="{{getImageUrl(comp.checked)}}">{{comp.checked}}
+                    <!-- TODO: Modaler Dialog fehlt noch -->
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 rightCol">
+            <img src="../..{{compGroup.illustration.illustrationRight}}" alt="Illustration Right">
+        </div>
+    </div>
+</main>
 <app-footer></app-footer>
