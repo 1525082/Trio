@@ -15,8 +15,8 @@ export class NavbarComponent {
     public isCollapsed: boolean = true;
     private token: string = null;
 
-    constructor(private authService: AuthenticationService,
-                public checkService: CheckDataService,
+    constructor(protected authService: AuthenticationService,
+                protected checkService: CheckDataService,
                 private router: Router) {
         this.token = this.authService.getToken();
         this.loadData();
@@ -129,12 +129,13 @@ export class NavbarComponent {
         }`;
     }
 
+    /*
     logout() {
         this.authService.logout();
     }
-
+    
     onClickAllAchievedCompetences() {
-        // TODO: redirect to page for all achieved competences
+        this.router.navigate(['/achieved', 0]);
     }
 
     onClickAchievedCompetences(chapter: Chapter) {
@@ -144,4 +145,5 @@ export class NavbarComponent {
     onClickChapterCompetences(chapter: Chapter) {
         this.router.navigate(['/chapter', chapter._id]);
     }
+    */
 }

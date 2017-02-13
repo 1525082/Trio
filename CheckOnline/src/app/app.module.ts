@@ -24,8 +24,8 @@ const routes: Routes = [
     { path: 'chapter', component: ChapterComponent },
     { path: 'chapter/:id', component: ChapterComponent },
     { path: 'educationalPlan/:id', component: EducationalPlanComponent },
-    { path: 'achieved', component: ChapterComponent }, // TODO: entsprechende Komponente erstellen
-    { path: 'achieved/:chapterId', component: ChapterComponent }, // TODO: entsprechende Komponente erstellen
+    { path: 'achieved', component: ChapterComponent }, // TODO: entsprechende Komponenten erstellen
+    { path: 'achieved/:chapterId', component: ChapterComponent },
     { path: 'changeavatar', component: ChangeAvatarComponent },
     { path: 'changepw', component: ChangePwComponent },
     { path: 'deleteprofile', component: DeleteProfileComponent },

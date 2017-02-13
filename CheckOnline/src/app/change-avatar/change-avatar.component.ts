@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { CheckDataService } from '../check-data.service'
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-change-avatar',
-  templateUrl: './change-avatar.component.html',
-  styleUrls: ['./change-avatar.component.css']
+    selector: 'app-change-avatar',
+    templateUrl: './change-avatar.component.html',
+    styleUrls: ['./change-avatar.component.css']
 })
-export class ChangeAvatarComponent implements OnInit {
+export class ChangeAvatarComponent {
 
-  constructor() { }
+    constructor(protected checkService: CheckDataService) {
 
-  ngOnInit() {
-  }
-
+    }
 }

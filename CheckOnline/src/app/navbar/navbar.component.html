@@ -17,7 +17,7 @@
                             Hier kommen weitere Informationen rein..
                         </span>
                         <li *ngFor="let chapter of checkService.chapters"
-                            class="chapter{{chapter._id}}" (click)="onClickChapterCompetences(chapter)">
+                            class="chapter{{chapter._id}}" routerLink="/chapter/{{chapter._id}}">
                             <a>{{chapter.name}}</a>
                         </li>
                     </ul>
@@ -36,11 +36,11 @@
                         <span>
                             Hier kommen weitere Informationen rein..
                         </span>
-                        <li>
-                            <a (click)="onClickAllAchievedCompetences()">ALLE KOMPETENZEN</a>
+                        <li routerLink="/achieved/0">
+                            <a>ALLE KOMPETENZEN</a>
                         </li>
                         <li *ngFor="let chapter of checkService.chapters"
-                            class="chapter{{chapter._id}}" (click)="onClickAchievedCompetences(chapter)">
+                            class="chapter{{chapter._id}}" routerLink="/achieved/{{chapter._id}}">
                             <a>{{chapter.name}}</a>
                         </li>
                     </ul>
@@ -50,11 +50,12 @@
                 <img src="../../images/logo.png"/>
             </span>
             <ul class="nav navbar-nav navbar-right col-sm-4">
+            <!-- TODO: reihenfolge muss geändert werden. Anordnung spiegelverkehrt durch float: right. -->
                 <li dropdown>
                     <a dropdownToggle id="navLogout"></a>
                     <ul dropdownMenu>
                         <span>
-                            Willst du wirklich gehen, Penner?
+                            MÖCHTEST DU CHECK! VERLASSEN?
                         </span>
                         <li>
                             <a (click)="authService.logout()">Ja</a>
@@ -68,19 +69,19 @@
                     <a dropdownToggle id="navHelp"></a>
                     <ul dropdownMenu>
                         <span>
-                            Brauchst du Hilfe?
+                            BRAUCHST DU HILFE?
                         </span>
                         <li>
-                            <a>So geht's!</a>
+                            <a>SO GEHT'S!</a>
                         </li>
                         <li>
-                            <a>Video-Tutorials</a>
+                            <a>VIDEO-TUTORIALS</a>
                         </li>
                         <li>
-                            <a>HÃ¤ufig gestellte Fragen</a>
+                            <a>HÄUFIG GESTELLTE FRAGEN</a>
                         </li>
                         <li>
-                            <a>Kontakt</a>
+                            <a>KONTAKT</a>
                         </li>
                     </ul>
                 </li>
@@ -109,6 +110,15 @@
                         <span>
                             Hier kommen weitere Informationen rein..
                         </span>
+                        <li routerLink="/changeavatar">
+                            <a>MEIN PROFILBILD &Auml;NDERN</a>
+                        </li>
+                        <li routerLink="/changepw">
+                            <a>MEIN PASSWORT &Auml;NDERN</a>
+                        </li>
+                        <li routerLink="/deleteprofile">
+                            <a>MEIN PROFIL L&Ouml;SCHEN</a>
+                        </li>
                     </ul>
                 </li>
             </ul>

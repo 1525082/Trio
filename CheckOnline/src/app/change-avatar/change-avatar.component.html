@@ -1,3 +1,20 @@
-<p>
-  change-avatar works!
-</p>
+<app-navbar></app-navbar>
+<main>
+<img class="displayedCentralImage icon" id="avatar"
+	src="../../images/student/superhero-robin-big-active.png"
+	alt="Your Avatar">
+<form id="changeAvatar">
+	<div class="alignedCenter">
+		<label class="headline checkNacht">PROFILBILD
+			&Auml;NDERN</label>
+	</div>
+	<div class="alignedCenter">
+		<input id="buttonCancel" type="submit" value="ABBRECHEN"> <input
+			type="submit" value="SPEICHERN">
+	</div>
+</form>
+<div class="avatarListCentered">
+    <button *ngFor="let avatar of checkService.avatare" type="button" class="avatarButton"><img src="../..{{avatar.avatarBigUrl}}"></button>
+</div>
+</main>
+<app-footer></app-footer>
