@@ -8,6 +8,7 @@ import { Student } from "./classes/student.class";
 import { ChapterIllustration } from "./classes/chapterIllustration.class";
 import { Competence } from "./classes/chapterCompetence.class";
 import { ChapterData } from './classes/chapterData.class'
+import { EducationalPlan, EducationalPlanContent } from './classes/educationalPlan.class'
 import { forEachComment } from 'tslint'
 
 @Injectable()
@@ -16,6 +17,7 @@ export class CheckDataService {
     public avatare: Avatar[] = [];
     public student: Student = null;
     public competences: Competence[] = [];
+    public educationalPlans: EducationalPlan[] = [];
 
     constructor(private http: Http) {
     }
@@ -40,9 +42,18 @@ export class CheckDataService {
                      * this should happen before the first chapter will be
                      * viewed. So the user don't have to wait again.
                      * 
-                     */ 
+                     */
                 },
                 this.handleError);
+            this.getEducationalPlans(token).subscribe(
+                plans => this.educationalPlans = plans as EducationalPlan[],
+                this.handleError);
+            for (let eduPlan of this.educationalPlans) {
+                this.getEducationalPlanContentById(token, eduPlan._id).subscribe(
+                    content => eduPlan.educationalContent = content as EducationalPlanContent,
+                    this.handleError);
+            }
+            
         }
     }
 
@@ -220,18 +231,35 @@ export class CheckDataService {
             .map((res: Response) => res.json());
     }
 
-    getEducationalPlan(token) {
+    /**
+     * Gives all educational plans.
+     * @param token authentication token of user
+     * @returns {Observable<R>}
+     */
+    getEducationalPlans(token) {
         return this.http.get(restUrls.getEducationalPlanUrl(),
             this.getAuthenticateHeaders(token))
             .map((res: Response) => res.json());
     }
 
-    getEducationalPlanById(token, id: number) {
+    /**
+     * Gives the notes to the competences of a educational plan. Includes 
+     * not the competences. Only the numbers of the competences.
+     * @param token authentication token of user
+     * @param id of the educational plan
+     * @returns {Observable<R>}
+     */
+    getEducationalPlanContentById(token, id: number) {
         return this.http.get(restUrls.getEducationalPlanUrlById(id),
             this.getAuthenticateHeaders(token))
             .map((res: Response) => res.json());
     }
 
+    /**
+     * Prints the error parsed in json and as error message in the
+     * console.
+     * @param error the error object, maybe the response error of the server
+     */
     private handleError(error: any) {
         console.log(JSON.stringify(error));
         console.error("FEHLER:", error);

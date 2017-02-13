@@ -1,3 +1,23 @@
-<p>
-  educational-plan works!
-</p>
+<app-navbar></app-navbar>
+<main style="background-color:#8da6d6;">
+    <div class="container-fluid">
+        <div class="col-sm-4">
+            <!-- TODO: Flagge wurde ausgelassen (dennoch aber in Styleguide) -->
+        </div>
+        <div class="col-sm-4">
+            <div *ngFor="let comp of checkService.competences" style="background-image: url('../../images/contentTextBubble.png'); width:369px; height:120px;">
+                <div style="width: 341px; height: 120px;">
+                    {{comp.studentText}}<br/>
+                    {{comp.teacherText}}<br/>
+                    {{comp.fromDate}}<br/>
+                    <img src="{{getImageUrl(comp.checked)}}">{{comp.checked}}
+                    <!-- TODO: Modaler Dialog fehlt noch -->
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+        </div>
+    </div>
+</main>
+<app-footer></app-footer>
+<app-footer></app-footer>

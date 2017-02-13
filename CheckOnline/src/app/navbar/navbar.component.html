@@ -28,6 +28,11 @@
                         <span>
                             Hier kommen weitere Informationen rein..
                         </span>
+                        <!-- TODO: Standard CSS-Klasse erstellen -->
+                        <li *ngFor="let eduPlan of checkService.educationalPlans"
+                            class="" routerLink="/educationalPlan/{{eduPlan._id}}">
+                            <a>{{eduPlan.name}}</a>
+                        </li>
                     </ul>
                 </li>
                 <li dropdown>
