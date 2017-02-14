@@ -8,7 +8,7 @@ import { Student } from "./classes/student.class";
 import { ChapterIllustration } from "./classes/chapterIllustration.class";
 import { Competence } from "./classes/chapterCompetence.class";
 import { ChapterData } from './classes/chapterData.class'
-import { EducationalPlan, EducationalPlanContent } from './classes/educationalPlan.class'
+import { EducationalPlan, EducationalPlanContent, EducationalCompetence } from './classes/educationalPlan.class'
 import { forEachComment } from 'tslint'
 
 @Injectable()
@@ -18,6 +18,7 @@ export class CheckDataService {
     public student: Student = null;
     public competences: Competence[] = [];
     public educationalPlans: EducationalPlan[] = [];
+    public educationalCompetences: EducationalCompetence[] = [];
 
     constructor(private http: Http) {
     }
@@ -46,14 +47,62 @@ export class CheckDataService {
                 },
                 this.handleError);
             this.getEducationalPlans(token).subscribe(
-                plans => this.educationalPlans = plans as EducationalPlan[],
+                plans => {
+                    this.educationalPlans = plans as EducationalPlan[];
+                    for (let eduPlan of this.educationalPlans) {
+                        // TODO: ohne [0] wird der content als Array hinzugefügt. liegt wohl am JSON RESPONSE
+                        this.getEducationalPlanContentById(token, eduPlan._id).subscribe(
+                            content => eduPlan.educationalContent = content[0] as EducationalPlanContent,
+                            this.handleError,
+                            () => {
+                                this.filter(eduPlan.educationalContent);
+                            }
+                        );
+                    }
+                },
                 this.handleError);
-            for (let eduPlan of this.educationalPlans) {
-                this.getEducationalPlanContentById(token, eduPlan._id).subscribe(
-                    content => eduPlan.educationalContent = content as EducationalPlanContent,
-                    this.handleError);
+        }
+    }
+    
+    public selectPlan(id: number) {
+        let plan: EducationalPlan = this.educationalPlans.find(plan => plan._id == id);
+        if(plan) {
+            this.educationalCompetences = plan.educationalContent.competencesForDisplay;
+        } else {
+            console.error("KEIN ENTSPRECHENDER PLAN VERFUEGBAR");
+        }
+    }
+    
+    /**
+     * Iterates through the notes of an educational plan and finds the competences to
+     * the notes.
+     * @param educationalContent plan content to finde compentences to notes
+     */
+    private filter(educationalContent: EducationalPlanContent) {
+        if (!educationalContent || !this.competences) {
+            console.log(educationalContent);
+            console.log(this.competences);
+        }
+
+        let counter = 0;
+        let arr = new Array<EducationalCompetence>(educationalContent.competences.length);
+
+        for (let compNote of educationalContent.competences) {
+            let comp = this.competences.find(comp => comp.id == compNote.competenceId);
+            if (comp) {
+                arr[counter] = EducationalCompetence.create(comp, compNote);
+                counter++;
             }
-            
+        }
+
+        // it could be that a note has no competence
+        if (counter < arr.length) {
+            educationalContent.competencesForDisplay = new Array<EducationalCompetence>(counter);
+            for (let i = 0; i < counter; i++) {
+                educationalContent.competencesForDisplay[i] = EducationalCompetence.clone(arr[i]);
+            }
+        } else {
+            educationalContent.competencesForDisplay = arr;
         }
     }
 

@@ -25,35 +25,29 @@ export class NavbarComponent {
     loadData() {
         let style = document.createElement('style');
         if (!this.checkService.student) {
-            console.log("If -> Student");
             this.checkService.getStudent(this.token).subscribe(stud => {
                 this.checkService.student = stud as Student;
                 this.appendSchoolAndClassToNavbar(style);
             });
         } else {
-            console.log("ELSE -> Student");
             this.appendSchoolAndClassToNavbar(style);
         }
 
         if (!this.checkService.avatare || this.checkService.avatare.length == 0) {
-            console.log("IF -> Avatar");
             this.checkService.getAvatare(this.token).subscribe(avatare => {
                 this.checkService.avatare = avatare as Avatar[];
                 this.appendAvatar(style);
             });
         } else {
-            console.log("ELSE -> Avatar");
             this.appendAvatar(style);
         }
 
         if (!this.checkService.chapters || this.checkService.chapters.length == 0) {
-            console.log("IF -> Chapter");
             this.checkService.getChapters(this.token).subscribe(chapters => {
                 this.checkService.chapters = chapters as Chapter[];
                 this.appendColorsToChapters(style);
             });
         } else {
-            console.log("ELSE -> Chapter");
             this.appendColorsToChapters(style);
         }
 
