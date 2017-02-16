@@ -4,7 +4,7 @@ import {Chapter} from '../classes/chapter.class'
 import {Competence} from '../classes/chapterCompetence.class'
 import {ChapterIllustration} from '../classes/chapterIllustration.class'
 import {ChapterData} from '../classes/chapterData.class'
-import {Component, DoCheck, OnDestroy} from '@angular/core';
+import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router'
 
 @Component({
@@ -12,15 +12,12 @@ import {ActivatedRoute} from '@angular/router'
     templateUrl: './chapter.component.html',
     styleUrls: ['./chapter.component.css']
 })
-export class ChapterComponent implements DoCheck, OnDestroy {
+export class ChapterComponent implements OnInit, DoCheck, OnDestroy {
     private chapter: Chapter;
     private selectedID: number;
     private chapterIllus: ChapterIllustration[] = [];
     private chapterComps: Competence[] = [];
-    private chapterFolderUrl: string;
     protected construction: ChapterData[] = null;
-    protected flagUrl = "";
-
 
     constructor(private route: ActivatedRoute,
                 private checkService: CheckDataService,
@@ -29,49 +26,64 @@ export class ChapterComponent implements DoCheck, OnDestroy {
 
     private isAchieved = false;
 
+    private body = null;
+
+    ngOnInit() {
+        this.body = document.getElementsByTagName("body").item(0);
+    }
+
     ngDoCheck() {
-        let id = undefined;
-        if (this.route.snapshot.params['id']) {
-            id = +this.route.snapshot.params['id'];
-            this.isAchieved = false;
-        } else if (this.route.snapshot.params['chapterId']) {
-            id = +this.route.snapshot.params['chapterId'];
-            console.log(this.route.snapshot.params['chapterId']);
-            this.isAchieved = true;
-        }
+        let id = this.resolveId();
         if (id != undefined && this.selectedID != id) {
             this.selectedID = id;
-            this.setColor();
             if (id == 0) {
-                this.checkService.getAchievedCompetences(this.authService.getToken()).subscribe(
-                    comps => this.chapterComps = comps as Competence[],
-                    error => console.error("ERROR!: ", error),
-                    () => {
-                        this.chapterIllus = new Array<ChapterIllustration>(this.chapterComps.length);
-                        for(let i = 0; i < this.chapterIllus.length; i++) {
-                            this.chapterIllus[i] = new ChapterIllustration(0,
-                                "/images/illustrations/illustrationLeft.png",
-                                "/images/illustrations/illustrationRight.png");
-                        }
-                        this.updateChapterData();
-                    });
+                this.loadAllAchievedCompetences();
             } else {
-                this.loadData(id);
+                this.loadAchievedOrNoneAchievedChapter(id);
             }
         }
     }
 
-    private loadData(id: number) {
-        let token = this.authService.getToken();
+    private resolveId(): number {
+        if (this.route.snapshot.params['id']) {
+            this.isAchieved = false;
+            return +this.route.snapshot.params['id'];
+        } else if (this.route.snapshot.params['chapterId']) {
+            this.isAchieved = true;
+            return +this.route.snapshot.params['chapterId'];
+        } else {
+            console.log("ELSE -> /CHAPTER -> id = undefined");
+            return undefined;
+        }
+    }
+
+    private loadAllAchievedCompetences() {
         /*
-         ILLUSTRATIONEN FÜR ALLE KOMPETENZEN NICHT AUSREICHEND!!!
+            ILLUSTRATIONEN FÜR ALLE KOMPETENZEN NICHT AUSREICHEND!!!
          */
+        this.checkService.getAchievedCompetences(this.authService.getToken()).subscribe(
+            comps => this.chapterComps = comps as Competence[],
+            error => console.error("ERROR!: ", error),
+            () => {
+                this.setStyle("#D3DDF2");
+                this.chapterIllus = new Array<ChapterIllustration>(this.chapterComps.length);
+                for(let i = 0; i < this.chapterIllus.length; i++) {
+                    this.chapterIllus[i] = new ChapterIllustration(0,
+                        "/images/illustrations/illustrationLeft.png",
+                        "/images/illustrations/illustrationRight.png");
+                }
+                this.updateChapterData();
+            });
+    }
+
+    private loadAchievedOrNoneAchievedChapter(id: number) {
+        let token = this.authService.getToken();
         // TODO: verschachtelung entfernen
         this.checkService.getChapterById(token, id).subscribe(
             chap => this.chapter = chap as Chapter,
             error => console.error("ERROR!: ", error),
             () => {
-                //this.changeView();
+                this.setStyle(this.chapter.weakcolor);
                 this.checkService.getIllustrationByChapterId(token, id).subscribe(
                     illus => this.chapterIllus = illus as ChapterIllustration[],
                     error => console.error("ERROR!: ", error),
@@ -92,22 +104,9 @@ export class ChapterComponent implements DoCheck, OnDestroy {
             });
     }
 
-    protected color: string = "#FFFFFF";
-
-    public setColor() {
-        if(this.selectedID == 0) {
-            this.color = "#FF00FF";
-        } else {
-            this.color = this.chapter.weakcolor;
-        }
-    }
-
-    private changeView() {
-        let main = document.getElementsByClassName("main").item(0);
-        //let main = document.getElementsByTagName("body").item(0);
-        if (main) {
-            main.setAttribute("style", "backgroud-color: " + this.chapter.weakcolor);
-            //main.style.backgroundColor = this.chapter.weakcolor;
+    public setStyle(color: string) {
+        if (this.body) {
+            this.body.setAttribute("style", "background-color: " + color);
         }
     }
 
