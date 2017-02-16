@@ -17,7 +17,16 @@ export class CheckDataService {
     public avatare: Avatar[] = [];
     public student: Student = null;
     public competences: Competence[] = [];
+    /**
+     * Datenstruktur für gesamten Förderplan
+     */
     public educationalPlans: EducationalPlan[] = [];
+    
+    /*
+     * Variablen die als Template dienen
+     */
+    public tpl_educationalComps: EducationalCompetence[] = [];
+    public tpl_chapterComps: Competence[] = [];
     public educationalCompetences: EducationalCompetence[] = [];
 
     constructor(private http: Http) {

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
@@ -16,7 +16,9 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { Routes, RouterModule } from "@angular/router";
 import { AuthenticationService } from "./authentication.service";
 import { CheckDataService } from "./check-data.service";
-import { CollapseModule, DropdownModule } from "ng2-bootstrap";
+import {CollapseModule, DropdownModule, ModalModule, TooltipModule, TooltipConfig} from "ng2-bootstrap";
+import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
+import {ModalMessageService} from "./modal-message.service";
 
 const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -32,6 +34,10 @@ const routes: Routes = [
     { path: '**', component: PageNotFoundComponent }
 ];
 
+export function getAlertConfig(): TooltipConfig {
+    return Object.assign(new TooltipConfig(), {placement: 'right', container: 'body'});
+}
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -43,7 +49,8 @@ const routes: Routes = [
         ChangePwComponent,
         ChangeAvatarComponent,
         EducationalPlanComponent,
-        PageNotFoundComponent
+        PageNotFoundComponent,
+        ModalDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -51,10 +58,15 @@ const routes: Routes = [
         HttpModule,
         RouterModule.forRoot(routes),
         CollapseModule.forRoot(),
-        DropdownModule.forRoot()
+        DropdownModule.forRoot(),
+        ModalModule.forRoot(),
+        TooltipModule.forRoot()
     ],
-    providers: [AuthenticationService, CheckDataService],
+    providers: [AuthenticationService, CheckDataService, ModalMessageService,
+        {provide:TooltipConfig, useFactory: getAlertConfig}],
     bootstrap: [AppComponent]
 })
 export class AppModule {
+    constructor() {
+    }
 }

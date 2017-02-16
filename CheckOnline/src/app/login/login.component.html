@@ -1,32 +1,34 @@
 <main>
-  <img id="displayedCentral" src="../../images/login/header.png" alt="CHECK! Login header">
-  <div class="alignedCenter">
-    <div>
-      <div>
-        <input type="text" name="username" [(ngModel)]="username" placeholder="BENUTZERNAME">
-      </div>
-      <div>
-        <input type="password" name="password" [(ngModel)]="password" placeholder="PASSWORT">
-      </div>
-      <div>
-        <input type="submit" (click)="login()" value="LOS!">
-      </div>
-      <!-- TODO: Modalen Dialog bauen... -->
-      {{message}}
-    </div>
+    <img id="displayedCentral" src="../../images/login/header.png" alt="CHECK! Login header">
+    <div class="alignedCenter">
+        <div>
+            <div>
+                <input type="text" name="username" [(ngModel)]="username" placeholder="BENUTZERNAME"
+                       (click)="hideTooltip()">
+            </div>
+            <div>
+                <input type="password" name="password" [(ngModel)]="password" placeholder="PASSWORT"
+                       [tooltip]="popTemplate" #pwtooltip="bs-tooltip" triggers="" (click)="hideTooltip()">
+                <!-- TODO: Tooltip mit CSS anpassen -->
+                <template #popTemplate style="max-width:300px;">{{message}}</template>
+            </div>
+            <div>
+                <input type="submit" (click)="login()" value="LOS!">
+            </div>
+        </div>
+        <p class="checkFlieder">Sie möchten mit CHECK! arbeiten?<br>
+            <a href="">Jetzt registrieren</a>
+        </p>
 
-    <p class="checkFlieder">Sie möchten mit CHECK! arbeiten?<br>
-      <a href="">Jetzt registrieren</a>
-    </p>
-  </div>
+    </div>
 </main>
 <footer>
-  <div id="footer">
-    <img id="displayedCentral" src="../../images/login/footer.png" alt="CHECK! Login footer">
-    <p class="alignedCenter checkNacht minfontsize">edition 2016 dark night blue 1.0</p>
-    <p class="alignedCenter checkFlieder minfontsize">CHECK! und CHECK! Lehrerzimmer sind Produkte des Raup&amp;Ritter
-      Verlag und der OnWerk Softwareagentur Mannheim
-      <br> www.raupundritter.com - Kontakt - Impressum - Preise - Hilfe
-    </p>
-  </div>
+    <div id="footer">
+        <img id="displayedCentral" src="../../images/login/footer.png" alt="CHECK! Login footer">
+        <p class="alignedCenter checkNacht minfontsize">edition 2016 dark night blue 1.0</p>
+        <p class="alignedCenter checkFlieder minfontsize">CHECK! und CHECK! Lehrerzimmer sind Produkte des Raup&amp;Ritter
+            Verlag und der OnWerk Softwareagentur Mannheim
+            <br> www.raupundritter.com - Kontakt - Impressum - Preise - Hilfe
+        </p>
+    </div>
 </footer>

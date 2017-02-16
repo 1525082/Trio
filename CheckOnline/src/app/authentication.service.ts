@@ -9,10 +9,6 @@ export class AuthenticationService {
     private isAuth: boolean = false;
     private token: string;
 
-    // TODO: wahrscheinlich für modalen Dialog benötigte Felder
-    private isInvalid: boolean = false;
-    private isError: boolean = false;
-
     private localStorageTokenID = "token";
     private loginPath = "/home";
     private logoutPath = "";
@@ -32,16 +28,17 @@ export class AuthenticationService {
     }
 
     public login(username, password) {
-        var headers = new Headers();
+        let headers = new Headers();
         headers.append("Content-Type", "application/json");
-        this.http.put(restUrls.getLoginUrl(),
+        let observable = this.http.put(restUrls.getLoginUrl(),
             JSON.stringify({username, password}),
             {headers: headers})
-            .map((res: Response) => res.json())
-            .subscribe(
-                data => this.handleSuccess(data, this),
-                this.handleError
-            );
+            .map((res: Response) => res.json());
+        observable.subscribe(
+            data => this.handleSuccess(data, this),
+            this.handleError
+        );
+        return observable;
     }
 
     public logout() {
@@ -49,7 +46,7 @@ export class AuthenticationService {
         this.redirect(this.logoutPath);
     }
 
-    private handleSuccess(data, obj:AuthenticationService) {
+    private handleSuccess(data, obj: AuthenticationService) {
         if (data) {
             if (data.token) {
                 obj.success(data.token);
@@ -58,7 +55,7 @@ export class AuthenticationService {
     }
 
     private success(token) {
-        if(this.checkService) {
+        if (this.checkService) {
             this.checkService.preloadData(token);
         }
         localStorage.setItem(this.localStorageTokenID, token);
@@ -68,7 +65,7 @@ export class AuthenticationService {
     }
 
     public handleError(error: any) {
-        console.error("FEHLER:", error);
+        //console.error("FEHLER:", error);
     }
 
     /**

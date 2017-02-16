@@ -4,10 +4,12 @@ import {environment} from './environments/environment';
 import {AppModule} from './app/app.module';
 import {AuthenticationService} from "./app/authentication.service";
 import {CheckDataService} from "./app/check-data.service";
+import {ModalMessageService} from "./app/modal-message.service";
 
 if (environment.production) {
     //enableProdMode();
 }
 enableProdMode();
 
-platformBrowserDynamic().bootstrapModule(AppModule, [AuthenticationService, CheckDataService]);
+platformBrowserDynamic().bootstrapModule(AppModule,
+    [AuthenticationService, CheckDataService, ModalMessageService]);
