@@ -31,6 +31,7 @@ div.collapse.navbar-collapse{
 }
 
 .dropdown-menu {
+	width: 250px;
     padding: 3px 0;
     background-color: #FFFFFF;
 }
@@ -47,6 +48,9 @@ div.collapse.navbar-collapse{
 .open > a, .open > a:hover {
     background-color: transparent;
 }
+.float-image{
+	float: left;
+}
 
 #navCompetences {
     background: url('../images/chapterOverview-inactive.png') transparent no-repeat;
@@ -57,6 +61,8 @@ div.collapse.navbar-collapse{
 }
 
 #navFoerderplan {
+	margin-left:8px;
+	margin-right: 8px;
     background: url('../images/educationalPlan-inactive.png') transparent no-repeat;
 }
 
@@ -70,6 +76,19 @@ div.collapse.navbar-collapse{
 
 #navMyCompetences:hover, #navMyCompetences:focus, .open > #navMyCompetences {
     background: url('../../images/achievedCompetences-active.png');
+}
+#navClass{
+	margin-right: 8px;
+}
+#navSchool{
+	margin-right: 8px;
+}
+#navAvatar{
+	margin-right: 8px;
+}
+#navHelp{
+	margin-left:8px;
+	margin-right: 8px;
 }
 
 #navLogout {
