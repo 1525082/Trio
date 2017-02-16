@@ -1,20 +1,19 @@
 <app-navbar></app-navbar>
-<main>
+<main class="main">
     <div class="container-fluid" *ngFor="let compGroup of construction; let i = index">
-        <div *ngIf="i == 0">
-            <img src="{{flagUrl}}" alt="Chapter Flag">
+        <div *ngIf="i == 0 && selectedID != 0">
+            <img src="{{getFlagUrl(selectedID)}}" alt="Chapter Flag">
         </div>
         <div class="col-sm-4 leftCol">
             <img src="../..{{compGroup.illustration.illustrationLeft}}" alt="Illustration Left">
         </div>
         <div class="col-sm-4">
             <div *ngFor="let comp of compGroup.competences; let j = index" style="background-image: url('../../images/contentTextBubble.png'); width:369px; height:120px;">
-                <div style="width: 341px; height: 120px;">
+                <div style="width: 341px; height: 120px;" tooltip="{{comp.fromDate}}">
                     {{comp.studentText}}<br/>
                     {{comp.teacherText}}<br/>
-                    {{comp.fromDate}}<br/>
-                    <img src="{{getImageUrl(comp.checked)}}">{{comp.checked}}
-                    <!-- TODO: Modaler Dialog fehlt noch -->
+                    {{comp.chapterId}}<br/>
+                    <img src="{{getImageUrl(comp.checked, comp.chapterId)}}">{{comp.checked}}
                 </div>
             </div>
         </div>

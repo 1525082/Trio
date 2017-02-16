@@ -9,6 +9,9 @@
     min-height: 60px;
     border: none;
     background-color: #001a3a;
+    position: fixed;
+    z-index: 9999;
+    width: 100%;
 }
 
 .navbar-nav {

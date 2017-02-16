@@ -1,132 +1,134 @@
 body {
-  font-size: 13pt;
-  font-family: verdana;
+    font-size: 13pt;
+    font-family: verdana;
 }
 
 #displayedCentral {
-  display: block;
-  margin: 3.5px auto;
+    display: block;
+    margin: 3.5px auto;
 }
 
 #footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 input {
-  width: 300px;
-  height: 40px;
-  padding: 0 15px;
-  margin: 2px 0;
-  border: 3px solid #d3ddf2;
-  border-radius: 4px;
-  color: grey;
+    width: 300px;
+    height: 40px;
+    padding: 0 15px;
+    margin: 2px 0;
+    border: 3px solid #d3ddf2;
+    border-radius: 4px;
+    color: grey;
 }
 
 input[type = password] {
-  border-color: #8da6d6;
-  color: #001a3a;
+    border-color: #8da6d6;
+    color: #001a3a;
 }
 
 input[type = submit] {
-  width: 150px;
-  margin-top: 20px;
-  margin-bottom: 40px;
-  border: none;
-  background-color: #001a3a;
-  color: white;
+    width: 150px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    border: none;
+    background-color: #001a3a;
+    color: white;
 }
 
 a {
-  color: inherit;
-  text-decoration: underline;
+    color: inherit;
+    text-decoration: underline;
 }
 
 .inputlabel {
-  position: absolute;
-  text-align: right;
-  width: 700px;
-  right: 310px;
-  top: 7px;
+    position: absolute;
+    text-align: right;
+    width: 700px;
+    right: 310px;
+    top: 7px;
 }
 
 .icon {
-  padding-top: 40px;
+    padding-top: 40px;
 }
 
 .headline {
-  display: inline-block;
-  font-size: 20pt;
-  font-weight: bold;
-  padding-top: 12px;
-  padding-bottom: 12px;
+    display: inline-block;
+    font-size: 20pt;
+    font-weight: bold;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 .placeholderHeader {
-  width: 100%;
-  height: 60px;
-  background-color: #001a3a;
+    width: 100%;
+    height: 60px;
+    background-color: #001a3a;
 }
 
 .placeholderFooter {
-  width: 100%;
-  height: 50px;
-  background-color: #001a3a;
-  bottom: 0;
-  position: fixed;
+    width: 100%;
+    height: 50px;
+    background-color: #001a3a;
+    bottom: 0;
+    position: fixed;
 }
 
 .displayedCentralImage {
-  display: block;
-  margin: auto;
+    display: block;
+    margin: auto;
 }
 
 .displayedCentral {
-  margin: auto;
+    margin: auto;
 }
 
 .alignedCenterInput {
-  text-align: center;
-  position: relative;
-  width: 300px;
-  margin: auto;
+    text-align: center;
+    position: relative;
+    width: 300px;
+    margin: auto;
 }
 
 .alignedCenter {
-  text-align: center;
+    text-align: center;
 }
 
 .checkViolett {
-  color: #4565ad;
+    color: #4565ad;
 }
 
 .checkNacht {
-  color: #001a3a;
+    color: #001a3a;
 }
 
 .checkFlieder {
-  color: #8da6d6;
+    color: #8da6d6;
 }
 
 .checkBlau {
-  color: #005468;
+    color: #005468;
 }
 
 .checkGrau {
-  color: #d3ddf2;
+    color: #d3ddf2;
 }
 
 .checkGruen {
-  color: #76b82d;
+    color: #76b82d;
 }
 
 .minfontsize {
-  font-size: 9pt;
+    font-size: 9pt;
 }
 
-
 .tooltip-inner {
-  max-width: 300px !important;
-  /* TODO: Tooltip -> Farbe anpassen */
+    max-width: 300px !important;
+    /* TODO: Tooltip -> Farbe anpassen  */
+}
+.main {
+    padding-top: 60px;
 }
