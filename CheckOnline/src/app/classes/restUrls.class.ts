@@ -59,6 +59,16 @@ export class restUrls {
     }
 
     /**
+     * Returns the url to update an avatar.
+     *
+     * @param id
+     * @returns {string}
+     */
+    static getUpdateAvatarUrl(id: number) {
+        return this.getAvatarUrl() + this.separator + id.toLocaleString();
+    }
+
+    /**
      * Returns the url for getting student information.
      * Also you can delete the student (inactivate) with it.
      *

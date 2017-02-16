@@ -10,11 +10,11 @@
 	</div>
 	<div class="alignedCenter">
 		<input id="buttonCancel" type="submit" value="ABBRECHEN"> <input
-			type="submit" value="SPEICHERN">
+			type="submit" value="SPEICHERN" (click)="updateSelectedAvatar()">
 	</div>
 </form>
 <div class="avatarListCentered">
-    <button *ngFor="let avatar of checkService.avatare" type="button" class="avatarButton"><img src="../..{{avatar.avatarBigUrl}}"></button>
+    <button *ngFor="let avatar of checkService.avatare" type="button" class="avatarButton" (click)="selectAvatar(avatar)"><img src="../..{{avatar.avatarBigUrl}}"></button>
 </div>
 </main>
 <app-footer></app-footer>

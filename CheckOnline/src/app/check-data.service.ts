@@ -18,7 +18,7 @@ export class CheckDataService {
     public student: Student = null;
     public competences: Competence[] = [];
     /**
-     * Datenstruktur für gesamten Förderplan
+     * Datenstruktur fÃ¼r gesamten FÃ¶rderplan
      */
     public educationalPlans: EducationalPlan[] = [];
     
@@ -59,7 +59,7 @@ export class CheckDataService {
                 plans => {
                     this.educationalPlans = plans as EducationalPlan[];
                     for (let eduPlan of this.educationalPlans) {
-                        // TODO: ohne [0] wird der content als Array hinzugefügt. liegt wohl am JSON RESPONSE
+                        // TODO: ohne [0] wird der content als Array hinzugefï¿½gt. liegt wohl am JSON RESPONSE
                         this.getEducationalPlanContentById(token, eduPlan._id).subscribe(
                             content => eduPlan.educationalContent = content[0] as EducationalPlanContent,
                             this.handleError,
@@ -309,6 +309,21 @@ export class CheckDataService {
      */
     getEducationalPlanContentById(token, id: number) {
         return this.http.get(restUrls.getEducationalPlanUrlById(id),
+            this.getAuthenticateHeaders(token))
+            .map((res: Response) => res.json());
+    }
+
+    /**
+     *
+     * @param token
+     * @param id
+     * @returns {Observable<R>}
+     */
+    updateAvatar(token: string, id: number) {
+        /*
+            null weil kein body vorhanden, entscheidung welcher Avatar geht ueber URL
+         */
+        return this.http.put(restUrls.getUpdateAvatarUrl(id), null,
             this.getAuthenticateHeaders(token))
             .map((res: Response) => res.json());
     }
