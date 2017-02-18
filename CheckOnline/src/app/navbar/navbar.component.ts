@@ -10,6 +10,7 @@ import {AuthenticationService} from "../services/authentication.service";
 export class NavbarComponent {
     public isCollapsed: boolean = true;
 
+    // TODO: remove Authentication Service
     constructor(private authService: AuthenticationService,
                 protected checkService: CheckDataService) {
         this.createEventListeners();
@@ -48,7 +49,7 @@ export class NavbarComponent {
     }
 
     private onChaptersChangedListener() {
-        this.checkService.onChangeChapters.subscribe(
+        this.checkService.onUpdateChapters.subscribe(
             (chapters) => {
                 let style = document.getElementById("navbarChapters");
                 style.innerHTML = "";

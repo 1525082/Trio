@@ -27,18 +27,18 @@ export class ChangePwComponent {
 
     onClickChangePw() {
         var isValid = true;
-        if (this.currentPw == "" || this.newPw == "" || this.confirmPw == "") {
+        if(this.currentPw == "" || this.newPw == "" || this.confirmPw == "") {
             console.log(this.curPwTooltip.tooltip);
             this.curPwTooltip.show();
             isValid = false;
             // ein Textfeld ist leer
         }
-        if (this.currentPw == this.newPw) {
+        if(this.currentPw == this.newPw) {
             this.newPwTooltip.show();
             isValid = false;
             // Password nicht geändert
         }
-        if (this.newPw != this.confirmPw) {
+        if(this.newPw != this.confirmPw) {
             this.confirmPwTooltip.show();
             isValid = false;
             // neues Passwort nicht gleich
@@ -48,7 +48,7 @@ export class ChangePwComponent {
                 this.currentPw,
                 this.newPw
             ).subscribe(
-                success => console.log(success),
+                success => this.authService.setToken(success.token), // TODO: check for errors
                 error => console.log(error)
             );
             // passwortänderung durchführen

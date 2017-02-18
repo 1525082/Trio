@@ -41,6 +41,15 @@ export class restUrls {
     }
 
     /**
+     * Returns the url to delete the profile.
+     *
+     * @returns {string}
+     */
+    static getDeleteProfileUrl() {
+        return this.getApiUrl() + this.student;
+    }
+
+    /**
      * Returns the url for the authentication.
      *
      * @returns {string}

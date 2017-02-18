@@ -1,11 +1,11 @@
 import {Injectable, EventEmitter} from '@angular/core';
-import { Http, Headers, Response } from "@angular/http";
-import { restUrls } from "../classes/restUrls.class";
-import { Chapter } from "../classes/chapter.class";
-import { Avatar } from "../classes/avatar.class";
-import { Student } from "../classes/student.class";
-import { Competence } from "../classes/chapterCompetence.class";
-import { EducationalPlan, EducationalPlanContent, EducationalCompetence } from '../classes/educationalPlan.class'
+import {Http, Headers, Response} from "@angular/http";
+import {restUrls} from "../classes/restUrls.class";
+import {Chapter} from "../classes/chapter.class";
+import {Avatar} from "../classes/avatar.class";
+import {Student} from "../classes/student.class";
+import {Competence} from "../classes/chapterCompetence.class";
+import {EducationalPlan, EducationalPlanContent, EducationalCompetence} from '../classes/educationalPlan.class'
 
 @Injectable()
 export class CheckDataService {
@@ -17,8 +17,7 @@ export class CheckDataService {
 
     onUpdateAvatar: EventEmitter<Avatar> = new EventEmitter<Avatar>();
     onUpdateStudent: EventEmitter<Student> = new EventEmitter<Student>();
-    // TODO: change name to onUpdateChapters
-    onChangeChapters: EventEmitter<Chapter[]> = new EventEmitter<Chapter[]>();
+    onUpdateChapters: EventEmitter<Chapter[]> = new EventEmitter<Chapter[]>();
 
     /**
      * Datenstruktur für gesamten Förderplan
@@ -40,8 +39,8 @@ export class CheckDataService {
                         avas => this.avatare = avas as Avatar[],
                         this.handleError,
                         () => {
-                            for(var avatar of this.avatare) {
-                                if(this.student.avatarId == avatar._id) {
+                            for (var avatar of this.avatare) {
+                                if (this.student.avatarId == avatar._id) {
                                     this.setAvatar(avatar);
                                     break;
                                 }
@@ -81,16 +80,16 @@ export class CheckDataService {
                 this.handleError);
         }
     }
-    
+
     public selectPlan(id: number) {
         let plan: EducationalPlan = this.educationalPlans.find(plan => plan._id == id);
-        if(plan) {
+        if (plan) {
             this.educationalCompetences = plan.educationalContent.competencesForDisplay;
         } else {
             console.error("KEIN ENTSPRECHENDER PLAN VERFUEGBAR");
         }
     }
-    
+
     /**
      * Iterates through the notes of an educational plan and finds the competences to
      * the notes.
@@ -153,7 +152,7 @@ export class CheckDataService {
      * @returns {{headers: Headers}}
      */
     private getStandardHeaders() {
-        return { headers: this.getStandardHeadersObj() };
+        return {headers: this.getStandardHeadersObj()};
     }
 
     /**
@@ -164,7 +163,7 @@ export class CheckDataService {
     private getAuthenticateHeaders(token) {
         var authHeaders = this.getStandardHeadersObj();
         authHeaders.append("Authorization", token);
-        return { headers: authHeaders };
+        return {headers: authHeaders};
     }
 
     /**
@@ -175,7 +174,7 @@ export class CheckDataService {
      */
     public authenticate(username, password) {
         return this.http.put(restUrls.getLoginUrl(),
-            JSON.stringify({ username, password }),
+            JSON.stringify({username, password}),
             this.getStandardHeaders())
             .map((res: Response) => res.json());
     }
@@ -306,7 +305,7 @@ export class CheckDataService {
     }
 
     /**
-     * Gives the notes to the competences of a educational plan. Includes 
+     * Gives the notes to the competences of a educational plan. Includes
      * not the competences. Only the numbers of the competences.
      * @param token authentication token of user
      * @param id of the educational plan
@@ -326,7 +325,7 @@ export class CheckDataService {
      */
     updateAvatar(token: string, id: number) {
         /*
-            null weil kein body vorhanden, entscheidung welcher Avatar geht ueber URL
+         null weil kein body vorhanden, entscheidung welcher Avatar geht ueber URL
          */
         return this.http.put(restUrls.getUpdateAvatarUrl(id), null,
             this.getAuthenticateHeaders(token))
@@ -337,9 +336,17 @@ export class CheckDataService {
         return this.http.put(restUrls.getRequestPasswordRecoveryUrl(),
             {
                 password: curPw,
-                newpassword : newPw
+                newpassword: newPw
             },
             this.getAuthenticateHeaders(token))
+            .map((res: Response) => res.json());
+    }
+
+    deleteProfile(token, curPw: string) {
+        return this.http.put(restUrls.getDeleteProfileUrl(),
+            {
+                password: curPw
+            }, this.getAuthenticateHeaders(token))
             .map((res: Response) => res.json());
     }
 
@@ -364,7 +371,7 @@ export class CheckDataService {
     }
 
     public setChapters(chapters: Chapter[]) {
-        this.onChangeChapters.emit(chapters);
+        this.onUpdateChapters.emit(chapters);
         this.chapters = chapters;
     }
 }

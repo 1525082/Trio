@@ -73,7 +73,7 @@ export class AuthenticationService {
         this.router.navigate([path]);
     }
 
-    private setToken(token: string) {
+    public setToken(token: string) {
         this.token = token;
     }
 
