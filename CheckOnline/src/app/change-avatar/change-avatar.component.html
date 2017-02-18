@@ -1,20 +1,22 @@
 <app-navbar></app-navbar>
 <main class="main">
-<img class="displayedCentralImage icon" id="avatar"
-	src="../../images/student/superhero-robin-big-active.png"
-	alt="Your Avatar">
-<form id="changeAvatar">
-	<div class="alignedCenter">
-		<label class="headline checkNacht">PROFILBILD
-			&Auml;NDERN</label>
-	</div>
-	<div class="alignedCenter">
-		<input id="buttonCancel" type="submit" value="ABBRECHEN"> <input
-			type="submit" value="SPEICHERN" (click)="updateSelectedAvatar()">
-	</div>
-</form>
-<div class="avatarListCentered">
-    <button *ngFor="let avatar of checkService.avatare" type="button" class="avatarButton" (click)="selectAvatar(avatar)"><img src="../..{{avatar.avatarBigUrl}}"></button>
-</div>
+    <img *ngIf="checkService.avatar" class="displayedCentralImage icon" id="avatar"
+         src="../..{{checkService.avatar.avatarBigUrl}}"
+         alt="Your Avatar">
+    <form id="changeAvatar">
+        <div class="alignedCenter">
+            <label class="headline checkNacht">PROFILBILD &Auml;NDERN</label>
+        </div>
+        <div class="alignedCenter">
+            <input id="buttonCancel" type="submit" value="ABBRECHEN">
+            <input type="submit" value="SPEICHERN" (click)="updateSelectedAvatar()">
+        </div>
+    </form>
+    <div class="avatarListCentered">
+        <button *ngFor="let avatar of checkService.avatare" id="avatar{{avatar._id}}" type="button" class="avatarButton"
+                (click)="selectAvatar(avatar)">
+            <img src="../..{{avatar.avatarBigUrl}}">
+        </button>
+    </div>
 </main>
 <app-footer></app-footer>

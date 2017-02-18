@@ -1,32 +1,28 @@
-import { Injectable } from '@angular/core';
+import {Injectable, Output, EventEmitter} from '@angular/core';
 import { Http, Headers, Response } from "@angular/http";
 import { restUrls } from "./classes/restUrls.class";
 import { Chapter } from "./classes/chapter.class";
-import { AuthenticationService } from "./authentication.service";
 import { Avatar } from "./classes/avatar.class";
 import { Student } from "./classes/student.class";
-import { ChapterIllustration } from "./classes/chapterIllustration.class";
 import { Competence } from "./classes/chapterCompetence.class";
-import { ChapterData } from './classes/chapterData.class'
 import { EducationalPlan, EducationalPlanContent, EducationalCompetence } from './classes/educationalPlan.class'
-import { forEachComment } from 'tslint'
 
 @Injectable()
 export class CheckDataService {
     public chapters: Chapter[] = [];
     public avatare: Avatar[] = [];
     public student: Student = null;
+    public avatar: Avatar = null;
     public competences: Competence[] = [];
+
+    onUpdateAvatar: EventEmitter<Avatar> = new EventEmitter<Avatar>();
+    onUpdateStudent: EventEmitter<Student> = new EventEmitter<Student>();
+    onChangeChapters: EventEmitter<Chapter[]> = new EventEmitter<Chapter[]>();
+
     /**
      * Datenstruktur für gesamten Förderplan
      */
     public educationalPlans: EducationalPlan[] = [];
-    
-    /*
-     * Variablen die als Template dienen
-     */
-    public tpl_educationalComps: EducationalCompetence[] = [];
-    public tpl_chapterComps: Competence[] = [];
     public educationalCompetences: EducationalCompetence[] = [];
 
     constructor(private http: Http) {
@@ -36,13 +32,25 @@ export class CheckDataService {
         if (token) {
             // Verarbeitung...
             this.getStudent(token).subscribe(
-                stud => this.student = stud as Student,
-                this.handleError);
+                stud => this.setStudent(stud),
+                this.handleError,
+                () => {
+                    this.getAvatare(token).subscribe(
+                        avas => this.avatare = avas as Avatar[],
+                        this.handleError,
+                        () => {
+                            for(var avatar of this.avatare) {
+                                if(this.student.avatarId == avatar._id) {
+                                    this.setAvatar(avatar);
+                                    break;
+                                }
+                            }
+                        }
+                    );
+                }
+            );
             this.getChapters(token).subscribe(
-                chaps => this.chapters = chaps as Chapter[],
-                this.handleError);
-            this.getAvatare(token).subscribe(
-                avas => this.avatare = avas as Avatar[],
+                chaps => this.setChapters(chaps),
                 this.handleError);
             this.getCompetences(token).subscribe(
                 comps => {
@@ -336,5 +344,20 @@ export class CheckDataService {
     private handleError(error: any) {
         console.log(JSON.stringify(error));
         console.error("FEHLER:", error);
+    }
+
+    public setAvatar(avatar: Avatar) {
+        this.onUpdateAvatar.emit(avatar);
+        this.avatar = avatar;
+    }
+
+    public setStudent(student: Student) {
+        this.onUpdateStudent.emit(student);
+        this.student = student;
+    }
+
+    public setChapters(chapters: Chapter[]) {
+        this.onChangeChapters.emit(chapters);
+        this.chapters = chapters;
     }
 }

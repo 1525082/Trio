@@ -1,20 +1,20 @@
 input[type=submit] {
-	margin-top: 8px;
-	margin-bottom: 20px;
+    margin-top: 8px;
+    margin-bottom: 20px;
 }
-
 #buttonCancel {
-	background-color: #8da6d6;
-	color: #4565ad;
+    background-color: #8da6d6;
+    color: #4565ad;
 }
 
 .avatarButton {
-	border: 0px;
-	background-color: white;
+    border: 0px;
+    background-color: white;
+    padding: 0px;
 }
 
 .avatarListCentered {
-	max-width: 440px;
+    max-width: 440px;
     display: block;
     margin: auto;
     text-align: left;

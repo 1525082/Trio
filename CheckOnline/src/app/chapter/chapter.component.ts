@@ -52,7 +52,6 @@ export class ChapterComponent implements OnInit, DoCheck, OnDestroy {
             this.isAchieved = true;
             return +this.route.snapshot.params['chapterId'];
         } else {
-            console.log("ELSE -> /CHAPTER -> id = undefined");
             return undefined;
         }
     }

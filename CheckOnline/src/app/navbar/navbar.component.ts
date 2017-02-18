@@ -1,10 +1,5 @@
-import { Component } from '@angular/core';
-import { Chapter } from "../classes/chapter.class";
-import { Router } from "@angular/router";
+import {Component} from '@angular/core';
 import { CheckDataService } from "../check-data.service";
-import { AuthenticationService } from "../authentication.service";
-import { Student } from "../classes/student.class";
-import { Avatar } from "../classes/avatar.class";
 
 @Component({
     selector: 'app-navbar',
@@ -13,78 +8,56 @@ import { Avatar } from "../classes/avatar.class";
 })
 export class NavbarComponent {
     public isCollapsed: boolean = true;
-    private token: string = null;
 
-    constructor(protected authService: AuthenticationService,
-                protected checkService: CheckDataService,
-                private router: Router) {
-        this.token = this.authService.getToken();
-        this.loadData();
+    constructor(protected checkService: CheckDataService) {
+        this.createEventListeners();
     }
 
-    loadData() {
-        let style = document.createElement('style');
-        if (!this.checkService.student) {
-            this.checkService.getStudent(this.token).subscribe(stud => {
-                this.checkService.student = stud as Student;
-                this.appendSchoolAndClassToNavbar(style);
-            });
-        } else {
-            this.appendSchoolAndClassToNavbar(style);
-        }
-
-        if (!this.checkService.avatare || this.checkService.avatare.length == 0) {
-            this.checkService.getAvatare(this.token).subscribe(avatare => {
-                this.checkService.avatare = avatare as Avatar[];
-                this.appendAvatar(style);
-            });
-        } else {
-            this.appendAvatar(style);
-        }
-
-        if (!this.checkService.chapters || this.checkService.chapters.length == 0) {
-            this.checkService.getChapters(this.token).subscribe(chapters => {
-                this.checkService.chapters = chapters as Chapter[];
-                this.appendColorsToChapters(style);
-            });
-        } else {
-            this.appendColorsToChapters(style);
-        }
-
-        document.getElementsByTagName('head')[0].appendChild(style);
+    private createEventListeners() {
+        this.onAvatarChangedListener();
+        this.onStudentChangedListener();
+        this.onChaptersChangedListener();
     }
 
-    private appendSchoolAndClassToNavbar(style) {
-        // generate style for navigation items
-        style.appendChild(document.createTextNode(
-            this.getClass("navSchool",
-                this.checkService.student.school.imageUrlInactive,
-                this.checkService.student.school.imageUrl)
-            + this.getClass("navClass",
-                this.checkService.student.studyGroups.imageUrlInactive,
-                this.checkService.student.studyGroups.imageUrl)));
-    }
-
-    private appendAvatar(style) {
-        for (let avatar of this.checkService.avatare) {
-            if (avatar._id == this.checkService.student.avatarId) {
-                // generate style for navigation items
-                style.appendChild(document.createTextNode(
-                    this.getClass("navAvatar",
-                        avatar.avatarInactiveUrl,
-                        avatar.avatarUrl)));
+    private onAvatarChangedListener() {
+        this.checkService.onUpdateAvatar.subscribe(
+            (avatar) => {
+                let style = document.getElementById("navbarAvatar");
+                style.innerHTML = this.getClass("navAvatar",
+                    avatar.avatarInactiveUrl,
+                    avatar.avatarUrl);
             }
-        }
+        );
     }
 
-    private appendColorsToChapters(style) {
-        this.checkService.chapters.forEach(chapter => {
-            // generate style for navigation items
-            style.appendChild(document.createTextNode(
-                this.getNavCompetenceClass(chapter._id,
-                    chapter.strongcolor,
-                    chapter.weakcolor)));
-        });
+    private onStudentChangedListener() {
+        this.checkService.onUpdateStudent.subscribe(
+            (student) => {
+                let style = document.getElementById("navbarSchoolClass");
+                style.innerHTML =
+                    this.getClass("navSchool",
+                        student.school.imageUrlInactive,
+                        student.school.imageUrl)
+                    + this.getClass("navClass",
+                        student.studyGroups.imageUrlInactive,
+                        student.studyGroups.imageUrl);
+            }
+        );
+    }
+
+    private onChaptersChangedListener() {
+        this.checkService.onChangeChapters.subscribe(
+            (chapters) => {
+                let style = document.getElementById("navbarChapters");
+                style.innerHTML = "";
+                chapters.forEach(chapter => {
+                    // generate style for navigation items
+                    style.innerHTML += this.getNavCompetenceClass(chapter._id,
+                        chapter.strongcolor,
+                        chapter.weakcolor);
+                });
+            }
+        );
     }
 
     /**
@@ -122,22 +95,4 @@ export class NavbarComponent {
             color: #FFF !important;
         }`;
     }
-
-    /*
-    logout() {
-        this.authService.logout();
-    }
-    
-    onClickAllAchievedCompetences() {
-        this.router.navigate(['/achieved', 0]);
-    }
-
-    onClickAchievedCompetences(chapter: Chapter) {
-        this.router.navigate(['/achieved', chapter._id]);
-    }
-
-    onClickChapterCompetences(chapter: Chapter) {
-        this.router.navigate(['/chapter', chapter._id]);
-    }
-    */
 }

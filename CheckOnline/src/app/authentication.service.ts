@@ -19,10 +19,7 @@ export class AuthenticationService {
         let token = localStorage.getItem(this.localStorageTokenID);
         if (token != null) {
             this.success(token);
-            console.log("EINGELOGGT");
         } else {
-            // not logged in
-            console.log("NICHT EINGELOGGT");
             this.redirect(this.logoutPath);
         }
     }
