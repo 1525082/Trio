@@ -1,5 +1,5 @@
-import {AuthenticationService} from '../authentication.service'
-import {CheckDataService} from '../check-data.service'
+import {AuthenticationService} from '../services/authentication.service'
+import {CheckDataService} from '../services/check-data.service'
 import {Chapter} from '../classes/chapter.class'
 import {Competence} from '../classes/chapterCompetence.class'
 import {ChapterIllustration} from '../classes/chapterIllustration.class'

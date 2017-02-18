@@ -125,10 +125,6 @@ a {
     font-size: 9pt;
 }
 
-.tooltip-inner {
-    max-width: 300px !important;
-    /* TODO: Tooltip -> Farbe anpassen  */
-}
 .main {
     padding-top: 60px;
 }

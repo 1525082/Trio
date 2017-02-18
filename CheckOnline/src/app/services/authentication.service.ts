@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Router} from "@angular/router";
 import {CheckDataService} from "./check-data.service";
-import {restUrls} from "./classes/restUrls.class";
+import {restUrls} from "../classes/restUrls.class";
 import {Http, Headers, Response} from "@angular/http";
 
 @Injectable()

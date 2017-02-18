@@ -1,11 +1,11 @@
-import {Injectable, Output, EventEmitter} from '@angular/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import { Http, Headers, Response } from "@angular/http";
-import { restUrls } from "./classes/restUrls.class";
-import { Chapter } from "./classes/chapter.class";
-import { Avatar } from "./classes/avatar.class";
-import { Student } from "./classes/student.class";
-import { Competence } from "./classes/chapterCompetence.class";
-import { EducationalPlan, EducationalPlanContent, EducationalCompetence } from './classes/educationalPlan.class'
+import { restUrls } from "../classes/restUrls.class";
+import { Chapter } from "../classes/chapter.class";
+import { Avatar } from "../classes/avatar.class";
+import { Student } from "../classes/student.class";
+import { Competence } from "../classes/chapterCompetence.class";
+import { EducationalPlan, EducationalPlanContent, EducationalCompetence } from '../classes/educationalPlan.class'
 
 @Injectable()
 export class CheckDataService {
@@ -17,6 +17,7 @@ export class CheckDataService {
 
     onUpdateAvatar: EventEmitter<Avatar> = new EventEmitter<Avatar>();
     onUpdateStudent: EventEmitter<Student> = new EventEmitter<Student>();
+    // TODO: change name to onUpdateChapters
     onChangeChapters: EventEmitter<Chapter[]> = new EventEmitter<Chapter[]>();
 
     /**
@@ -196,11 +197,9 @@ export class CheckDataService {
      * @returns {Observable<R>}
      */
     getStudent(token) {
-        var stud = this.http.get(restUrls.getStudentUrl(),
+        return this.http.get(restUrls.getStudentUrl(),
             this.getAuthenticateHeaders(token))
             .map((res: Response) => res.json());
-        stud.subscribe(stud => this.student = stud as Student);
-        return stud;
     }
 
     /**
@@ -209,11 +208,9 @@ export class CheckDataService {
      * @returns {Observable<R>}
      */
     getChapters(token) {
-        let chapters = this.http.get(restUrls.getChaptersUrl(),
+        return this.http.get(restUrls.getChaptersUrl(),
             this.getAuthenticateHeaders(token))
             .map((res: Response) => res.json());
-        chapters.subscribe(chaps => this.chapters = chaps as Chapter[]);
-        return chapters;
     }
 
     /**
@@ -332,6 +329,16 @@ export class CheckDataService {
             null weil kein body vorhanden, entscheidung welcher Avatar geht ueber URL
          */
         return this.http.put(restUrls.getUpdateAvatarUrl(id), null,
+            this.getAuthenticateHeaders(token))
+            .map((res: Response) => res.json());
+    }
+
+    updatePassword(token, curPw: string, newPw: string) {
+        return this.http.put(restUrls.getRequestPasswordRecoveryUrl(),
+            {
+                password: curPw,
+                newpassword : newPw
+            },
             this.getAuthenticateHeaders(token))
             .map((res: Response) => res.json());
     }

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ModalMessageService} from "../modal-message.service";
+import {ModalMessageService} from "../services/modal-message.service";
 
 @Component({
     selector: 'app-modal-dialog',

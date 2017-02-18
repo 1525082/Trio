@@ -14,13 +14,14 @@ import { ChangeAvatarComponent } from './change-avatar/change-avatar.component';
 import { EducationalPlanComponent } from './educational-plan/educational-plan.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { Routes, RouterModule } from "@angular/router";
-import { AuthenticationService } from "./authentication.service";
-import { CheckDataService } from "./check-data.service";
+import { AuthenticationService } from "./services/authentication.service";
+import { CheckDataService } from "./services/check-data.service";
 import {CollapseModule, DropdownModule, ModalModule, TooltipModule, TooltipConfig} from "ng2-bootstrap";
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
-import {ModalMessageService} from "./modal-message.service";
+import {ModalMessageService} from "./services/modal-message.service";
+import {TooltipService} from "./services/tooltip.service";
 
-const routes: Routes = [
+export const ROUTES: Routes = [
     { path: '', component: LoginComponent },
     { path: 'home', component: ChapterComponent },
     { path: 'chapter', component: ChapterComponent },
@@ -56,13 +57,13 @@ export function getAlertConfig(): TooltipConfig {
         BrowserModule,
         FormsModule,
         HttpModule,
-        RouterModule.forRoot(routes),
+        RouterModule.forRoot(ROUTES),
         CollapseModule.forRoot(),
         DropdownModule.forRoot(),
         ModalModule.forRoot(),
         TooltipModule.forRoot()
     ],
-    providers: [AuthenticationService, CheckDataService, ModalMessageService,
+    providers: [AuthenticationService, CheckDataService, ModalMessageService, TooltipService,
         {provide:TooltipConfig, useFactory: getAlertConfig}],
     bootstrap: [AppComponent]
 })

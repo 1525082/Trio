@@ -1,8 +1,8 @@
-import { CheckDataService } from '../check-data.service'
+import { CheckDataService } from '../services/check-data.service'
 import {Component} from '@angular/core';
 import {Avatar} from "../classes/avatar.class";
-import {ModalMessageService} from "../modal-message.service";
-import {AuthenticationService} from "../authentication.service";
+import {ModalMessageService} from "../services/modal-message.service";
+import {AuthenticationService} from "../services/authentication.service";
 
 @Component({
     selector: 'app-change-avatar',

@@ -1,5 +1,5 @@
-import { AuthenticationService } from '../authentication.service'
-import { CheckDataService } from '../check-data.service'
+import { AuthenticationService } from '../services/authentication.service'
+import { CheckDataService } from '../services/check-data.service'
 import { Competence } from '../classes/chapterCompetence.class'
 import { EducationalPlan, EducationalPlanContent, CompetenceNote, EducationalCompetence } from '../classes/educationalPlan.class'
 import { Component, OnInit, DoCheck } from '@angular/core';

@@ -1,7 +1,8 @@
 import {Component, ViewChild} from '@angular/core';
 import {isNullOrUndefined} from "util";
-import {AuthenticationService} from "../authentication.service";
+import {AuthenticationService} from "../services/authentication.service";
 import {TooltipDirective} from "ng2-bootstrap";
+import {TooltipService} from "../services/tooltip.service";
 
 @Component({
     selector: 'app-login',

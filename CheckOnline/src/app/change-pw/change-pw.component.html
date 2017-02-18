@@ -1,27 +1,27 @@
 <app-navbar></app-navbar>
 <main class="main">
-<img class="displayedCentralImage icon"
-	src="../images/change-password.png" alt="Illustration Change Password">
-<form method="post" id="changePassword">
-	<div class="alignedCenter">
-		<label class="headline checkNacht">PASSWORT &Auml;NDERN</label>
-	</div>
-	<div class="alignedCenterInput">
-		<label for="currentPw" class="inputlabel checkFlieder">AKTUELLES
-			PASSWORT*</label> <input type="password" name="currentPw" id="currentPw">
-	</div>
-	<div class="alignedCenterInput">
-		<label for="newPw" class="inputlabel checkFlieder">NEUES
-			PASSWORT*</label> <input type="password" name="newPw" id="newPw">
-	</div>
-	<div class="alignedCenterInput">
-		<label for="confirmedPw" class="inputlabel checkFlieder">PASSWORT
-			BEST&Auml;TIGUNG*</label> <input type="password" name="confirmedPw"
-			id="confirmedPw">
-	</div>
-	<div class="alignedCenter">
-		<input type="submit" value="&Auml;NDERN">
-	</div>
-</form>
+    <img class="displayedCentralImage icon"
+         src="../../images/change-password.png" alt="Illustration Change Password">
+    <div class="alignedCenter">
+        <label class="headline checkNacht">PASSWORT &Auml;NDERN</label>
+    </div>
+    <div class="alignedCenterInput">
+        <label for="currentPw" class="inputlabel checkFlieder">AKTUELLES PASSWORT*</label>
+        <input type="password" id="currentPw" [(ngModel)]="currentPw"
+               [tooltip]="curPwMsg" #curPwTooltip="bs-tooltip" triggers="" />
+    </div>
+    <div class="alignedCenterInput">
+        <label for="newPw" class="inputlabel checkFlieder">NEUES PASSWORT*</label>
+        <input type="password" id="newPw" [(ngModel)]="newPw"
+               [tooltip]="newPwMsg" #newPwTooltip="bs-tooltip" triggers="" />
+    </div>
+    <div class="alignedCenterInput">
+        <label for="confirmedPw" class="inputlabel checkFlieder">PASSWORT BEST&Auml;TIGUNG*</label>
+        <input type="password" id="confirmedPw" [(ngModel)]="confirmPw"
+               [tooltip]="confirmPwMsg" #confirmPwTooltip="bs-tooltip" triggers="" />
+    </div>
+    <div class="alignedCenter">
+        <input type="submit" value="&Auml;NDERN" (click)="onClickChangePw()">
+    </div>
 </main>
 <app-footer></app-footer>
