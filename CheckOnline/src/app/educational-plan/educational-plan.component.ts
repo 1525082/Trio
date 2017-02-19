@@ -1,8 +1,6 @@
-import { AuthenticationService } from '../services/authentication.service'
 import { CheckDataService } from '../services/check-data.service'
-import { Competence } from '../classes/chapterCompetence.class'
-import { EducationalPlan, EducationalPlanContent, CompetenceNote, EducationalCompetence } from '../classes/educationalPlan.class'
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { EducationalPlan, EducationalPlanContent } from '../classes/educationalPlan.class'
+import { Component, DoCheck } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
 
 @Component({
@@ -11,14 +9,10 @@ import { ActivatedRoute } from '@angular/router'
     styleUrls: ['./educational-plan.component.css']
 })
 export class EducationalPlanComponent implements DoCheck {
-
-    private token = null;
     private selectedID: number;
 
     constructor(protected checkService: CheckDataService,
-        private authService: AuthenticationService,
         private route: ActivatedRoute) {
-        this.token = this.authService.getToken();
     }
 
     ngDoCheck() {
@@ -32,13 +26,13 @@ export class EducationalPlanComponent implements DoCheck {
 
     loadData() {
         if (this.checkService.educationalPlans.length == 0) {
-            this.checkService.getEducationalPlans(this.token).subscribe(
+            this.checkService.getEducationalPlans().subscribe(
                 plans => this.checkService.educationalPlans = plans as EducationalPlan[],
                 error => console.error("ERROR!: ", error),
                 () => {
                     for (let plan of this.checkService.educationalPlans) {
                         if (this.selectedID == plan._id) {
-                            this.checkService.getEducationalPlanContentById(this.token, plan._id).subscribe(
+                            this.checkService.getEducationalPlanContentById(plan._id).subscribe(
                                 content => plan.educationalContent = content[0] as EducationalPlanContent,
                                 error => console.error("ERROR!: ", error),
                                 () => {
@@ -55,7 +49,7 @@ export class EducationalPlanComponent implements DoCheck {
                     if (plan.educationalContent) {
                         this.filter();
                     } else {
-                        this.checkService.getEducationalPlanContentById(this.token, plan._id).subscribe(
+                        this.checkService.getEducationalPlanContentById(plan._id).subscribe(
                             content => plan.educationalContent = content[0] as EducationalPlanContent,
                             error => console.error("ERROR!: ", error),
                             () => {

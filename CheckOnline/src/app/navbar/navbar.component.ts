@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import { CheckDataService } from "../services/check-data.service";
-import {AuthenticationService} from "../services/authentication.service";
 
 @Component({
     selector: 'app-navbar',
@@ -10,9 +9,7 @@ import {AuthenticationService} from "../services/authentication.service";
 export class NavbarComponent {
     public isCollapsed: boolean = true;
 
-    // TODO: remove Authentication Service
-    constructor(private authService: AuthenticationService,
-                protected checkService: CheckDataService) {
+    constructor(private checkService: CheckDataService) {
         this.createEventListeners();
     }
 

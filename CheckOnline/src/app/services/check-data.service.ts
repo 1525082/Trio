@@ -6,6 +6,9 @@ import {Avatar} from "../classes/avatar.class";
 import {Student} from "../classes/student.class";
 import {Competence} from "../classes/chapterCompetence.class";
 import {EducationalPlan, EducationalPlanContent, EducationalCompetence} from '../classes/educationalPlan.class'
+import {BehaviorSubject, Observable} from "rxjs";
+import {Router} from "@angular/router";
+import {OperationCode} from "../classes/operationCode.enum";
 
 @Injectable()
 export class CheckDataService {
@@ -14,10 +17,12 @@ export class CheckDataService {
     public student: Student = null;
     public avatar: Avatar = null;
     public competences: Competence[] = [];
+    private token: string = "";
 
     onUpdateAvatar: EventEmitter<Avatar> = new EventEmitter<Avatar>();
     onUpdateStudent: EventEmitter<Student> = new EventEmitter<Student>();
     onUpdateChapters: EventEmitter<Chapter[]> = new EventEmitter<Chapter[]>();
+    onAuthenticate: BehaviorSubject<OperationCode> = new BehaviorSubject<OperationCode>(OperationCode.NONE);
 
     /**
      * Datenstruktur für gesamten Förderplan
@@ -25,17 +30,24 @@ export class CheckDataService {
     public educationalPlans: EducationalPlan[] = [];
     public educationalCompetences: EducationalCompetence[] = [];
 
-    constructor(private http: Http) {
+    private localStorageTokenID = "token";
+    private loginPath = "/home";
+    private logoutPath = "";
+
+    constructor(private http: Http,
+                private router: Router) {
+        this.setSubscriptionForAuthentication();
+        this.checkForToken();
     }
 
-    public preloadData(token) {
-        if (token) {
+    public preloadData() {
+        if (this.getToken() && this.getToken() != "") {
             // Verarbeitung...
-            this.getStudent(token).subscribe(
+            this.getStudent().subscribe(
                 stud => this.setStudent(stud),
                 this.handleError,
                 () => {
-                    this.getAvatare(token).subscribe(
+                    this.getAvatare().subscribe(
                         avas => this.avatare = avas as Avatar[],
                         this.handleError,
                         () => {
@@ -49,10 +61,10 @@ export class CheckDataService {
                     );
                 }
             );
-            this.getChapters(token).subscribe(
+            this.getChapters().subscribe(
                 chaps => this.setChapters(chaps),
                 this.handleError);
-            this.getCompetences(token).subscribe(
+            this.getCompetences().subscribe(
                 comps => {
                     this.competences = comps as Competence[];
                     // TODO: sort competences on chapters
@@ -63,12 +75,12 @@ export class CheckDataService {
                      */
                 },
                 this.handleError);
-            this.getEducationalPlans(token).subscribe(
+            this.getEducationalPlans().subscribe(
                 plans => {
                     this.educationalPlans = plans as EducationalPlan[];
                     for (let eduPlan of this.educationalPlans) {
                         // TODO: ohne [0] wird der content als Array hinzugef�gt. liegt wohl am JSON RESPONSE
-                        this.getEducationalPlanContentById(token, eduPlan._id).subscribe(
+                        this.getEducationalPlanContentById(eduPlan._id).subscribe(
                             content => eduPlan.educationalContent = content[0] as EducationalPlanContent,
                             this.handleError,
                             () => {
@@ -157,12 +169,11 @@ export class CheckDataService {
 
     /**
      * Gives header with authorization and token.
-     * @param token
      * @returns {{headers: Headers}}
      */
-    private getAuthenticateHeaders(token) {
+    private getAuthenticateHeaders() {
         var authHeaders = this.getStandardHeadersObj();
-        authHeaders.append("Authorization", token);
+        authHeaders.append("Authorization", this.getToken());
         return {headers: authHeaders};
     }
 
@@ -173,180 +184,172 @@ export class CheckDataService {
      * @returns {Observable<R>}
      */
     public authenticate(username, password) {
-        return this.http.put(restUrls.getLoginUrl(),
+        this.http.put(restUrls.getLoginUrl(),
             JSON.stringify({username, password}),
             this.getStandardHeaders())
-            .map((res: Response) => res.json());
+            .map((res: Response) => res.json())
+            .subscribe(
+                obj => this.setToken(obj.token), // TODO: control handling
+                error => this.onAuthenticate.next(OperationCode.ERROR)
+            );
+    }
+
+    public logout() {
+        localStorage.removeItem(this.localStorageTokenID);
+        this.onAuthenticate.next(OperationCode.ERROR);
     }
 
     /**
      * Get all avatar which are available.
-     * @param token authentication token of user
      * @returns {Observable<R>}
      */
-    getAvatare(token) {
+    getAvatare() {
         return this.http.get(restUrls.getAvatarUrl(),
-            this.getAuthenticateHeaders(token))
+            this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
     /**
      * Get the information of the student.
-     * @param token authentication token of user
      * @returns {Observable<R>}
      */
-    getStudent(token) {
+    getStudent() {
         return this.http.get(restUrls.getStudentUrl(),
-            this.getAuthenticateHeaders(token))
+            this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
     /**
      * Get the information of all chapters.
-     * @param token authentication token of user
      * @returns {Observable<R>}
      */
-    getChapters(token) {
+    getChapters() {
         return this.http.get(restUrls.getChaptersUrl(),
-            this.getAuthenticateHeaders(token))
+            this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
     /**
      * Get the information of a chapter by id.
-     * @param token authentication token of user
      * @param id selected chapter
      * @returns {Observable<R>}
      */
-    getChapterById(token, id: number) {
+    getChapterById(id: number) {
         return this.http.get(restUrls.getChapterById(id),
-            this.getAuthenticateHeaders(token))
+            this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
-    /*
-     Ab hier noch nicht getestet
-     */
-
     /**
      * Get all illustrations of a chapter by id.
-     * @param token authentication token of user
      * @param id selected chapter
      * @returns {Observable<R>}
      */
-    getIllustrationByChapterId(token, id: number) {
+    getIllustrationByChapterId(id: number) {
         return this.http.get(restUrls.getChapterIllustrationsById(id),
-            this.getAuthenticateHeaders(token))
+            this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
     /**
      * Gives all competences.
-     * @param token authentication token of user
      * @returns {Observable<R>}
      */
-    getCompetences(token) {
-        return this.getStudentCompetences(token, 0, false);
+    getCompetences() {
+        return this.getStudentCompetences(0, false);
     }
 
     /**
      * Gives all competences of a chapter by id. By call with id = 0 it returns
      * the competences of all chapters.
-     * @param token authentication token of user
      * @param id selected chapter
      * @returns {Observable<R>}
      */
-    getCompetencesByChapterId(token, id: number) {
-        return this.getStudentCompetences(token, id, false);
+    getCompetencesByChapterId(id: number) {
+        return this.getStudentCompetences(id, false);
     }
 
     /**
      * Gives all competences which are achieved.
-     * @param token authentication token of user
      * @returns {Observable<R>}
      */
-    getAchievedCompetences(token) {
-        return this.getStudentCompetences(token, 0, true);
+    getAchievedCompetences() {
+        return this.getStudentCompetences(0, true);
     }
 
     /**
      * Gives all competences of a chapter by id which are achieved.
-     * @param token authentication token of user
      * @param id selected chapter
      * @returns {Observable<R>}
      */
-    getAchievedCompetencesByChapterId(token, id: number) {
-        return this.getStudentCompetences(token, id, true);
+    getAchievedCompetencesByChapterId(id: number) {
+        return this.getStudentCompetences(id, true);
     }
 
     /**
      * Gives all competences of a chapter by id. Is id = 0 then it gives all
      * competences.
-     * @param token authentication token of user
      * @param id selected chapter, id = 0 => all competences
      * @param checked false | true => all achieved competences
      * @returns {Observable<R>}
      */
-    private getStudentCompetences(token, id: number, checked: boolean) {
+    private getStudentCompetences(id: number, checked: boolean) {
         return this.http.get(restUrls.getCompetencesUrl(id, checked),
-            this.getAuthenticateHeaders(token))
+            this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
     /**
      * Gives all educational plans.
-     * @param token authentication token of user
      * @returns {Observable<R>}
      */
-    getEducationalPlans(token) {
+    getEducationalPlans() {
         return this.http.get(restUrls.getEducationalPlanUrl(),
-            this.getAuthenticateHeaders(token))
+            this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
     /**
      * Gives the notes to the competences of a educational plan. Includes
      * not the competences. Only the numbers of the competences.
-     * @param token authentication token of user
      * @param id of the educational plan
      * @returns {Observable<R>}
      */
-    getEducationalPlanContentById(token, id: number) {
+    getEducationalPlanContentById(id: number) {
         return this.http.get(restUrls.getEducationalPlanUrlById(id),
-            this.getAuthenticateHeaders(token))
+            this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
     /**
      *
-     * @param token
      * @param id
      * @returns {Observable<R>}
      */
-    updateAvatar(token: string, id: number) {
+    updateAvatar(id: number) {
         /*
          null weil kein body vorhanden, entscheidung welcher Avatar geht ueber URL
          */
         return this.http.put(restUrls.getUpdateAvatarUrl(id), null,
-            this.getAuthenticateHeaders(token))
+            this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
-    updatePassword(token, curPw: string, newPw: string) {
+    updatePassword(curPw: string, newPw: string) {
         return this.http.put(restUrls.getRequestPasswordRecoveryUrl(),
             {
                 password: curPw,
                 newpassword: newPw
             },
-            this.getAuthenticateHeaders(token))
+            this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
-    deleteProfile(token, curPw: string) {
+    deleteProfile(curPw: string) {
         return this.http.put(restUrls.getDeleteProfileUrl(),
             {
                 password: curPw
-            }, this.getAuthenticateHeaders(token))
+            }, this.getAuthenticateHeaders())
             .map((res: Response) => res.json());
     }
 
@@ -358,6 +361,45 @@ export class CheckDataService {
     private handleError(error: any) {
         console.log(JSON.stringify(error));
         console.error("FEHLER:", error);
+    }
+
+    private setSubscriptionForAuthentication() {
+        this.onAuthenticate.subscribe(
+            code => {
+                switch(code) {
+                    case OperationCode.SUCCESS:
+                        this.preloadData();
+                        this.router.navigate([this.loginPath]);
+                        console.log("CODE: " + OperationCode[code] + " | VALUE: " + this.getToken());
+                        break;
+                    case OperationCode.ERROR:
+                        this.router.navigate([this.logoutPath]);
+                        console.log("CODE: " + OperationCode[code] + " | VALUE: Fehlermeldung...");
+                        break;
+                    default:
+                        console.log("NOT AUTHENTICATED");
+                }
+            }
+        );
+    }
+
+    private checkForToken() {
+        let token = localStorage.getItem(this.localStorageTokenID);
+        if (token != null) {
+            this.setToken(token);
+        } else {
+            this.onAuthenticate.next(OperationCode.ERROR);
+        }
+    }
+
+    public getToken() {
+        return this.token;
+    }
+
+    private setToken(token: string) {
+        localStorage.setItem(this.localStorageTokenID, token);
+        this.token = token;
+        this.onAuthenticate.next(OperationCode.SUCCESS);
     }
 
     public setAvatar(avatar: Avatar) {

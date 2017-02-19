@@ -1,8 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
-import {isNullOrUndefined} from "util";
-import {AuthenticationService} from "../services/authentication.service";
 import {TooltipDirective} from "ng2-bootstrap";
-import {TooltipService} from "../services/tooltip.service";
+import {CheckDataService} from "../services/check-data.service";
 
 @Component({
     selector: 'app-login',
@@ -16,10 +14,12 @@ export class LoginComponent {
 
     @ViewChild('pwtooltip') pwtooltip: TooltipDirective;
 
-    constructor(private authService: AuthenticationService) {
+    constructor(private checkService: CheckDataService) {
     }
 
     login() {
+        this.checkService.authenticate(this.username, this.password);
+        /*
         // TODO: Anpassen für modalen Dialog
         if (!isNullOrUndefined(this.username) && !isNullOrUndefined(this.password)) {
             this.authService.login(this.username, this.password).subscribe(
@@ -35,7 +35,7 @@ export class LoginComponent {
             }
         } else {
             this.showTooltip("Bitte Benutzernamen und Passwort angeben...");
-        }
+        }*/
     }
 
     showTooltip(msg: string) {

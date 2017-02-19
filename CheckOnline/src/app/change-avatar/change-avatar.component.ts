@@ -2,7 +2,6 @@ import { CheckDataService } from '../services/check-data.service'
 import {Component} from '@angular/core';
 import {Avatar} from "../classes/avatar.class";
 import {ModalMessageService} from "../services/modal-message.service";
-import {AuthenticationService} from "../services/authentication.service";
 
 @Component({
     selector: 'app-change-avatar',
@@ -12,8 +11,7 @@ import {AuthenticationService} from "../services/authentication.service";
 export class ChangeAvatarComponent {
     private selectedAvatar: Avatar = null;
 
-    constructor(protected authService: AuthenticationService,
-                protected checkService: CheckDataService,
+    constructor(protected checkService: CheckDataService,
                 protected modalService: ModalMessageService) {
     }
 
@@ -23,8 +21,8 @@ export class ChangeAvatarComponent {
                 console.log("GLEICHER AVATAR AUSGEWAEHLT!");
                 return;
             }
-            this.checkService.updateAvatar(this.authService.getToken(),
-            this.selectedAvatar._id).subscribe(
+            this.checkService.updateAvatar(this.selectedAvatar._id)
+                .subscribe(
                 success => {
                     console.log(success);
                     this.checkService.setAvatar(this.selectedAvatar);

@@ -1,6 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
 import {CheckDataService} from "../services/check-data.service";
-import {AuthenticationService} from "../services/authentication.service";
 import {TooltipDirective} from "ng2-bootstrap";
 
 @Component({
@@ -21,13 +20,12 @@ export class ChangePwComponent {
     @ViewChild('newPwTooltip') newPwTooltip: TooltipDirective;
     @ViewChild('confirmPwTooltip') confirmPwTooltip: TooltipDirective;
 
-    constructor(private authService: AuthenticationService,
-                private checkService: CheckDataService) {
+    constructor(private checkService: CheckDataService) {
     }
 
     onClickChangePw() {
         var isValid = true;
-        if(this.currentPw == "" || this.newPw == "" || this.confirmPw == "") {
+        if(this.isAFieldEmpty()) {
             console.log(this.curPwTooltip.tooltip);
             this.curPwTooltip.show();
             isValid = false;
@@ -44,14 +42,18 @@ export class ChangePwComponent {
             // neues Passwort nicht gleich
         }
         if (isValid) {
-            this.checkService.updatePassword(this.authService.getToken(),
+            this.checkService.updatePassword(
                 this.currentPw,
                 this.newPw
             ).subscribe(
-                success => this.authService.setToken(success.token), // TODO: check for errors
+                success => console.log("CHECKSERVICE ÜBERGEBEN -> NEUER TOKEN"), // TODO: check for errors
                 error => console.log(error)
             );
             // passwortänderung durchführen
         }
+    }
+
+    private isAFieldEmpty(): boolean {
+        return this.currentPw == "" || this.newPw == "" || this.confirmPw == "";
     }
 }

@@ -1,4 +1,3 @@
-import {AuthenticationService} from '../services/authentication.service'
 import {CheckDataService} from '../services/check-data.service'
 import {Chapter} from '../classes/chapter.class'
 import {Competence} from '../classes/chapterCompetence.class'
@@ -20,8 +19,7 @@ export class ChapterComponent implements OnInit, DoCheck, OnDestroy {
     protected construction: ChapterData[] = null;
 
     constructor(private route: ActivatedRoute,
-                private checkService: CheckDataService,
-                private authService: AuthenticationService) {
+                private checkService: CheckDataService) {
     }
 
     private isAchieved = false;
@@ -60,7 +58,7 @@ export class ChapterComponent implements OnInit, DoCheck, OnDestroy {
         /*
             ILLUSTRATIONEN FÜR ALLE KOMPETENZEN NICHT AUSREICHEND!!!
          */
-        this.checkService.getAchievedCompetences(this.authService.getToken()).subscribe(
+        this.checkService.getAchievedCompetences().subscribe(
             comps => this.chapterComps = comps as Competence[],
             error => console.error("ERROR!: ", error),
             () => {
@@ -76,22 +74,21 @@ export class ChapterComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     private loadAchievedOrNoneAchievedChapter(id: number) {
-        let token = this.authService.getToken();
         // TODO: verschachtelung entfernen
-        this.checkService.getChapterById(token, id).subscribe(
+        this.checkService.getChapterById(id).subscribe(
             chap => this.chapter = chap as Chapter,
             error => console.error("ERROR!: ", error),
             () => {
                 this.setStyle(this.chapter.weakcolor);
-                this.checkService.getIllustrationByChapterId(token, id).subscribe(
+                this.checkService.getIllustrationByChapterId(id).subscribe(
                     illus => this.chapterIllus = illus as ChapterIllustration[],
                     error => console.error("ERROR!: ", error),
                     () => {
                         let observable;
                         if (this.isAchieved) {
-                            observable = this.checkService.getAchievedCompetencesByChapterId(token, id);
+                            observable = this.checkService.getAchievedCompetencesByChapterId(id);
                         } else {
-                            observable = this.checkService.getCompetencesByChapterId(token, id);
+                            observable = this.checkService.getCompetencesByChapterId(id);
                         }
                         observable.subscribe(
                             comps => this.chapterComps = comps as Competence[],
