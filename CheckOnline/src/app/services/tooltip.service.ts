@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 
 @Injectable()
-export class TooltipService {
+export class TooltipService implements OnInit {
     /*
     Routes for input tooltip style
      */
@@ -33,9 +33,12 @@ export class TooltipService {
     private tooltipState: TooltipState = TooltipState.NONE;
 
     constructor(private router: Router) {
+    }
+
+    ngOnInit() {
         this.styleTag = document.getElementById(this.styleTagId);
         // react on route event to add the style automatically
-        router.events.subscribe((e) => {
+        this.router.events.subscribe((e) => {
             if(e.url.startsWith(this.routeChapter) || e.url.startsWith(this.routeAchieved)
                 || e.url.startsWith(this.routePlan) || e.url == this.routeHome) {
                 if(this.tooltipState != TooltipState.COMPETENCE) {

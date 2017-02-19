@@ -10,7 +10,7 @@
                 <input type="password" name="password" [(ngModel)]="password" placeholder="PASSWORT"
                        [tooltip]="popTemplate" #pwtooltip="bs-tooltip" triggers="" (click)="hideTooltip()">
                 <!-- TODO: Tooltip mit CSS anpassen -->
-                <template #popTemplate style="max-width:300px;">{{message}}</template>
+                <template #popTemplate>{{message}}</template>
             </div>
             <div>
                 <input type="submit" (click)="login()" value="LOS!">
@@ -19,7 +19,6 @@
         <p class="checkFlieder">Sie möchten mit CHECK! arbeiten?<br>
             <a href="">Jetzt registrieren</a>
         </p>
-
     </div>
 </main>
 <footer>

@@ -14,16 +14,22 @@ import 'core-js/es6/regexp';
 import 'core-js/es6/map';
 import 'core-js/es6/set';
 import 'core-js/es6/reflect';
+import 'core-js/es6/promise';
 
+import 'core-js/client/shim.min'; // included by me
+
+import 'core-js/es7/observable'; // included by me
 import 'core-js/es7/reflect';
 import 'zone.js/dist/zone';
+import 'zone.js/dist/long-stack-trace-zone'; // included by me
+import 'core-js/shim'; // included by me
 
 // If you need to support the browsers/features below, uncomment the import
 // and run `npm install import-name-here';
 // Learn more in https://angular.io/docs/ts/latest/guide/browser-support.html
 
 // Needed for: IE9
-// import 'classlist.js';
+import '../node_modules/classlist/classlist.js';
 
 // Animations
 // Needed for: All but Chrome and Firefox, Not supported in IE9

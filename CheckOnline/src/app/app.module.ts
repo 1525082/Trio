@@ -1,37 +1,37 @@
-import { BrowserModule } from '@angular/platform-browser';
-import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-
-import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { FooterComponent } from './footer/footer.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { DeleteProfileComponent } from './delete-profile/delete-profile.component';
-import { ChapterComponent } from './chapter/chapter.component';
-import { ChangePwComponent } from './change-pw/change-pw.component';
-import { ChangeAvatarComponent } from './change-avatar/change-avatar.component';
-import { EducationalPlanComponent } from './educational-plan/educational-plan.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { Routes, RouterModule } from "@angular/router";
-import { CheckDataService } from "./services/check-data.service";
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {HttpModule} from '@angular/http';
+import {AppComponent} from './app.component';
+import {LoginComponent} from './login/login.component';
+import {FooterComponent} from './footer/footer.component';
+import {NavbarComponent} from './navbar/navbar.component';
+import {DeleteProfileComponent} from './delete-profile/delete-profile.component';
+import {ChapterComponent} from './chapter/chapter.component';
+import {ChangePwComponent} from './change-pw/change-pw.component';
+import {ChangeAvatarComponent} from './change-avatar/change-avatar.component';
+import {EducationalPlanComponent} from './educational-plan/educational-plan.component';
+import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {Routes, RouterModule} from "@angular/router";
+import {CheckDataService} from "./services/check-data.service";
 import {CollapseModule, DropdownModule, ModalModule, TooltipModule, TooltipConfig} from "ng2-bootstrap";
-import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
+import {ModalDialogComponent} from './modal-dialog/modal-dialog.component';
 import {ModalMessageService} from "./services/modal-message.service";
 import {TooltipService} from "./services/tooltip.service";
+import {LocationStrategy, HashLocationStrategy} from "@angular/common";
 
-export const ROUTES: Routes = [
-    { path: '', component: LoginComponent },
-    { path: 'home', component: ChapterComponent },
-    { path: 'chapter', component: ChapterComponent },
-    { path: 'chapter/:id', component: ChapterComponent },
-    { path: 'educationalPlan/:id', component: EducationalPlanComponent },
-    { path: 'achieved', component: ChapterComponent }, // TODO: entsprechende Komponenten erstellen
-    { path: 'achieved/:chapterId', component: ChapterComponent },
-    { path: 'changeavatar', component: ChangeAvatarComponent },
-    { path: 'changepw', component: ChangePwComponent },
-    { path: 'deleteprofile', component: DeleteProfileComponent },
-    { path: '**', component: PageNotFoundComponent }
+const ROUTES: Routes = [
+    {path: '', component: LoginComponent},
+    {path: 'home', component: ChapterComponent},
+    {path: 'chapter', component: ChapterComponent},
+    {path: 'chapter/:id', component: ChapterComponent},
+    {path: 'educationalPlan/:id', component: EducationalPlanComponent},
+    {path: 'achieved', component: ChapterComponent},
+    {path: 'achieved/:chapterId', component: ChapterComponent},
+    {path: 'changeavatar', component: ChangeAvatarComponent},
+    {path: 'changepw', component: ChangePwComponent},
+    {path: 'deleteprofile', component: DeleteProfileComponent},
+    {path: '**', component: PageNotFoundComponent}
 ];
 
 export function getAlertConfig(): TooltipConfig {
@@ -56,14 +56,15 @@ export function getAlertConfig(): TooltipConfig {
         BrowserModule,
         FormsModule,
         HttpModule,
-        RouterModule.forRoot(ROUTES),
+        RouterModule.forRoot(ROUTES, { useHash: true }),
         CollapseModule.forRoot(),
         DropdownModule.forRoot(),
         ModalModule.forRoot(),
         TooltipModule.forRoot()
     ],
     providers: [CheckDataService, ModalMessageService, TooltipService,
-        {provide:TooltipConfig, useFactory: getAlertConfig}],
+        {provide: TooltipConfig, useFactory: getAlertConfig},
+        ], // {provide: LocationStrategy, useClass: HashLocationStrategy} alternative für { useHash: true }
     bootstrap: [AppComponent]
 })
 export class AppModule {

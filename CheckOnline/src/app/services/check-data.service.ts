@@ -1,4 +1,4 @@
-import {Injectable, EventEmitter} from '@angular/core';
+import {Injectable, EventEmitter, OnInit} from '@angular/core';
 import {Http, Headers, Response} from "@angular/http";
 import {restUrls} from "../classes/restUrls.class";
 import {Chapter} from "../classes/chapter.class";
@@ -12,23 +12,23 @@ import {OperationCode} from "../classes/operationCode.enum";
 
 @Injectable()
 export class CheckDataService {
-    public chapters: Chapter[] = [];
-    public avatare: Avatar[] = [];
+    public chapters: Chapter[];
+    public avatare: Avatar[];
     public student: Student = null;
     public avatar: Avatar = null;
-    public competences: Competence[] = [];
+    public competences: Competence[];
     private token: string = "";
 
-    onUpdateAvatar: EventEmitter<Avatar> = new EventEmitter<Avatar>();
-    onUpdateStudent: EventEmitter<Student> = new EventEmitter<Student>();
-    onUpdateChapters: EventEmitter<Chapter[]> = new EventEmitter<Chapter[]>();
-    onAuthenticate: BehaviorSubject<OperationCode> = new BehaviorSubject<OperationCode>(OperationCode.NONE);
+    onUpdateAvatar: EventEmitter<Avatar>;
+    onUpdateStudent: EventEmitter<Student>;
+    onUpdateChapters: EventEmitter<Chapter[]>;
+    onAuthenticate: BehaviorSubject<OperationCode>;
 
     /**
      * Datenstruktur für gesamten Förderplan
      */
-    public educationalPlans: EducationalPlan[] = [];
-    public educationalCompetences: EducationalCompetence[] = [];
+    public educationalPlans: EducationalPlan[];
+    public educationalCompetences: EducationalCompetence[];
 
     private localStorageTokenID = "token";
     private loginPath = "/home";
@@ -36,6 +36,15 @@ export class CheckDataService {
 
     constructor(private http: Http,
                 private router: Router) {
+        this.chapters = [];
+        this.avatare = [];
+        this.competences = [];
+        this.educationalPlans = [];
+        this.educationalCompetences = [];
+        this.onUpdateAvatar = new EventEmitter();
+        this.onUpdateStudent = new EventEmitter();
+        this.onUpdateChapters = new EventEmitter();
+        this.onAuthenticate = new BehaviorSubject<OperationCode>(OperationCode.NONE);
         this.setSubscriptionForAuthentication();
         this.checkForToken();
     }
@@ -79,7 +88,7 @@ export class CheckDataService {
                 plans => {
                     this.educationalPlans = plans as EducationalPlan[];
                     for (let eduPlan of this.educationalPlans) {
-                        // TODO: ohne [0] wird der content als Array hinzugef�gt. liegt wohl am JSON RESPONSE
+                        // TODO: ohne [0] wird der content als Array hinzugefügt. liegt wohl am JSON RESPONSE
                         this.getEducationalPlanContentById(eduPlan._id).subscribe(
                             content => eduPlan.educationalContent = content[0] as EducationalPlanContent,
                             this.handleError,
@@ -105,12 +114,12 @@ export class CheckDataService {
     /**
      * Iterates through the notes of an educational plan and finds the competences to
      * the notes.
-     * @param educationalContent plan content to finde compentences to notes
+     * @param educationalContent plan content to find compentences to notes
      */
     private filter(educationalContent: EducationalPlanContent) {
         if (!educationalContent || !this.competences) {
-            console.log(educationalContent);
-            console.log(this.competences);
+            console.error("NOT EDUCATIONAL CONTENT OR COMPETENCES AVAILABLE!");
+            return;
         }
 
         let counter = 0;
@@ -196,7 +205,7 @@ export class CheckDataService {
 
     public logout() {
         localStorage.removeItem(this.localStorageTokenID);
-        this.onAuthenticate.next(OperationCode.ERROR);
+        this.router.navigate([this.logoutPath]);
     }
 
     /**
@@ -366,14 +375,13 @@ export class CheckDataService {
     private setSubscriptionForAuthentication() {
         this.onAuthenticate.subscribe(
             code => {
-                switch(code) {
+                switch (code) {
                     case OperationCode.SUCCESS:
                         this.preloadData();
                         this.router.navigate([this.loginPath]);
                         console.log("CODE: " + OperationCode[code] + " | VALUE: " + this.getToken());
                         break;
                     case OperationCode.ERROR:
-                        this.router.navigate([this.logoutPath]);
                         console.log("CODE: " + OperationCode[code] + " | VALUE: Fehlermeldung...");
                         break;
                     default:
