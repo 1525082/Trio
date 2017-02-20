@@ -1,0 +1,21 @@
+.tooltip .tooltip-inner {
+  background-color: #d3ddf2;
+  color: #001a3a;
+  text-align: left;
+  padding: 10px 15px;
+  max-width: 300px;
+  min-width: 300px;
+  margin-top: 50px;
+  height: 90px;
+}
+
+.tooltip.right .tooltip-arrow {
+  margin-top: -6px;
+  border-width: 6px 6px 6px 0;
+  border-right-color: #d3ddf2;
+}
+
+.tooltip.right {
+  margin-left: 5px;
+  padding: 0 6px;
+}

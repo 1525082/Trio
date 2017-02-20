@@ -22,7 +22,9 @@
           <input type = "text" name = "username" placeholder = "BENUTZERNAME">
         </div>
         <div>
-          <input type = "password" name = "password" placeholder = "PASSWORT">
+          <input type = "password" name = "password" data-toggle = "tooltip" data-placement = "right"
+          title = "Aus Sicherheitsgründen muss das Passwort mindestens 7-stellig sein sowie einen Groß- buchstaben, eine Ziffer und ein Sonderzeichen enthalten."
+          placeholder = "PASSWORT">
         </div>
         <div>
           <input type="submit" value = "LOS!">
@@ -34,7 +36,7 @@
       </p>
 
     </div>
-
+    
   </main>
 
   <footer>
@@ -50,5 +52,12 @@
 
   <script src = "dist/js/jquery-3.1.1.min.js"></script>
   <script src = "dist/js/bootstrap.min.js"></script>
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+
 </body>
 </html>

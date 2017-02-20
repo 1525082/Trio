@@ -6,7 +6,9 @@
   <title>Checkonline Schülerversion</title>
 
   <link rel = "stylesheet" type = "text/css" href = "../dist/css/bootstrap.min.css">
+<!--
   <link rel = "stylesheet" type = "text/css" href = "../dist/css/mycss.css">
+-->
   <link rel = "stylesheet" type = "text/css" href = "representation.css">
 </head>
 <body>
@@ -22,7 +24,16 @@
 
       <div id = "representationMiddleElement">
         <img class = "textbubble" src = "../images/contentTextBubble.png" alt = "Content Text Bubble">
+
+        <img class = "statusCompetence" src = "../images/chapter11/competenceDone.png" data-toggle = "tooltip" data-placement = "right"
+        title = "Du hast diese Kompetenz am 25. Oktober 2016 erreicht!">
+
         <img class = "textbubble" src = "../images/contentTextBubble.png" alt = "Content Text Bubble">
+
+        <img class = "statusCompetence" src = "../images/educationalPlan-inactive.png" data-toggle = "tooltip" data-placement = "right"
+        title = "An element with position: absolute; is positioned relative to the nearest positioned ancestor (instead of positioned relative to the viewport, like fixed).
+        However; if an absolute positioned element has no positioned ancestors, it uses the document body">
+
         <img class = "textbubble" src = "../images/contentTextBubble.png" alt = "Content Text Bubble">
         <img class = "textbubble" src = "../images/contentTextBubble.png" alt = "Content Text Bubble">
         <img class = "textbubble" src = "../images/contentTextBubble.png" alt = "Content Text Bubble">
@@ -41,5 +52,13 @@
 
   <script src = "../dist/js/jquery-3.1.1.min.js"></script>
   <script src = "../dist/js/bootstrap.min.js"></script>
+
+  <script>
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+  </script>
+
+
 </body>
 </html>
