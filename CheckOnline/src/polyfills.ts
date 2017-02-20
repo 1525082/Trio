@@ -29,7 +29,7 @@ import 'core-js/shim'; // included by me
 // Learn more in https://angular.io/docs/ts/latest/guide/browser-support.html
 
 // Needed for: IE9
-import '../node_modules/classlist/classlist.js';
+//import 'classlist.js';
 
 // Animations
 // Needed for: All but Chrome and Firefox, Not supported in IE9
