@@ -30,8 +30,9 @@
                     <a dropdownToggle id="navFoerderplan"></a>
                     <ul dropdownMenu>
                         <span>
-                            Hier kommen weitere Informationen rein..
-                        </span>
+                          <img src="../images/educationalPlan-big.png" class="float-image" />F&Ouml;DERPLAN
+						</span>
+						<div>evtl. weitere Informationen...<br/><br/></div>
                         <!-- TODO: Standard CSS-Klasse erstellen -->
                         <li *ngFor="let eduPlan of checkService.educationalPlans"
                             class="" routerLink="/educationalPlan/{{eduPlan._id}}">
@@ -43,7 +44,7 @@
                     <a dropdownToggle id="navMyCompetences"></a>
                     <ul dropdownMenu>
                         <span>
-                            Hier kommen weitere Informationen rein..
+                            <img src="../images/achievedCompetences-big.png" class="float-image" />DAS KANN ICH!<br/><br/><br/>
                         </span>
                         <li routerLink="/achieved/0">
                             <a>ALLE KOMPETENZEN</a>
@@ -97,7 +98,7 @@
                     <a dropdownToggle id="navHelp"></a>
                     <ul dropdownMenu>
                         <span>
-                            BRAUCHST DU HILFE?
+                            <img src="../images/help-big.png" class="float-image" />Brauchst du Hilfe?<Br/><Br/><Br/>
                         </span>
                         <li>
                             <a>SO GEHT'S!</a>
@@ -117,7 +118,7 @@
                     <a dropdownToggle id="navLogout"></a>
                     <ul dropdownMenu>
                         <span>
-                            M&Ouml;CHTEST DU CHECK! VERLASSEN?
+						<img src="../images/logout-big.png" class="float-image" />M&Ouml;CHTEST DU CHECK! VERLASSEN? <br/><br/>
                         </span>
                         <li>
                             <a (click)="checkService.logout()">JA</a>
