@@ -26,13 +26,13 @@ export class EducationalPlanComponent implements DoCheck {
 
     loadData() {
         if (this.checkService.educationalPlans.length == 0) {
-            this.checkService.getEducationalPlans().subscribe(
+            this.checkService.requestEducationalPlans().subscribe(
                 plans => this.checkService.educationalPlans = plans as EducationalPlan[],
                 error => console.error("ERROR!: ", error),
                 () => {
                     for (let plan of this.checkService.educationalPlans) {
                         if (this.selectedID == plan._id) {
-                            this.checkService.getEducationalPlanContentById(plan._id).subscribe(
+                            this.checkService.requestEducationalPlanContentById(plan._id).subscribe(
                                 content => plan.educationalContent = content[0] as EducationalPlanContent,
                                 error => console.error("ERROR!: ", error),
                                 () => {
@@ -49,7 +49,7 @@ export class EducationalPlanComponent implements DoCheck {
                     if (plan.educationalContent) {
                         this.filter();
                     } else {
-                        this.checkService.getEducationalPlanContentById(plan._id).subscribe(
+                        this.checkService.requestEducationalPlanContentById(plan._id).subscribe(
                             content => plan.educationalContent = content[0] as EducationalPlanContent,
                             error => console.error("ERROR!: ", error),
                             () => {

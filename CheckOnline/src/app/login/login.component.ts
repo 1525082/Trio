@@ -1,49 +1,64 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, OnInit} from '@angular/core';
 import {TooltipDirective} from "ng2-bootstrap";
 import {CheckDataService} from "../services/check-data.service";
+import {Subject} from "rxjs";
+import {TooltipService} from "../services/tooltip.service";
+import {OperationCode} from "../classes/operationCode.enum";
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
     private username: string;
     private password: string;
-    private message: string;
+
+    private tooltipMessage: Subject<string> = new Subject();
 
     @ViewChild('pwtooltip') pwtooltip: TooltipDirective;
 
     constructor(private checkService: CheckDataService) {
     }
 
-    login() {
-        this.checkService.authenticate(this.username, this.password);
-        /*
-        // TODO: Anpassen für modalen Dialog
-        if (!isNullOrUndefined(this.username) && !isNullOrUndefined(this.password)) {
-            this.authService.login(this.username, this.password).subscribe(
-                null,
-                error => {
-                    console.log(error);
-                    this.showTooltip("Bitte überprüfen Sie Ihre Accountdaten.");
+    ngOnInit() {
+        this.tooltipMessage.subscribe(
+            message => {
+                if (message != "") {
+                    TooltipService.showTooltip(this.pwtooltip, message);
+                } else {
+                    TooltipService.hideTooltip(this.pwtooltip);
                 }
-            );
-
-            if (!this.authService.isAuthenticated()) {
-                this.showTooltip("Benutzername oder Password ist falsch.");
             }
-        } else {
-            this.showTooltip("Bitte Benutzernamen und Passwort angeben...");
-        }*/
+        );
+        this.checkService.onAuthenticate.subscribe(
+            code => code == OperationCode.ERROR ? this.tooltipMessage.next(OperationCode[code]) : null
+            /*{
+                if(code == OperationCode.ERROR) {
+                    this.tooltipMessage.next(OperationCode[code]);
+                }
+            }*/
+        );
     }
 
-    showTooltip(msg: string) {
-        this.message = msg;
-        this.pwtooltip.show();
-    }
+    login() {
+        this.checkService.requestLogin(this.username, this.password);
+        /*
+         // TODO: Anpassen für modalen Dialog
+         if (!isNullOrUndefined(this.username) && !isNullOrUndefined(this.password)) {
+         this.authService.login(this.username, this.password).subscribe(
+         null,
+         error => {
+         console.log(error);
+         this.showTooltip("Bitte überprüfen Sie Ihre Accountdaten.");
+         }
+         );
 
-    hideTooltip() {
-        this.pwtooltip.hide();
+         if (!this.authService.isAuthenticated()) {
+         this.showTooltip("Benutzername oder Password ist falsch.");
+         }
+         } else {
+         this.showTooltip("Bitte Benutzernamen und Passwort angeben...");
+         }*/
     }
 }

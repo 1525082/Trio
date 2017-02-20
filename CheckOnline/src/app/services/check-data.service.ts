@@ -1,4 +1,4 @@
-import {Injectable, EventEmitter, OnInit} from '@angular/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import {Http, Headers, Response} from "@angular/http";
 import {restUrls} from "../classes/restUrls.class";
 import {Chapter} from "../classes/chapter.class";
@@ -9,14 +9,15 @@ import {EducationalPlan, EducationalPlanContent, EducationalCompetence} from '..
 import {BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {OperationCode} from "../classes/operationCode.enum";
+import 'rxjs/Rx'; // TODO: remove if IE9 has still problems with promise and add property
 
 @Injectable()
 export class CheckDataService {
-    public chapters: Chapter[];
-    public avatare: Avatar[];
+    public chapters: Chapter[] = [];
+    public avatare: Avatar[] = [];
     public student: Student = null;
     public avatar: Avatar = null;
-    public competences: Competence[];
+    public competences: Competence[] = [];
     private token: string = "";
 
     onUpdateAvatar: EventEmitter<Avatar>;
@@ -27,8 +28,8 @@ export class CheckDataService {
     /**
      * Datenstruktur für gesamten Förderplan
      */
-    public educationalPlans: EducationalPlan[];
-    public educationalCompetences: EducationalCompetence[];
+    public educationalPlans: EducationalPlan[] = [];
+    public educationalCompetences: EducationalCompetence[] = [];
 
     private localStorageTokenID = "token";
     private loginPath = "/home";
@@ -36,11 +37,6 @@ export class CheckDataService {
 
     constructor(private http: Http,
                 private router: Router) {
-        this.chapters = [];
-        this.avatare = [];
-        this.competences = [];
-        this.educationalPlans = [];
-        this.educationalCompetences = [];
         this.onUpdateAvatar = new EventEmitter();
         this.onUpdateStudent = new EventEmitter();
         this.onUpdateChapters = new EventEmitter();
@@ -50,53 +46,43 @@ export class CheckDataService {
     }
 
     public preloadData() {
+        console.log("CALL PRELOADING DATA");
         if (this.getToken() && this.getToken() != "") {
-            // Verarbeitung...
-            this.getStudent().subscribe(
+            this.requestStudent().subscribe(
                 stud => this.setStudent(stud),
                 this.handleError,
                 () => {
-                    this.getAvatare().subscribe(
-                        avas => this.avatare = avas as Avatar[],
-                        this.handleError,
-                        () => {
-                            for (var avatar of this.avatare) {
-                                if (this.student.avatarId == avatar._id) {
-                                    this.setAvatar(avatar);
-                                    break;
-                                }
-                            }
-                        }
+                    this.requestAvatarById(this.getStudent().avatarId).subscribe(
+                        ava => this.setAvatar(ava)
                     );
-                }
-            );
-            this.getChapters().subscribe(
+                });
+            this.requestAvatare().subscribe(
+                avas => this.setAvatare(avas),
+                this.handleError);
+            this.requestChapters().subscribe(
                 chaps => this.setChapters(chaps),
                 this.handleError);
-            this.getCompetences().subscribe(
-                comps => {
-                    this.competences = comps as Competence[];
-                    // TODO: sort competences on chapters
-                    /*
-                     * this should happen before the first chapter will be
-                     * viewed. So the user don't have to wait again.
-                     * 
-                     */
-                },
+            /*
+             * this should happen before the first chapter will be
+             * viewed. So the user don't have to wait again.
+             *
+             */
+            this.requestCompetences().subscribe( // TODO: sort competences on chapters
+                comps => this.setCompetences(comps),
                 this.handleError);
-            this.getEducationalPlans().subscribe(
+            this.requestEducationalPlans().subscribe(
                 plans => {
-                    this.educationalPlans = plans as EducationalPlan[];
-                    for (let eduPlan of this.educationalPlans) {
-                        // TODO: ohne [0] wird der content als Array hinzugefügt. liegt wohl am JSON RESPONSE
-                        this.getEducationalPlanContentById(eduPlan._id).subscribe(
-                            content => eduPlan.educationalContent = content[0] as EducationalPlanContent,
-                            this.handleError,
-                            () => {
-                                this.filter(eduPlan.educationalContent);
-                            }
-                        );
-                    }
+                    this.setEducationalPlans(plans);
+                    this.getEducationalPlans().forEach(
+                        (eduPlan: EducationalPlan) => {
+                            this.requestEducationalPlanContentById(eduPlan._id).subscribe(
+                                // TODO: ohne [0] wird der content als Array hinzugefügt. liegt wohl am JSON RESPONSE
+                                content => EducationalPlan.setContent(eduPlan, content[0]),
+                                this.handleError,
+                                () => this.filter(EducationalPlan.getContent(eduPlan as EducationalPlan) as EducationalPlanContent)
+                            );
+                        }
+                    );
                 },
                 this.handleError);
         }
@@ -124,80 +110,28 @@ export class CheckDataService {
 
         let counter = 0;
         let arr = new Array<EducationalCompetence>(educationalContent.competences.length);
-
-        for (let compNote of educationalContent.competences) {
-            let comp = this.competences.find(comp => comp.id == compNote.competenceId);
-            if (comp) {
-                arr[counter] = EducationalCompetence.create(comp, compNote);
-                counter++;
-            }
-        }
-
-        // it could be that a note has no competence
-        if (counter < arr.length) {
-            educationalContent.competencesForDisplay = new Array<EducationalCompetence>(counter);
-            for (let i = 0; i < counter; i++) {
-                educationalContent.competencesForDisplay[i] = EducationalCompetence.clone(arr[i]);
-            }
-        } else {
-            educationalContent.competencesForDisplay = arr;
-        }
-    }
-
-    /**
-     * Searchs the chapter of the given id in the stored data.
-     * @returns {Headers}
-     */
-    public getChapter(id: number) {
-        let chapter: Chapter = null;
-        for (chapter of this.chapters) {
-            if (chapter._id == id) {
-                break;
-            }
-        }
-        return chapter;
-    }
-
-    /**
-     * Gives the normale header with json content type.
-     * @returns {Headers}
-     */
-    private getStandardHeadersObj() {
-        var headers = new Headers();
-        headers.append("Content-Type", "application/json");
-        return headers;
-    }
-
-    /**
-     * Gives header with json content type in a object.
-     * @returns {{headers: Headers}}
-     */
-    private getStandardHeaders() {
-        return {headers: this.getStandardHeadersObj()};
-    }
-
-    /**
-     * Gives header with authorization and token.
-     * @returns {{headers: Headers}}
-     */
-    private getAuthenticateHeaders() {
-        var authHeaders = this.getStandardHeadersObj();
-        authHeaders.append("Authorization", this.getToken());
-        return {headers: authHeaders};
+        educationalContent.competences.forEach(
+            compNote => {
+                let comp = this.competences.find(comp => comp.id == compNote.competenceId);
+                if (comp) {
+                    arr[counter++] = EducationalCompetence.create(comp, compNote);
+                }
+            });
+        EducationalPlanContent.setCompetencesForDisplay(educationalContent, arr, counter);
     }
 
     /**
      * Authenticates a user and gets the token of the user.
+     *
      * @param username
      * @param password
-     * @returns {Observable<R>}
      */
-    public authenticate(username, password) {
+    public requestLogin(username, password) {
         this.http.put(restUrls.getLoginUrl(),
             JSON.stringify({username, password}),
-            this.getStandardHeaders())
-            .map((res: Response) => res.json())
-            .subscribe(
+            CheckHeaders.getHeaders())
+            .share()
+            .map((res: Response) => res.json()).subscribe(
                 obj => this.setToken(obj.token), // TODO: control handling
                 error => this.onAuthenticate.next(OperationCode.ERROR)
             );
@@ -212,9 +146,22 @@ export class CheckDataService {
      * Get all avatar which are available.
      * @returns {Observable<R>}
      */
-    getAvatare() {
+    requestAvatare() {
         return this.http.get(restUrls.getAvatarUrl(),
-            this.getAuthenticateHeaders())
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
+            .map((res: Response) => res.json());
+    }
+
+    /**
+     * Gets an avatar by id.
+     * @param id
+     * @returns {Observable<R>}
+     */
+    requestAvatarById(id: number) {
+        return this.http.get(restUrls.getAvatarByIdUrl(id),
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
 
@@ -222,9 +169,10 @@ export class CheckDataService {
      * Get the information of the student.
      * @returns {Observable<R>}
      */
-    getStudent() {
+    requestStudent() {
         return this.http.get(restUrls.getStudentUrl(),
-            this.getAuthenticateHeaders())
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
 
@@ -232,9 +180,10 @@ export class CheckDataService {
      * Get the information of all chapters.
      * @returns {Observable<R>}
      */
-    getChapters() {
+    requestChapters() {
         return this.http.get(restUrls.getChaptersUrl(),
-            this.getAuthenticateHeaders())
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
 
@@ -243,9 +192,10 @@ export class CheckDataService {
      * @param id selected chapter
      * @returns {Observable<R>}
      */
-    getChapterById(id: number) {
+    requestChapterById(id: number) {
         return this.http.get(restUrls.getChapterById(id),
-            this.getAuthenticateHeaders())
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
 
@@ -254,9 +204,10 @@ export class CheckDataService {
      * @param id selected chapter
      * @returns {Observable<R>}
      */
-    getIllustrationByChapterId(id: number) {
+    requestIllustrationByChapterId(id: number) {
         return this.http.get(restUrls.getChapterIllustrationsById(id),
-            this.getAuthenticateHeaders())
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
 
@@ -264,8 +215,8 @@ export class CheckDataService {
      * Gives all competences.
      * @returns {Observable<R>}
      */
-    getCompetences() {
-        return this.getStudentCompetences(0, false);
+    requestCompetences() {
+        return this.requestStudentCompetences(0, false);
     }
 
     /**
@@ -274,16 +225,16 @@ export class CheckDataService {
      * @param id selected chapter
      * @returns {Observable<R>}
      */
-    getCompetencesByChapterId(id: number) {
-        return this.getStudentCompetences(id, false);
+    requestCompetencesByChapterId(id: number) {
+        return this.requestStudentCompetences(id, false);
     }
 
     /**
      * Gives all competences which are achieved.
      * @returns {Observable<R>}
      */
-    getAchievedCompetences() {
-        return this.getStudentCompetences(0, true);
+    requestAchievedCompetences() {
+        return this.requestStudentCompetences(0, true);
     }
 
     /**
@@ -291,8 +242,8 @@ export class CheckDataService {
      * @param id selected chapter
      * @returns {Observable<R>}
      */
-    getAchievedCompetencesByChapterId(id: number) {
-        return this.getStudentCompetences(id, true);
+    requestAchievedCompetencesByChapterId(id: number) {
+        return this.requestStudentCompetences(id, true);
     }
 
     /**
@@ -302,9 +253,10 @@ export class CheckDataService {
      * @param checked false | true => all achieved competences
      * @returns {Observable<R>}
      */
-    private getStudentCompetences(id: number, checked: boolean) {
+    private requestStudentCompetences(id: number, checked: boolean) {
         return this.http.get(restUrls.getCompetencesUrl(id, checked),
-            this.getAuthenticateHeaders())
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
 
@@ -312,9 +264,10 @@ export class CheckDataService {
      * Gives all educational plans.
      * @returns {Observable<R>}
      */
-    getEducationalPlans() {
+    requestEducationalPlans() {
         return this.http.get(restUrls.getEducationalPlanUrl(),
-            this.getAuthenticateHeaders())
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
 
@@ -324,11 +277,16 @@ export class CheckDataService {
      * @param id of the educational plan
      * @returns {Observable<R>}
      */
-    getEducationalPlanContentById(id: number) {
+    requestEducationalPlanContentById(id: number) {
         return this.http.get(restUrls.getEducationalPlanUrlById(id),
-            this.getAuthenticateHeaders())
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
+
+    /*
+    TODO: check following methods
+     */
 
     /**
      *
@@ -340,7 +298,8 @@ export class CheckDataService {
          null weil kein body vorhanden, entscheidung welcher Avatar geht ueber URL
          */
         return this.http.put(restUrls.getUpdateAvatarUrl(id), null,
-            this.getAuthenticateHeaders())
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
 
@@ -350,7 +309,8 @@ export class CheckDataService {
                 password: curPw,
                 newpassword: newPw
             },
-            this.getAuthenticateHeaders())
+            CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
 
@@ -358,7 +318,8 @@ export class CheckDataService {
         return this.http.put(restUrls.getDeleteProfileUrl(),
             {
                 password: curPw
-            }, this.getAuthenticateHeaders())
+            }, CheckHeaders.getHeadersWith(this.getToken()))
+            .share()
             .map((res: Response) => res.json());
     }
 
@@ -368,7 +329,6 @@ export class CheckDataService {
      * @param error the error object, maybe the response error of the server
      */
     private handleError(error: any) {
-        console.log(JSON.stringify(error));
         console.error("FEHLER:", error);
     }
 
@@ -395,10 +355,18 @@ export class CheckDataService {
         let token = localStorage.getItem(this.localStorageTokenID);
         if (token != null) {
             this.setToken(token);
-        } else {
+        }
+        /*
+        nicht nötig
+         else {
             this.onAuthenticate.next(OperationCode.ERROR);
         }
+        */
     }
+
+    /*
+    TODO: add more getter and setter
+     */
 
     public getToken() {
         return this.token;
@@ -410,18 +378,84 @@ export class CheckDataService {
         this.onAuthenticate.next(OperationCode.SUCCESS);
     }
 
-    public setAvatar(avatar: Avatar) {
-        this.onUpdateAvatar.emit(avatar);
-        this.avatar = avatar;
-    }
-
     public setStudent(student: Student) {
         this.onUpdateStudent.emit(student);
         this.student = student;
     }
 
+    public getStudent() {
+        return this.student;
+    }
+
     public setChapters(chapters: Chapter[]) {
         this.onUpdateChapters.emit(chapters);
         this.chapters = chapters;
+    }
+
+    public getChapters() {
+        return this.chapters;
+    }
+
+    /**
+     * Searchs the chapter of the given id in the stored data.
+     * @returns {Headers}
+     */
+    public getChapter(id: number) {
+        return this.chapters.find(chapter => chapter._id == id);
+    }
+
+    public setAvatar(avatar: Avatar) {
+        this.onUpdateAvatar.emit(avatar);
+        this.avatar = avatar;
+    }
+
+    public setAvatare(avatare: Avatar[]) {
+        this.avatare = avatare;
+    }
+
+    public getAvatare() {
+        return this.avatare;
+    }
+
+    public setCompetences(competences: Competence[]) {
+        this.competences = competences;
+    }
+
+    public setEducationalPlans(plans: EducationalPlan[]) {
+        this.educationalPlans = plans;
+    }
+
+    public getEducationalPlans() {
+        return this.educationalPlans;
+    }
+}
+
+class CheckHeaders {
+    /**
+     * Gives the normale header with json content type.
+     * @returns {Headers}
+     */
+    private static getStandardHeadersObj(): Headers {
+        var headers = new Headers();
+        headers.append("Content-Type", "application/json");
+        return headers;
+    }
+
+    /**
+     * Gives header with json content type in a object.
+     * @returns {{headers: Headers}}
+     */
+    static getHeaders(): any {
+        return {headers: this.getStandardHeadersObj()};
+    }
+
+    /**
+     * Gives header with authorization and token.
+     * @returns {{headers: Headers}}
+     */
+    static getHeadersWith(token: string): any {
+        var authHeaders = this.getStandardHeadersObj();
+        authHeaders.append("Authorization", token);
+        return {headers: authHeaders};
     }
 }

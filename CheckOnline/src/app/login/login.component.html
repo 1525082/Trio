@@ -2,19 +2,21 @@
     <img id="displayedCentral" src="../../images/login/header.png" alt="CHECK! Login header">
     <div class="alignedCenter">
         <div>
-            <div>
-                <input type="text" name="username" [(ngModel)]="username" placeholder="BENUTZERNAME"
-                       (click)="hideTooltip()">
-            </div>
-            <div>
-                <input type="password" name="password" [(ngModel)]="password" placeholder="PASSWORT"
-                       [tooltip]="popTemplate" #pwtooltip="bs-tooltip" triggers="" (click)="hideTooltip()">
-                <!-- TODO: Tooltip mit CSS anpassen -->
-                <template #popTemplate>{{message}}</template>
-            </div>
-            <div>
-                <input type="submit" (click)="login()" value="LOS!">
-            </div>
+            <form (submit)="login()">
+                <div>
+                    <input type="text" name="username" [(ngModel)]="username" placeholder="BENUTZERNAME"
+                           (click)="tooltipMessage.next('')">
+                </div>
+                <div>
+                    <input type="password" name="password" [(ngModel)]="password" placeholder="PASSWORT"
+                           [tooltip]="popTemplate" #pwtooltip="bs-tooltip" triggers="" (click)="tooltipMessage.next('')">
+                    <!-- TODO: Tooltip mit CSS anpassen -->
+                    <template #popTemplate>nichts</template>
+                </div>
+                <div>
+                    <input type="submit" value="LOS!">
+                </div>
+            </form>
         </div>
         <p class="checkFlieder">Sie möchten mit CHECK! arbeiten?<br>
             <a href="">Jetzt registrieren</a>

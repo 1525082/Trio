@@ -67,6 +67,10 @@ export class restUrls {
         return this.getApiUrl() + this.avatar;
     }
 
+    static getAvatarByIdUrl(id: number) {
+        return this.getUpdateAvatarUrl(id);
+    }
+
     /**
      * Returns the url to update an avatar.
      *

@@ -5,6 +5,14 @@ export class EducationalPlan {
                 public name: string,
                 public thema: string) {
     }
+
+    public static setContent(plan: EducationalPlan, content: EducationalPlanContent) {
+        plan.educationalContent = content;
+    }
+
+    public static getContent(plan: EducationalPlan) {
+        return plan.educationalContent;
+    }
 }
 
 export class EducationalPlanContent {
@@ -12,6 +20,28 @@ export class EducationalPlanContent {
     constructor(public id: number,
                 public educationalPlanId: number,
                 public competences: CompetenceNote[]) {
+    }
+
+    /**
+     * Sets the competences which will be used to show on site educational plan.
+     * @param competences
+     * @param counter   real content of variable 'competences'. Maybe some notes have no competence!
+     */
+    static setCompetencesForDisplay(content: EducationalPlanContent,
+                                    competences: EducationalCompetence[], counter: number) {
+        // it could be that a note has no competence
+        if (counter != competences.length) {
+            content.competencesForDisplay = new Array<EducationalCompetence>(counter);
+            for (let i = 0; i < counter; i++) {
+                content.competencesForDisplay[i] = EducationalCompetence.clone(competences[i]);
+            }
+        } else {
+            content.competencesForDisplay = competences;
+        }
+    }
+
+    static getCompetencesForDisplay(content: EducationalPlanContent) {
+        return content.competencesForDisplay;
     }
 }
 
