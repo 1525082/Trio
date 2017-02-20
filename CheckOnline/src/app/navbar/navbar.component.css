@@ -10,18 +10,26 @@
     border: none;
     margin-bottom: 0px;
     background-color: #001a3a;
-    position: fixed;
-    z-index: 9999;
     width: 100%;
+}
+.navbar-collapse {
+    padding: 0px;
 }
 
 .navbar-nav {
     margin: 0px;
+    padding: 0px;
 }
 
-.dropdown-menu {
-    padding: 3px 0;
-    background-color: #FFFFFF;
+.navbar-nav > li > .dropdown-menu {
+    border-radius: 0px;
+    border-bottom: solid 1px #FFFFFF;
+    padding: 0px;
+    margin: 0px;
+}
+
+.dropdown-menu > li > a {
+    border-top: solid 1px #FFFFFF;
 }
 
 .dropdown-toggle {
@@ -37,61 +45,74 @@
     background-color: transparent;
 }
 
-#navCompetences {
-    background: url('../../images/chapterOverview-inactive.png') transparent no-repeat;
-}
-
-#navCompetences:hover, #navCompetences:focus, .open > #navCompetences {
-    background: url('../../images/chapterOverview-active.png');
-}
-
-#navFoerderplan {
-    background: url('../../images/educationalPlan-inactive.png') transparent no-repeat;
-}
-
-#navFoerderplan:hover, #navFoerderplan:focus, .open > #navFoerderplan {
-    background: url('../../images/educationalPlan-active.png');
-}
-
-#navMyCompetences {
-    background: url('../../images/achievedCompetences-inactive.png') transparent no-repeat;
-}
-
-#navMyCompetences:hover, #navMyCompetences:focus, .open > #navMyCompetences {
-    background: url('../../images/achievedCompetences-active.png');
-}
-
-#navHelp {
-    background: url('../../images/help-inactive.png') transparent no-repeat;
-}
-
-#navHelp:hover, #navHelp:focus, .open > #navHelp {
-    background: url('../../images/help-active.png');
-}
-
-#navLogout {
-    background: url('../../images/logout-iactive.png') transparent no-repeat;
-}
-
-#navLogout:hover, #navLogout:focus, .open > #navLogout {
-    background: url('../../images/logout-active.png');
-}
-
 .center {
     display: none;
     text-align: center;
 }
 
+nav li > a {
+    background-color: #001a3a;
+    color: #FFF;
+    text-decoration: none;
+    font-family: Verdana ;
+    font-size: 10pt;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+nav li > a:hover {
+    background-color: #8da6d6;
+    color: #FFF;
+    cursor: pointer;
+}
+
+.visitenkarte {
+    height: 125px;
+    vertical-align: top;
+}
+
 @media (min-width: 768px) {
+    nav .col-sm-4 {
+        padding: 0px;
+    }
+
+    nav .container-fluid {
+        height: 60px;
+    }
+
     .navbar {
         border-radius: 0px;
     }
+
+    .navbar-nav > li > .dropdown-menu {
+        width: 250px;
+        border: solid 3px #FFF;
+        border-radius: 3px;
+        padding: 0px;
+        margin: 0px;
+        color: #FFF;
+        background-color: #001a3a;
+    }
+
     .navbar-collapse {
         padding: 12px 0px 0px 0px;
     }
 
-    .navbar-right > li {
-        float: right;
+    .navbar-left .dropdown-toggle {
+        margin-right: 10px;
+    }
+
+    .navbar-right .dropdown {
+        float: left;
+    }
+
+    .navbar-right {
+        max-width: 250px;
+    }
+
+    .navbar-right .dropdown-toggle {
+        margin-left: 10px;
     }
 
     .center {
@@ -103,16 +124,50 @@
     }
 }
 
-
-nav li > a {
-    background-color: #001a3a;
-    color: #4565ad;
-    text-decoration: none;
-    font-weight: bold;
+#navCompetences {
+    background: url('../../images/chapterOverview-inactive.png') transparent no-repeat;
 }
-nav li > a:hover {
-    background-color: #8da6d6;
-    color: #FFF;
-    text-decoration: none;
-    font-weight: bold;
+
+#navCompetences:hover, #navCompetences:focus, .open > #navCompetences {
+    background: url('../../images/chapterOverview-active.png') transparent no-repeat;
+}
+
+#navFoerderplan {
+    background: url('../../images/educationalPlan-inactive.png') transparent no-repeat;
+}
+
+#navFoerderplan:hover, #navFoerderplan:focus, .open > #navFoerderplan {
+    background: url('../../images/educationalPlan-active.png') transparent no-repeat;
+}
+
+#navMyCompetences {
+    background: url('../../images/achievedCompetences-inactive.png') transparent no-repeat;
+}
+
+#navMyCompetences:hover, #navMyCompetences:focus, .open > #navMyCompetences {
+    background: url('../../images/achievedCompetences-active.png') transparent no-repeat;
+}
+
+#navHelp {
+    background: url('../../images/help-inactive.png') transparent no-repeat;
+}
+
+#navHelp:hover, #navHelp:focus, .open > #navHelp {
+    background: url('../../images/help-active.png') transparent no-repeat;
+}
+
+#navLogout {
+    background: url('../../images/logout-iactive.png') transparent no-repeat;
+}
+
+#navLogout:hover, #navLogout:focus, .open > #navLogout {
+    background: url('../../images/logout-active.png') transparent no-repeat;
+}
+
+#navAvatar {
+    margin: 0px;
+}
+
+#navAvatar:hover, #navAvatar:focus, .open > #navAvatar{
+    margin: 0px;
 }

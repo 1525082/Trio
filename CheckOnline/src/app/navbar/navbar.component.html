@@ -9,13 +9,17 @@
             </button>
         </div>
         <div class="navbar-collapse" [collapse]="isCollapsed">
-            <ul class="nav navbar-nav col-sm-4">
+            <ul class="nav navbar-nav navbar-left col-sm-4">
                 <li dropdown>
                     <a dropdownToggle id="navCompetences"></a>
                     <ul dropdownMenu>
-                        <span>
-                            Hier kommen weitere Informationen rein..
-                        </span>
+                        <div class="visitenkarte">
+                            <div class="header">
+                                <img src="../../images/confirmation.png" />
+                                <span>Information</span>
+                            </div>
+                            evtl. weitere Informationen...
+                        </div>
                         <li *ngFor="let chapter of checkService.chapters"
                             class="chapter{{chapter._id}}" routerLink="/chapter/{{chapter._id}}">
                             <a>{{chapter.name}}</a>
@@ -54,22 +58,41 @@
             <span class="nav navbar-nav col-sm-4 center">
                 <img src="../../images/logo.png"/>
             </span>
-            <ul class="nav navbar-nav navbar-right col-sm-4">
-            <!-- TODO: reihenfolge muss ge�ndert werden. Anordnung spiegelverkehrt durch float: right. -->
+            <ul class="nav navbar-nav navbar-right col-sm-4" id="right">
                 <li dropdown>
-                    <a dropdownToggle id="navLogout"></a>
+                    <a dropdownToggle id="navAvatar"></a>
                     <ul dropdownMenu>
                         <span>
-                            M&Ouml;CHTEST DU CHECK! VERLASSEN?
+                            Hier kommen weitere Informationen rein..
                         </span>
-                        <li>
-                            <a (click)="checkService.logout()">JA</a>
+                        <li routerLink="/changeavatar">
+                            <a>MEIN PROFILBILD &Auml;NDERN</a>
                         </li>
-                        <li>
-                            <a>NEIN</a>
+                        <li routerLink="/changepw">
+                            <a>MEIN PASSWORT &Auml;NDERN</a>
+                        </li>
+                        <li routerLink="/deleteprofile">
+                            <a>MEIN PROFIL L&Ouml;SCHEN</a>
                         </li>
                     </ul>
                 </li>
+                <li dropdown>
+                    <a dropdownToggle id="navSchool"></a>
+                    <ul dropdownMenu>
+                        <span>
+                            Hier kommen weitere Informationen rein..
+                        </span>
+                    </ul>
+                </li>
+                <li dropdown>
+                    <a dropdownToggle id="navClass"></a>
+                    <ul dropdownMenu>
+                        <span>
+                            Hier kommen weitere Informationen rein..
+                        </span>
+                    </ul>
+                </li>
+                <li class="seperator"></li>
                 <li dropdown>
                     <a dropdownToggle id="navHelp"></a>
                     <ul dropdownMenu>
@@ -90,37 +113,17 @@
                         </li>
                     </ul>
                 </li>
-                <li class="divider"></li>
                 <li dropdown>
-                    <a dropdownToggle id="navClass"></a>
+                    <a dropdownToggle id="navLogout"></a>
                     <ul dropdownMenu>
                         <span>
-                            Hier kommen weitere Informationen rein..
+                            M&Ouml;CHTEST DU CHECK! VERLASSEN?
                         </span>
-                    </ul>
-                </li>
-                <li dropdown>
-                    <a dropdownToggle id="navSchool"></a>
-                    <ul dropdownMenu>
-                        <span>
-                            Hier kommen weitere Informationen rein..
-                        </span>
-                    </ul>
-                </li>
-                <li dropdown>
-                    <a dropdownToggle id="navAvatar"></a>
-                    <ul dropdownMenu>
-                        <span>
-                            Hier kommen weitere Informationen rein..
-                        </span>
-                        <li routerLink="/changeavatar">
-                            <a>MEIN PROFILBILD &Auml;NDERN</a>
+                        <li>
+                            <a (click)="checkService.logout()">JA</a>
                         </li>
-                        <li routerLink="/changepw">
-                            <a>MEIN PASSWORT &Auml;NDERN</a>
-                        </li>
-                        <li routerLink="/deleteprofile">
-                            <a>MEIN PROFIL L&Ouml;SCHEN</a>
+                        <li>
+                            <a>NEIN</a>
                         </li>
                     </ul>
                 </li>

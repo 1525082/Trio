@@ -73,7 +73,7 @@ export class NavbarComponent {
             background-size: 40px 40px;
         }
         #${elmId}:hover, #${elmId}:focus, .open > #${elmId} {
-            background: url('../..${activeUrl}');
+            background: url('../..${activeUrl}') transparent no-repeat;
             background-size: 40px 40px;
         }`;
     }

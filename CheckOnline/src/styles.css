@@ -125,6 +125,6 @@ a {
     font-size: 9pt;
 }
 
-.main {
-    padding-top: 60px;
+.container-fluid {
+    max-width: 1080px;
 }
