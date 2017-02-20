@@ -13,6 +13,12 @@ import 'rxjs/Rx'; // TODO: remove if IE9 has still problems with promise and add
 
 @Injectable()
 export class CheckDataService {
+    /*
+    TODO: SHIT LÖSUNG!!
+     */
+    private username: string;
+    private password: string;
+
     public chapters: Chapter[] = [];
     public avatare: Avatar[] = [];
     public student: Student = null;
@@ -120,21 +126,29 @@ export class CheckDataService {
         EducationalPlanContent.setCompetencesForDisplay(educationalContent, arr, counter);
     }
 
+    private requestLogin(username, password) {
+        return this.http.put(restUrls.getLoginUrl(),
+            JSON.stringify({username, password}),
+            CheckHeaders.getHeaders())
+            .share()
+            .map((res: Response) => res.json());
+    }
+
     /**
      * Authenticates a user and gets the token of the user.
      *
      * @param username
      * @param password
      */
-    public requestLogin(username, password) {
-        this.http.put(restUrls.getLoginUrl(),
-            JSON.stringify({username, password}),
-            CheckHeaders.getHeaders())
-            .share()
-            .map((res: Response) => res.json()).subscribe(
-                obj => this.setToken(obj.token), // TODO: control handling
-                error => this.onAuthenticate.next(OperationCode.ERROR)
-            );
+    public login(username, password) {
+        this.requestLogin(username, password).subscribe(
+            obj => {
+                this.setUsername(username);
+                this.setPassword(password);
+                this.setToken(obj.token); // TODO: control handling
+            },
+            error => this.onAuthenticate.next(OperationCode.ERROR)
+        );
     }
 
     public logout() {
@@ -285,7 +299,7 @@ export class CheckDataService {
     }
 
     /*
-    TODO: check following methods
+     TODO: check following methods
      */
 
     /**
@@ -314,11 +328,9 @@ export class CheckDataService {
             .map((res: Response) => res.json());
     }
 
-    deleteProfile(curPw: string) {
-        return this.http.put(restUrls.getDeleteProfileUrl(),
-            {
-                password: curPw
-            }, CheckHeaders.getHeadersWith(this.getToken()))
+    deleteProfile() {
+        return this.http.delete(restUrls.getDeleteProfileUrl(),
+            CheckHeaders.getHeadersWith(this.getToken()))
             .share()
             .map((res: Response) => res.json());
     }
@@ -357,15 +369,15 @@ export class CheckDataService {
             this.setToken(token);
         }
         /*
-        nicht nötig
+         nicht nötig
          else {
-            this.onAuthenticate.next(OperationCode.ERROR);
-        }
-        */
+         this.onAuthenticate.next(OperationCode.ERROR);
+         }
+         */
     }
 
     /*
-    TODO: add more getter and setter
+     TODO: add more getter and setter
      */
 
     public getToken() {
@@ -427,6 +439,22 @@ export class CheckDataService {
 
     public getEducationalPlans() {
         return this.educationalPlans;
+    }
+
+    public setUsername(username: string) {
+        this.username = username;
+    }
+
+    public getUsername(): string {
+        return this.username;
+    }
+
+    public setPassword(password: string) {
+        this.password = password;
+    }
+
+    public getPassword(): string {
+        return this.password;
     }
 }
 

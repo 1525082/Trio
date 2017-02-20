@@ -5,11 +5,11 @@
             <form (submit)="login()">
                 <div>
                     <input type="text" name="username" [(ngModel)]="username" placeholder="BENUTZERNAME"
-                           (click)="tooltipMessage.next('')">
+                           [tooltip]="popTemplate" #bnTooltip="bs-tooltip" triggers="" (click)="bnTooltipMsg.next(emptyMsg)">
                 </div>
                 <div>
                     <input type="password" name="password" [(ngModel)]="password" placeholder="PASSWORT"
-                           [tooltip]="popTemplate" #pwtooltip="bs-tooltip" triggers="" (click)="tooltipMessage.next('')">
+                           [tooltip]="popTemplate" #pwTooltip="bs-tooltip" triggers="" (click)="pwTooltipMsg.next(emptyMsg)">
                     <!-- TODO: Tooltip mit CSS anpassen -->
                     <template #popTemplate>nichts</template>
                 </div>

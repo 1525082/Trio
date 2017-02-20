@@ -3,7 +3,7 @@ import {Chapter} from '../classes/chapter.class'
 import {Competence} from '../classes/chapterCompetence.class'
 import {ChapterIllustration} from '../classes/chapterIllustration.class'
 import {ChapterData} from '../classes/chapterData.class'
-import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router'
 
 @Component({
@@ -11,88 +11,100 @@ import {ActivatedRoute} from '@angular/router'
     templateUrl: './chapter.component.html',
     styleUrls: ['./chapter.component.css']
 })
-export class ChapterComponent implements OnInit, DoCheck, OnDestroy {
+export class ChapterComponent implements OnInit, OnDestroy {
     private chapter: Chapter;
-    private selectedID: number;
     private chapterIllus: ChapterIllustration[] = [];
     private chapterComps: Competence[] = [];
-    protected construction: ChapterData[] = null;
+    private construction: ChapterData[] = null;
 
-    constructor(private route: ActivatedRoute,
-                private checkService: CheckDataService) {
-    }
-
-    private isAchieved = false;
-
+    private params;
+    private selectedID: number;
     private body = null;
 
-    ngOnInit() {
-        this.body = document.getElementsByTagName("body").item(0);
+    constructor(protected route: ActivatedRoute,
+                protected checkService: CheckDataService) {
     }
 
-    ngDoCheck() {
-        let id = this.resolveId();
-        if (id != undefined && this.selectedID != id) {
-            this.selectedID = id;
-            if (id == 0) {
-                this.loadAllAchievedCompetences();
+    ngOnInit() {
+        this.setBody(document.getElementsByTagName("body").item(0));
+        this.route.params.subscribe(
+            params => {
+                this.setParams(params);
+                this.onParamChanged(this);
+            }
+        );
+    }
+
+    onParamChanged(scope: ChapterComponent) {
+        if (scope.getParams().id) {
+            scope.setSelectedId(parseInt(scope.getParams().id));
+            scope.loadNonAchievedChapter();
+        } else if (scope.getParams().chapterId) {
+            scope.setSelectedId(parseInt(scope.getParams().chapterId));
+            if (scope.getSelectedId() === 0) {
+                scope.loadAllAchievedCompetencesTEST();
             } else {
-                this.loadAchievedOrNoneAchievedChapter(id);
+                scope.loadAchievedChapter();
             }
         }
     }
 
-    private resolveId(): number {
-        if (this.route.snapshot.params['id']) {
-            this.isAchieved = false;
-            return +this.route.snapshot.params['id'];
-        } else if (this.route.snapshot.params['chapterId']) {
-            this.isAchieved = true;
-            return +this.route.snapshot.params['chapterId'];
-        } else {
-            return undefined;
-        }
+    // TODO: remove from all class in one!
+    private handleError(error: any) {
+        console.error("ERROR!: ", error);
     }
 
-    private loadAllAchievedCompetences() {
+    private loadAllAchievedCompetencesTEST() {
         /*
-            ILLUSTRATIONEN FÜR ALLE KOMPETENZEN NICHT AUSREICHEND!!!
+         ILLUSTRATIONEN FÜR ALLE KOMPETENZEN NICHT AUSREICHEND!!!
+         TODO: REST API MUSS ENTSPRECHEND VIELE ILLUSTRATIONEN ZURÜCKGEBEN!
          */
-        this.checkService.getAchievedCompetences().subscribe(
-            comps => this.chapterComps = comps as Competence[],
-            error => console.error("ERROR!: ", error),
+        this.checkService.requestAchievedCompetences().subscribe(
+            comps => this.setChapterComps(comps),
+            this.handleError,
             () => {
                 this.setStyle("#D3DDF2");
-                this.chapterIllus = new Array<ChapterIllustration>(this.chapterComps.length);
-                for(let i = 0; i < this.chapterIllus.length; i++) {
-                    this.chapterIllus[i] = new ChapterIllustration(0,
-                        "/images/illustrations/illustrationLeft.png",
-                        "/images/illustrations/illustrationRight.png");
-                }
+                this.setChapterIllus(new Array<ChapterIllustration>(this.getChapterComps().length));
+                this.getChapterIllus().fill(new ChapterIllustration(0,
+                    "/images/illustrations/illustrationLeft.png",
+                    "/images/illustrations/illustrationRight.png"));
                 this.updateChapterData();
             });
     }
 
-    private loadAchievedOrNoneAchievedChapter(id: number) {
-        // TODO: verschachtelung entfernen
-        this.checkService.getChapterById(id).subscribe(
-            chap => this.chapter = chap as Chapter,
-            error => console.error("ERROR!: ", error),
+    private loadAchievedChapter() {
+        this.checkService.requestChapterById(this.getSelectedId()).subscribe(
+            chapter => this.setChapter(chapter),
+            this.handleError,
             () => {
-                this.setStyle(this.chapter.weakcolor);
-                this.checkService.getIllustrationByChapterId(id).subscribe(
-                    illus => this.chapterIllus = illus as ChapterIllustration[],
-                    error => console.error("ERROR!: ", error),
+                this.setStyle(this.getChapter().weakcolor);
+                this.checkService.requestIllustrationByChapterId(this.getSelectedId()).subscribe(
+                    illus => this.setChapterIllus(illus),
+                    this.handleError,
                     () => {
-                        let observable;
-                        if (this.isAchieved) {
-                            observable = this.checkService.getAchievedCompetencesByChapterId(id);
-                        } else {
-                            observable = this.checkService.getCompetencesByChapterId(id);
-                        }
-                        observable.subscribe(
-                            comps => this.chapterComps = comps as Competence[],
-                            error => console.error("ERROR!: ", error),
+                        this.checkService.requestAchievedCompetencesByChapterId(this.getSelectedId()).subscribe(
+                            comps => this.setChapterComps(comps),
+                            this.handleError,
+                            () => {
+                                this.updateChapterData();
+                            });
+                    });
+            });
+    }
+
+    private loadNonAchievedChapter() {
+        this.checkService.requestChapterById(this.getSelectedId()).subscribe(
+            chapter => this.setChapter(chapter),
+            this.handleError,
+            () => {
+                this.setStyle(this.getChapter().weakcolor);
+                this.checkService.requestIllustrationByChapterId(this.getSelectedId()).subscribe(
+                    illus => this.setChapterIllus(illus),
+                    this.handleError,
+                    () => {
+                        this.checkService.requestCompetencesByChapterId(this.getSelectedId()).subscribe(
+                            comps => this.setChapterComps(comps),
+                            this.handleError,
                             () => {
                                 this.updateChapterData();
                             });
@@ -101,38 +113,32 @@ export class ChapterComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     public setStyle(color: string) {
-        if (this.body) {
-            this.body.setAttribute("style", "background-color: " + color);
+        if (this.getBody()) {
+            this.getBody().setAttribute("style", "background-color: " + color);
         }
     }
 
     private updateChapterData() {
-        let max = (this.chapterComps.length / 5);
+        let max = (this.getChapterComps().length / 5);
         if (max > Math.floor(max)) {
             max = Math.floor(max) + 1;
         }
 
-        this.construction = new Array<ChapterData>(max);
+        this.setConstruction(new Array<ChapterData>(max));
         for (let k = 0; k < max; k++) {
-            let anzahl = 5;
-            if (k == (max - 1)) {
-                anzahl = this.chapterComps.length - (k * 5);
-            }
+            let count = (k == (max - 1)) ? this.getChapterComps().length - (k * 5) : 5;
 
-            this.construction[k] = new ChapterData(anzahl);
-            this.construction[k].illustration = this.chapterIllus[k];
-            for (let i = 0; i < anzahl; i++) {
+            this.getConstruction()[k] = new ChapterData(count);
+            this.getConstruction()[k].illustration = this.getChapterIllus()[k];
+            for (let i = 0; i < count; i++) {
                 let elmId = ((k * 5) + i);
-                this.construction[k].competences[i] = this.chapterComps[elmId];
+                this.getConstruction()[k].competences[i] = this.getChapterComps()[elmId];
             }
         }
     }
 
-    private getFolderNrForComp(chapterId: number) {
-        if (chapterId < 10) {
-            return "0" + chapterId.toLocaleString();
-        }
-        return chapterId.toLocaleString();
+    private getFolderNrForComp(id: number) {
+        return (id < 10) ? "0" + id.toString() : id.toString();
     }
 
     public getFlagUrl(chapterId: number) {
@@ -150,9 +156,69 @@ export class ChapterComponent implements OnInit, DoCheck, OnDestroy {
 
     ngOnDestroy() {
         // TODO: hintergrundfarbe zurücksetzen
-        const main = document.getElementsByTagName('body').item(0);
-        if (main) {
-            main.style.backgroundColor = '#FFFFFF';
+        if (this.getBody()) {
+            this.getBody().style.backgroundColor = "#FFFFFF";
         }
+    }
+
+    /*
+     *              GETTER && SETTER
+     *-----------------------------------------------
+     */
+
+    public setSelectedId(id: number) {
+        this.selectedID = id;
+    }
+
+    public getSelectedId(): number {
+        return this.selectedID;
+    }
+
+    public setBody(body: HTMLElement) {
+        this.body = body;
+    }
+
+    public getBody(): HTMLElement {
+        return this.body;
+    }
+
+    public setChapter(chapter: Chapter) {
+        this.chapter = chapter;
+    }
+
+    public getChapter(): Chapter {
+        return this.chapter;
+    }
+
+    public setChapterIllus(illus: ChapterIllustration[]) {
+        this.chapterIllus = illus;
+    }
+
+    public getChapterIllus(): ChapterIllustration[] {
+        return this.chapterIllus;
+    }
+
+    public setChapterComps(comps: Competence[]) {
+        this.chapterComps = comps;
+    }
+
+    public getChapterComps(): Competence[] {
+        return this.chapterComps;
+    }
+
+    public setConstruction(construction: ChapterData[]) {
+        this.construction = construction;
+    }
+
+    public getConstruction() {
+        return this.construction;
+    }
+
+    public setParams(params) {
+        this.params = params;
+    }
+
+    public getParams() {
+        return this.params;
     }
 }

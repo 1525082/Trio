@@ -1,17 +1,20 @@
 <app-navbar></app-navbar>
 <main class="main">
-<img class="displayedCentralImage icon"
-    src="../images/delete-profile.png" alt="Illustration Delete Profile">
-    <div class="alignedCenter">
-        <label class="headline checkNacht">PROFIL L&Ouml;SCHEN</label>
-    </div>
-    <div class="alignedCenterInput">
-        <label for="confirmDeletion" class="inputlabel checkFlieder">PASSWORT*</label>
-        <input type="password" id="confirmDeletion" [(ngModel)]="userpw"
-               [tooltip]="deleteProfileMsg" #deleteProfileTooltip="bs-tooltip" triggers="" />
-    </div>
-    <div class="alignedCenter">
-        <input type="submit" value="L&Ouml;SCHEN" (click)="onClickDelete()">
-    </div>
+    <form (submit)="onClickDelete()">
+        <img class="displayedCentralImage icon"
+             src="../images/delete-profile.png" alt="Illustration Delete Profile">
+        <div class="alignedCenter">
+            <label class="headline checkNacht">PROFIL L&Ouml;SCHEN</label>
+        </div>
+        <div class="alignedCenterInput">
+            <label for="confirmDeletion" class="inputlabel checkFlieder">PASSWORT*</label>
+            <input type="password" id="confirmDeletion" name="password" [(ngModel)]="userpw"
+                   [tooltip]="deleteProfileMsg" #deleteProfileTooltip="bs-tooltip" triggers=""
+                   (click)="deleteProfileMsg.next('')"/>
+        </div>
+        <div class="alignedCenter">
+            <input type="submit" value="L&Ouml;SCHEN">
+        </div>
+    </form>
 </main>
 <app-footer></app-footer>
