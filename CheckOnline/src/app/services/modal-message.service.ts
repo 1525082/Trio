@@ -1,38 +1,37 @@
 import {Injectable} from '@angular/core';
+import {Subject} from "rxjs";
 
 @Injectable()
 export class ModalMessageService {
-    public isErrorVisible: boolean = false;
-    public errorMsg: string = "";
-
-    public isSuccessVisible: boolean = false;
-    public successMsg: string = "";
-
-    public isMsgVisible: boolean = false;
-    public msg: string = "";
+    public sbjInfoMsg: Subject<string> = new Subject();
+    public sbjSuccessMsg: Subject<string> = new Subject();
+    public sbjErrorMsg: Subject<string> = new Subject();
 
     constructor() {
     }
 
     showErrorMsg(msg: string) {
-        this.errorMsg = msg;
-        this.isErrorVisible = true;
+        this.sbjErrorMsg.next(msg);
     }
 
     showSuccessMsg(msg: string) {
-        this.successMsg = msg;
-        this.isSuccessVisible = true;
+        this.sbjSuccessMsg.next(msg);
     }
 
     showMsg(msg: string) {
-        this.msg = msg;
-        this.isMsgVisible = true;
+        this.sbjInfoMsg.next(msg);
     }
 
-    hide() {
-        this.isErrorVisible = false;
-        this.isSuccessVisible = false;
-        this.isMsgVisible = false;
+    public getInfoSubject(): Subject<string> {
+        return this.sbjInfoMsg;
+    }
+
+    public getSuccessSubject(): Subject<string> {
+        return this.sbjSuccessMsg;
+    }
+
+    public getErrorSubject(): Subject<string> {
+        return this.sbjErrorMsg;
     }
 }
 

@@ -1,59 +1,100 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, OnInit} from '@angular/core';
 import {CheckDataService} from "../services/check-data.service";
 import {TooltipDirective} from "ng2-bootstrap";
+import {Subject} from "rxjs";
+import {TooltipService} from "../services/tooltip.service";
+import {isNullOrUndefined} from "util";
+import {ModalMessageService} from "../services/modal-message.service";
 
 @Component({
     selector: 'app-change-pw',
     templateUrl: './change-pw.component.html',
     styleUrls: ['./change-pw.component.css']
 })
-export class ChangePwComponent {
+export class ChangePwComponent implements OnInit {
     private currentPw: string = "";
     private newPw: string = "";
     private confirmPw: string = "";
-
-    private curPwMsg: string = "MINDESTENS EIN FELD IST LEER!";
-    private newPwMsg: string = "ALTES UND NEUES PASSWORT SIND GLEICH!";
-    private confirmPwMsg: string = "DIE EINGABEN DES NEUEN PASSWORTS SIND IDENTISCH";
 
     @ViewChild('curPwTooltip') curPwTooltip: TooltipDirective;
     @ViewChild('newPwTooltip') newPwTooltip: TooltipDirective;
     @ViewChild('confirmPwTooltip') confirmPwTooltip: TooltipDirective;
 
-    constructor(private checkService: CheckDataService) {
+    private curPwTooltipMsg: Subject<string> = new Subject();
+    private newPwTooltipMsg: Subject<string> = new Subject();
+    private confirmPwTooltipMsg: Subject<string> = new Subject();
+
+    private emptyText: string = "";
+    private emptyFieldMsg: string = "Dieses Feld darf nicht leer sein.";
+    private inputFieldsSameMsg: string = "Das alte und das neue Passwort sind identisch.";
+    private inputFiledsNotSameMsg: string = "Die Eingabe stimmt nicht mit dem neuen Passwort überein.";
+    private passwordChangeSuccessMsg: string = "Das Passwort wurde erfolgreich geändert.";
+
+    constructor(private checkService: CheckDataService,
+                private modalService: ModalMessageService) {
+    }
+
+    ngOnInit() {
+        this.curPwTooltipMsg.subscribe(
+            message => this.handleMessage(message, this.curPwTooltip));
+        this.newPwTooltipMsg.subscribe(
+            message => this.handleMessage(message, this.newPwTooltip));
+        this.confirmPwTooltipMsg.subscribe(
+            message => this.handleMessage(message, this.confirmPwTooltip));
     }
 
     onClickChangePw() {
         var isValid = true;
-        if(this.isAFieldEmpty()) {
-            console.log(this.curPwTooltip.tooltip);
-            this.curPwTooltip.show();
+        if (this.isEmpty(this.currentPw)) {
+            this.curPwTooltipMsg.next(this.emptyFieldMsg);
             isValid = false;
-            // ein Textfeld ist leer
+        } else {
+            this.curPwTooltipMsg.next();
         }
-        if(this.currentPw == this.newPw) {
-            this.newPwTooltip.show();
+        if (this.isEmpty(this.newPw)) {
+            this.newPwTooltipMsg.next(this.emptyFieldMsg);
             isValid = false;
-            // Password nicht geändert
+        } else {
+            this.newPwTooltipMsg.next();
         }
-        if(this.newPw != this.confirmPw) {
-            this.confirmPwTooltip.show();
+        if (this.isEmpty(this.confirmPw)) {
+            this.confirmPwTooltipMsg.next(this.emptyFieldMsg);
             isValid = false;
-            // neues Passwort nicht gleich
+        } else {
+            this.confirmPwTooltipMsg.next();
         }
         if (isValid) {
-            this.checkService.updatePassword(
-                this.currentPw,
-                this.newPw
-            ).subscribe(
-                success => console.log("CHECKSERVICE ÜBERGEBEN -> NEUER TOKEN"), // TODO: check for errors
-                error => console.log(error)
-            );
-            // passwortänderung durchführen
+            if (this.currentPw == this.newPw) {
+                this.newPwTooltipMsg.next(this.inputFieldsSameMsg);
+                this.confirmPwTooltipMsg.next();
+            } else if (this.newPw != this.confirmPw) {
+                this.confirmPwTooltipMsg.next(this.inputFiledsNotSameMsg);
+                this.newPwTooltipMsg.next();
+            } else {
+                // Passwortänderung durchführen
+                this.checkService.updatePassword(this.currentPw, this.newPw)
+                    .subscribe(
+                        data => {
+                            this.checkService.setPassword(this.newPw);
+                            this.checkService.setToken(data.token);
+                            this.currentPw = this.newPw = this.confirmPw = this.emptyText;
+                            this.modalService.showSuccessMsg(this.passwordChangeSuccessMsg
+                                + " | " + data.token);
+                        },
+                        error => console.log(error));
+            }
         }
     }
 
-    private isAFieldEmpty(): boolean {
-        return this.currentPw == "" || this.newPw == "" || this.confirmPw == "";
+    private isEmpty(str: string): boolean {
+        return (str == "" || isNullOrUndefined(str));
+    }
+
+    private handleMessage(message: string, tooltip: TooltipDirective) {
+        if (message != this.emptyText) {
+            TooltipService.showTooltip(tooltip, message);
+        } else {
+            TooltipService.hideTooltip(tooltip);
+        }
     }
 }

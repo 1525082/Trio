@@ -1,48 +1,47 @@
-<div *ngIf="modalService.isMsgVisible" class="modal fade show in danger" id="stdModal" role="dialog">
+<div bsModal #informationModal="bs-modal" class="modal fade" id="infoModal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Error</h4>
+                <h4 class="modal-title">INFORMATION</h4>
             </div>
             <div class="modal-body">
-                <p>{{modalService.msg}}</p>
+                <p>{{modalService.sbjInfoMsg}}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" (click)="modalService.hide()">Close</button>
+                <button type="button" class="btn btn-default" (click)="hide(informationModal)">Close</button>
             </div>
         </div>
     </div>
 </div>
-<div *ngIf="modalService.isErrorVisible" class="modal fade show in danger" id="errorModal" role="dialog">
+<div bsModal #errorModal="bs-modal" class="modal fade" id="errorModal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Error</h4>
+                <h4 class="modal-title">ERROR</h4>
             </div>
             <div class="modal-body">
-                <p>{{modalService.errorMsg}}</p>
+                <p>{{modalService.sbjErrorMsg}}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" (click)="modalService.hide()">Close</button>
+                <button type="button" class="btn btn-default" (click)="hide(errorModal)">Close</button>
             </div>
         </div>
     </div>
 </div>
-<div *ngIf="modalService.isSuccessVisible" class="modal fade show in danger" id="successModal" role="dialog">
+<div bsModal #successModal="bs-modal" class="modal fade" id="successModal" role="dialog">
     <div class="modal-dialog">
-
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Error</h4>
+                <h4 class="modal-title">SUCCESS</h4>
             </div>
             <div class="modal-body">
-                <p>{{modalService.successMsg}}</p>
+                <p>{{modalService.sbjSuccessMsg}}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" (click)="modalService.hide()">Close</button>
+                <button type="button" class="btn btn-default" (click)="hide(successModal)">Close</button>
             </div>
         </div>
     </div>

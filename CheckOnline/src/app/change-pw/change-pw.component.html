@@ -1,27 +1,32 @@
 <app-navbar></app-navbar>
 <main class="main">
-    <img class="displayedCentralImage icon"
-         src="../../images/change-password.png" alt="Illustration Change Password">
-    <div class="alignedCenter">
-        <label class="headline checkNacht">PASSWORT &Auml;NDERN</label>
-    </div>
-    <div class="alignedCenterInput">
-        <label for="currentPw" class="inputlabel checkFlieder">AKTUELLES PASSWORT*</label>
-        <input type="password" id="currentPw" [(ngModel)]="currentPw"
-               [tooltip]="curPwMsg" #curPwTooltip="bs-tooltip" triggers="" />
-    </div>
-    <div class="alignedCenterInput">
-        <label for="newPw" class="inputlabel checkFlieder">NEUES PASSWORT*</label>
-        <input type="password" id="newPw" [(ngModel)]="newPw"
-               [tooltip]="newPwMsg" #newPwTooltip="bs-tooltip" triggers="" />
-    </div>
-    <div class="alignedCenterInput">
-        <label for="confirmedPw" class="inputlabel checkFlieder">PASSWORT BEST&Auml;TIGUNG*</label>
-        <input type="password" id="confirmedPw" [(ngModel)]="confirmPw"
-               [tooltip]="confirmPwMsg" #confirmPwTooltip="bs-tooltip" triggers="" />
-    </div>
-    <div class="alignedCenter">
-        <input type="submit" value="&Auml;NDERN" (click)="onClickChangePw()">
-    </div>
+    <form (submit)="onClickChangePw()">
+        <img class="displayedCentralImage icon"
+             src="../../images/change-password.png" alt="Illustration Change Password">
+        <div class="alignedCenter">
+            <label class="headline checkNacht">PASSWORT &Auml;NDERN</label>
+        </div>
+        <div class="alignedCenterInput">
+            <label for="currentPw" class="inputlabel checkFlieder">AKTUELLES PASSWORT*</label>
+            <input type="password" id="currentPw" name="curPw" [(ngModel)]="currentPw"
+                   [tooltip]="curPwTooltipMsg" #curPwTooltip="bs-tooltip" triggers=""
+                   (click)="curPwTooltipMsg.next('')" />
+        </div>
+        <div class="alignedCenterInput">
+            <label for="newPw" class="inputlabel checkFlieder">NEUES PASSWORT*</label>
+            <input type="password" id="newPw" name="newPw" [(ngModel)]="newPw"
+                   [tooltip]="newPwTooltipMsg" #newPwTooltip="bs-tooltip" triggers=""
+                   (click)="newPwTooltipMsg.next('')" />
+        </div>
+        <div class="alignedCenterInput">
+            <label for="confirmedPw" class="inputlabel checkFlieder">PASSWORT BEST&Auml;TIGUNG*</label>
+            <input type="password" id="confirmedPw" name="confirmedPw" [(ngModel)]="confirmPw"
+                   [tooltip]="confirmPwTooltipMsg" #confirmPwTooltip="bs-tooltip" triggers=""
+                   (click)="confirmPwTooltipMsg.next('')" />
+        </div>
+        <div class="alignedCenter">
+            <input type="submit" value="&Auml;NDERN" />
+        </div>
+    </form>
 </main>
 <app-footer></app-footer>

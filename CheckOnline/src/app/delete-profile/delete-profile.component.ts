@@ -4,6 +4,7 @@ import {CheckDataService} from "../services/check-data.service";
 import {Subject} from "rxjs";
 import {isNullOrUndefined} from "util";
 import {TooltipService} from "../services/tooltip.service";
+import {ModalMessageService} from "../services/modal-message.service";
 
 @Component({
     selector: 'app-delete-profile',
@@ -12,11 +13,13 @@ import {TooltipService} from "../services/tooltip.service";
 })
 export class DeleteProfileComponent implements OnInit {
     userpw: string;
-
-    @ViewChild('deleteProfileTooltip') curPwTooltip: TooltipDirective;
     private deleteProfileMsg: Subject<string> = new Subject();
 
-    constructor(private checkService: CheckDataService) {
+    @ViewChild('deleteProfileTooltip')
+    curPwTooltip: TooltipDirective;
+
+    constructor(private checkService: CheckDataService,
+                private modalService: ModalMessageService) {
     }
 
     ngOnInit() {
@@ -35,13 +38,15 @@ export class DeleteProfileComponent implements OnInit {
         if (this.userpw == "" || isNullOrUndefined(this.userpw)) {
             this.deleteProfileMsg.next("Bitte geben Sie Ihr Passwort ein.");
         } else {
-            // TODO: handle success
             if (this.userpw != this.checkService.getPassword()) {
                 this.deleteProfileMsg.next("Bitte geben Sie Ihr korrekte Passwort ein.");
             } else {
                 this.checkService.deleteProfile().subscribe(
-                    data => console.log(data)
-                );
+                    data => {
+                        this.userpw = "";
+                        this.modalService.showSuccessMsg("Das Profil wurde gelöscht. | " + data);
+                        this.checkService.logout();
+                    });
             }
         }
     }

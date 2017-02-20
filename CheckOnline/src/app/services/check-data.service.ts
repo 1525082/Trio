@@ -16,8 +16,7 @@ export class CheckDataService {
     /*
     TODO: SHIT LÖSUNG!!
      */
-    private username: string;
-    private password: string;
+    public password: string;
 
     public chapters: Chapter[] = [];
     public avatare: Avatar[] = [];
@@ -143,9 +142,10 @@ export class CheckDataService {
     public login(username, password) {
         this.requestLogin(username, password).subscribe(
             obj => {
-                this.setUsername(username);
                 this.setPassword(password);
-                this.setToken(obj.token); // TODO: control handling
+                this.setToken(obj.token);
+                this.onAuthenticate.next(OperationCode.SUCCESS);
+                this.router.navigate([this.loginPath]);
             },
             error => this.onAuthenticate.next(OperationCode.ERROR)
         );
@@ -319,10 +319,7 @@ export class CheckDataService {
 
     updatePassword(curPw: string, newPw: string) {
         return this.http.put(restUrls.getRequestPasswordRecoveryUrl(),
-            {
-                password: curPw,
-                newpassword: newPw
-            },
+            { password: curPw, newpassword: newPw },
             CheckHeaders.getHeadersWith(this.getToken()))
             .share()
             .map((res: Response) => res.json());
@@ -345,12 +342,12 @@ export class CheckDataService {
     }
 
     private setSubscriptionForAuthentication() {
+        // TODO: remove subscription and do preloading in login and checkForToken methods.
         this.onAuthenticate.subscribe(
             code => {
                 switch (code) {
                     case OperationCode.SUCCESS:
                         this.preloadData();
-                        this.router.navigate([this.loginPath]);
                         console.log("CODE: " + OperationCode[code] + " | VALUE: " + this.getToken());
                         break;
                     case OperationCode.ERROR:
@@ -367,13 +364,8 @@ export class CheckDataService {
         let token = localStorage.getItem(this.localStorageTokenID);
         if (token != null) {
             this.setToken(token);
+            this.onAuthenticate.next(OperationCode.SUCCESS);
         }
-        /*
-         nicht nötig
-         else {
-         this.onAuthenticate.next(OperationCode.ERROR);
-         }
-         */
     }
 
     /*
@@ -384,10 +376,10 @@ export class CheckDataService {
         return this.token;
     }
 
-    private setToken(token: string) {
+    public setToken(token: string) {
         localStorage.setItem(this.localStorageTokenID, token);
+        console.log(token);
         this.token = token;
-        this.onAuthenticate.next(OperationCode.SUCCESS);
     }
 
     public setStudent(student: Student) {
@@ -439,14 +431,6 @@ export class CheckDataService {
 
     public getEducationalPlans() {
         return this.educationalPlans;
-    }
-
-    public setUsername(username: string) {
-        this.username = username;
-    }
-
-    public getUsername(): string {
-        return this.username;
     }
 
     public setPassword(password: string) {
