@@ -1,20 +1,34 @@
 <app-navbar></app-navbar>
 <main class="main" style="background-color:#8da6d6;">
-    <div class="container-fluid">
-        <div class="col-sm-4">
-            <!-- TODO: Flagge wurde ausgelassen (dennoch aber in Styleguide) -->
+    <div id="content-container">
+        <div id="content-scrollbar">
+            <a href="#" class="scrollUp">
+                <img src="../../images/scrollUp.png"/>
+            </a>
+            <a href="#" class="scrollDown">
+                <img src="../../images/scrollDown.png"/>
+            </a>
         </div>
-        <div class="col-sm-4">
-            <div *ngFor="let comp of checkService.educationalCompetences" style="background-image: url('../../images/contentTextBubble.png'); width:369px; height:120px;">
-                <div style="width: 341px; height: 120px;" tooltip="{{comp.fromDate}}">
-                    {{comp.studentText}}<br/>
-                    {{comp.teacherText}}<br/>
-                    <img src="{{getImageUrl(comp.checked)}}">{{comp.checked}}
-                    <!-- TODO: Modaler Dialog fehlt noch -->
+        <div class="container-fluid">
+            <div>
+                <img src="../../images/littleChapterFlag1.png" alt="Chapter Flag">
+            </div>
+            <div class="col-sm-4">
+                <!-- TODO: Flagge wurde ausgelassen (dennoch aber in Styleguide) -->
+            </div>
+            <div class="col-sm-4">
+                <div *ngFor="let comp of checkService.educationalCompetences"
+                     style="background-image: url('../../images/contentTextBubble.png'); width:369px; height:120px;  margin: auto;">
+                    <div style="width: 341px; height: 120px;" tooltip="{{comp.fromDate}}">
+                        {{comp.studentText}}<br/>
+                        {{comp.teacherText}}<br/>
+                        <img src="{{getImageUrl(comp.checked)}}">{{comp.checked}}
+                        <!-- TODO: Modaler Dialog fehlt noch -->
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-4">
+            <div class="col-sm-4">
+            </div>
         </div>
     </div>
 </main>

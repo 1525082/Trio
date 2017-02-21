@@ -15,7 +15,7 @@ import {CheckHeaders} from "../classes/checkHeaders.class"; // TODO: remove if I
 @Injectable()
 export class CheckDataService {
     /*
-    TODO: SHIT LÖSUNG!!
+    SHIT LÖSUNG!!
      */
     public password: string;
 

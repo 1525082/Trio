@@ -2,8 +2,8 @@
     width: 137px;
     height: 42px;
     display: inline-block;
-    background-image: url("../../images/logo.png");
-    background-repeat: no-repeat;
+    padding-top: 8px;
+    padding-left: 10px;
 }
 .navbar {
     min-height: 60px;
@@ -54,7 +54,7 @@ nav li > a {
     background-color: #001a3a;
     color: #FFF;
     text-decoration: none;
-    font-family: Verdana ;
+    font-family: Verdana, sans-serif;
     font-size: 10pt;
     font-weight: bold;
     padding-left: 10px;
@@ -70,6 +70,17 @@ nav li > a:hover {
 .visitenkarte {
     height: 125px;
     vertical-align: top;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.navbar-toggle {
+    margin-top: 12px;
+    border: solid 1px #EEE;
+}
+
+.navbar-toggle .icon-bar {
+    border: solid 1px #EEE;
 }
 
 @media (min-width: 768px) {
@@ -100,8 +111,9 @@ nav li > a:hover {
     }
 
     .navbar-left .dropdown-toggle {
-        margin-right: 10px;
+        margin-left: 10px;
     }
+
 
     .navbar-right .dropdown {
         float: left;

@@ -145,7 +145,7 @@ export class ChapterComponent implements OnInit, OnDestroy {
         if(chapterId != 0) {
             return "../../images/chapter" + this.getFolderNrForComp(chapterId) + "/littleChapterFlag.png";
         } else {
-            return "../../images/educationalPlanlittleFlag.png";
+            return "../../images/littleChapterFlag2.png";
         }
     }
 
@@ -160,7 +160,7 @@ export class ChapterComponent implements OnInit, OnDestroy {
     public getScrollUpBtnUrl() {
         var imageName = "/scrollUp.png";
         if(this.getSelectedId() == 0) {
-            imageName = "/educationalPlanscrollUp.png";
+            imageName = "/scrollUp.png";
         }
         return this.getScrollButtonUrl() + imageName;
     }
@@ -168,7 +168,7 @@ export class ChapterComponent implements OnInit, OnDestroy {
     public getScrollDownBtnUrl() {
         var imageName = "/scrollDown.png";
         if(this.getSelectedId() == 0) {
-            imageName = "/educationalPlanscrollDown.png";
+            imageName = "/scrollDown.png";
         }
         return this.getScrollButtonUrl() + imageName;
     }
