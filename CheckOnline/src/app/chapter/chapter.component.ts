@@ -142,7 +142,35 @@ export class ChapterComponent implements OnInit, OnDestroy {
     }
 
     public getFlagUrl(chapterId: number) {
-        return "../../images/chapter" + this.getFolderNrForComp(chapterId) + "/littleChapterFlag.png";
+        if(chapterId != 0) {
+            return "../../images/chapter" + this.getFolderNrForComp(chapterId) + "/littleChapterFlag.png";
+        } else {
+            return "../../images/educationalPlanlittleFlag.png";
+        }
+    }
+
+    private getScrollButtonUrl() {
+        if(this.getSelectedId() > 0) {
+            return "../../images/chapter" + this.getFolderNrForComp(this.getSelectedId());
+        } else {
+            return "../../images";
+        }
+    }
+
+    public getScrollUpBtnUrl() {
+        var imageName = "/scrollUp.png";
+        if(this.getSelectedId() == 0) {
+            imageName = "/educationalPlanscrollUp.png";
+        }
+        return this.getScrollButtonUrl() + imageName;
+    }
+
+    public getScrollDownBtnUrl() {
+        var imageName = "/scrollDown.png";
+        if(this.getSelectedId() == 0) {
+            imageName = "/educationalPlanscrollDown.png";
+        }
+        return this.getScrollButtonUrl() + imageName;
     }
 
     getImageUrl(checked: boolean, chapterId: number) {

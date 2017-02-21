@@ -1,24 +1,35 @@
 <app-navbar></app-navbar>
 <main class="main">
-    <div class="container-fluid" *ngFor="let compGroup of construction; let i = index">
-        <div *ngIf="i == 0 && selectedID != 0">
-            <img src="{{getFlagUrl(selectedID)}}" alt="Chapter Flag">
+    <div id="content-container">
+        <div id="content-scrollbar">
+            <a href="#" class="scrollUp">
+                <img src="{{getScrollUpBtnUrl()}}"/>
+            </a>
+            <a href="#" class="scrollDown">
+                <img src="{{getScrollDownBtnUrl()}}"/>
+            </a>
         </div>
-        <div class="col-sm-4 leftCol">
-            <img src="../..{{compGroup.illustration.illustrationLeft}}" alt="Illustration Left">
-        </div>
-        <div class="col-sm-4">
-            <div *ngFor="let comp of compGroup.competences; let j = index" style="background-image: url('../../images/contentTextBubble.png'); width:369px; height:120px;">
-                <div style="width: 341px; height: 120px;" tooltip="{{comp.fromDate}}">
-                    {{comp.studentText}}<br/>
-                    {{comp.teacherText}}<br/>
-                    {{comp.chapterId}}<br/>
-                    <img src="{{getImageUrl(comp.checked, comp.chapterId)}}">{{comp.checked}}
+        <div class="container-fluid" *ngFor="let compGroup of construction; let i = index">
+            <div *ngIf="i == 0">
+                <img src="{{getFlagUrl(selectedID)}}" alt="Chapter Flag">
+            </div>
+            <div class="col-sm-4 leftCol">
+                <img src="../..{{compGroup.illustration.illustrationLeft}}" alt="Illustration Left">
+            </div>
+            <div class="col-sm-4">
+                <div *ngFor="let comp of compGroup.competences; let j = index"
+                     style="background-image: url('../../images/contentTextBubble.png'); width:369px; height:120px;">
+                    <div style="width: 341px; height: 120px;" tooltip="{{comp.fromDate}}">
+                        {{comp.studentText}}<br/>
+                        {{comp.teacherText}}<br/>
+                        {{comp.chapterId}}<br/>
+                        <img src="{{getImageUrl(comp.checked, comp.chapterId)}}">{{comp.checked}}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-4 rightCol">
-            <img src="../..{{compGroup.illustration.illustrationRight}}" alt="Illustration Right">
+            <div class="col-sm-4 rightCol">
+                <img src="../..{{compGroup.illustration.illustrationRight}}" alt="Illustration Right">
+            </div>
         </div>
     </div>
 </main>
