@@ -9,7 +9,8 @@ import {EducationalPlan, EducationalPlanContent, EducationalCompetence} from '..
 import {BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {OperationCode} from "../classes/operationCode.enum";
-import 'rxjs/Rx'; // TODO: remove if IE9 has still problems with promise and add property
+import 'rxjs/Rx';
+import {CheckHeaders} from "../classes/checkHeaders.class"; // TODO: remove if IE9 has still problems with promise and add property
 
 @Injectable()
 export class CheckDataService {
@@ -439,35 +440,5 @@ export class CheckDataService {
 
     public getPassword(): string {
         return this.password;
-    }
-}
-
-class CheckHeaders {
-    /**
-     * Gives the normale header with json content type.
-     * @returns {Headers}
-     */
-    private static getStandardHeadersObj(): Headers {
-        var headers = new Headers();
-        headers.append("Content-Type", "application/json");
-        return headers;
-    }
-
-    /**
-     * Gives header with json content type in a object.
-     * @returns {{headers: Headers}}
-     */
-    static getHeaders(): any {
-        return {headers: this.getStandardHeadersObj()};
-    }
-
-    /**
-     * Gives header with authorization and token.
-     * @returns {{headers: Headers}}
-     */
-    static getHeadersWith(token: string): any {
-        var authHeaders = this.getStandardHeadersObj();
-        authHeaders.append("Authorization", token);
-        return {headers: authHeaders};
     }
 }

@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
                 });
 
                 var ele = jQuery('#content-container');
-                var speed = 20, scroll = 50, scrolling;
+                var speed = 20, scroll = 25, scrolling;
 
                 jQuery('.scrollUp').mousedown(function () {
                     // Scroll the element up
@@ -81,12 +81,12 @@ export class AppComponent implements OnInit {
 
                         //scrolling down?
                         if (delta < 0) {
-                            ele.scrollTop(ele.scrollTop() + scroll);
+                            ele.scrollTop(ele.scrollTop() + (2 * scroll));
                         }
 
                         //scrolling up?
                         else {
-                            ele.scrollTop(ele.scrollTop() - scroll);
+                            ele.scrollTop(ele.scrollTop() - (2 * scroll));
                         }
                         return false;
                     }
