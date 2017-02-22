@@ -1,4 +1,4 @@
-import {Injectable, EventEmitter} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Http, Headers, Response} from "@angular/http";
 import {restUrls} from "../classes/restUrls.class";
 import {Chapter} from "../classes/chapter.class";
@@ -11,32 +11,24 @@ import {Router} from "@angular/router";
 import {OperationCode} from "../classes/operationCode.enum";
 import 'rxjs/Rx';
 import {CheckHeaders} from "../classes/checkHeaders.class";
+import {APP_CONSTS} from "../app.config";
 
 @Injectable()
 export class CheckDataService {
-    public chapters: Chapter[] = [];
     public avatare: Avatar[] = [];
-    public student: Student = null;
-    public avatar: Avatar = null;
     public educationalPlans: EducationalPlan[] = []; // On own created structures for the educational plan and its content.
     public competences: Competence[] = [];
     private token: string = "";
     public password: string;
 
-    onUpdateAvatar: EventEmitter<Avatar> = new EventEmitter();
-    onUpdateStudent: EventEmitter<Student> = new EventEmitter();
-    onUpdateChapters: EventEmitter<Chapter[]> = new EventEmitter();
-    onAuthenticate: BehaviorSubject<OperationCode> = new BehaviorSubject(OperationCode.NONE);;
+    subjectStudent: BehaviorSubject<Student> = new BehaviorSubject(null);
+    subjectAvatar: BehaviorSubject<Avatar> = new BehaviorSubject(null);
+    subjectChapters: BehaviorSubject<Chapter[]> = new BehaviorSubject([]);
+    subjectAuthentication: BehaviorSubject<OperationCode> = new BehaviorSubject(OperationCode.NONE);
     arePlansLoadedAndFiltered: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
-
-    private localStorageTokenID = "token";
-    private loginPath = "/home";
-    private logoutPath = "";
 
     constructor(private http: Http,
                 private router: Router) {
-        //this.setSubscriptionForAuthentication();
         this.checkForToken();
     }
 
@@ -127,11 +119,11 @@ export class CheckDataService {
             obj => {
                 this.setPassword(password);
                 this.setToken(obj.token);
-                this.onAuthenticate.next(OperationCode.SUCCESS);
+                this.subjectAuthentication.next(OperationCode.SUCCESS);
                 this.preloadData();
-                this.router.navigate([this.loginPath]);
+                this.router.navigate([APP_CONSTS.LOGGED_IN_PATH]);
             },
-            error => this.onAuthenticate.next(OperationCode.ERROR)
+            error => this.subjectAuthentication.next(OperationCode.ERROR)
         );
     }
 
@@ -140,8 +132,8 @@ export class CheckDataService {
      *
      */
     public logout() {
-        localStorage.removeItem(this.localStorageTokenID);
-        this.router.navigate([this.logoutPath]);
+        localStorage.removeItem(APP_CONSTS.LOCALSTORAGE_TOKEN_ID);
+        this.router.navigate([APP_CONSTS.LOGGED_OUT_PATH]);
     }
 
     /**
@@ -314,10 +306,6 @@ export class CheckDataService {
             .map((res: Response) => res.json());
     }
 
-    /*
-     TODO: check following methods
-     */
-
     /**
      * Sends the id of the new avatar to the REST-API. The response gives a feedback whether
      * the avatar has been changed.
@@ -368,38 +356,18 @@ export class CheckDataService {
      * @param error the error object, maybe the response error of the server
      */
     private handleError(error: any) {
-        console.error("FEHLER:", error);
+        console.error(error);
     }
-
-    /*
-    private setSubscriptionForAuthentication() {
-        // TODO: remove subscription and do preloading in login and checkForToken methods.
-        this.onAuthenticate.subscribe(
-            code => {
-                switch (code) {
-                    case OperationCode.SUCCESS:
-                        this.preloadData();
-                        console.log("CODE: " + OperationCode[code] + " | VALUE: " + this.getToken());
-                        break;
-                    case OperationCode.ERROR:
-                        console.log("CODE: " + OperationCode[code] + " | VALUE: Fehlermeldung...");
-                        break;
-                    default:
-                        console.log("NOT AUTHENTICATED");
-                }
-            }
-        );
-    }*/
 
     /**
      * Checks whether the token is available in the localstorage and if it is available it sets the token.
      *
      */
     private checkForToken() {
-        let token = localStorage.getItem(this.localStorageTokenID);
+        let token = localStorage.getItem(APP_CONSTS.LOCALSTORAGE_TOKEN_ID);
         if (token != null) {
             this.setToken(token);
-            this.onAuthenticate.next(OperationCode.SUCCESS);
+            this.subjectAuthentication.next(OperationCode.SUCCESS);
             this.preloadData();
         }
     }
@@ -414,26 +382,24 @@ export class CheckDataService {
     }
 
     public setToken(token: string) {
-        localStorage.setItem(this.localStorageTokenID, token);
+        localStorage.setItem(APP_CONSTS.LOCALSTORAGE_TOKEN_ID, token);
         this.token = token;
     }
 
     public setStudent(student: Student) {
-        this.onUpdateStudent.emit(student);
-        this.student = student;
+        this.subjectStudent.next(student);
     }
 
     public getStudent() {
-        return this.student;
+        return this.subjectStudent.getValue();
     }
 
     public setChapters(chapters: Chapter[]) {
-        this.onUpdateChapters.emit(chapters);
-        this.chapters = chapters;
+        this.subjectChapters.next(chapters);
     }
 
     public getChapters() {
-        return this.chapters;
+        return this.subjectChapters.getValue();
     }
 
     /**
@@ -441,12 +407,15 @@ export class CheckDataService {
      * @returns {Headers}
      */
     public getChapter(id: number) {
-        return this.chapters.find(chapter => chapter._id == id);
+        return this.getChapters().find(chapter => chapter._id == id);
     }
 
     public setAvatar(avatar: Avatar) {
-        this.onUpdateAvatar.emit(avatar);
-        this.avatar = avatar;
+        this.subjectAvatar.next(avatar);
+    }
+
+    public getAvatar() {
+        return this.subjectAvatar.getValue();
     }
 
     public setAvatare(avatare: Avatar[]) {

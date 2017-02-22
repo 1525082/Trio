@@ -24,7 +24,7 @@
                             </div>
                             evtl. weitere Informationen...
                         </div>
-                        <li *ngFor="let chapter of checkService.chapters"
+                        <li *ngFor="let chapter of checkService.getChapters()"
                             class="chapter{{chapter._id}}" routerLink="/chapter/{{chapter._id}}">
                             <a>{{chapter.name}}</a>
                         </li>
@@ -33,12 +33,12 @@
                 <li dropdown>
                     <a dropdownToggle id="navFoerderplan"></a>
                     <ul dropdownMenu>
-                        <div class = "visitenkarte">
-                            <div class = "header">
-                                <img src="../images/educationalPlan-big.png" 
-                                     />F&Ouml;DERPLAN
+                        <div class="visitenkarte">
+                            <div class="header">
+                                <img src="../images/educationalPlan-big.png"
+                                />F&Ouml;DERPLAN
                             </div>
-                        </div>  
+                        </div>
                         <!-- TODO: Standard CSS-Klasse erstellen -->
                         <li *ngFor="let eduPlan of checkService.educationalPlans"
                             class="" routerLink="/educationalPlan/{{eduPlan._id}}">
@@ -49,16 +49,16 @@
                 <li dropdown>
                     <a dropdownToggle id="navMyCompetences"></a>
                     <ul dropdownMenu>
-                        <div class = "visitenkarte">
-                            <div class = "header">
+                        <div class="visitenkarte">
+                            <div class="header">
                                 <img src="../images/achievedCompetences-big.png"/><span> DAS KANN ICH!</span>
                             </div>
-                        </div>  
-                        
+                        </div>
+
                         <li routerLink="/achieved/0">
                             <a>ALLE KOMPETENZEN</a>
                         </li>
-                        <li *ngFor="let chapter of checkService.chapters"
+                        <li *ngFor="let chapter of checkService.getChapters()"
                             class="chapter{{chapter._id}}" routerLink="/achieved/{{chapter._id}}">
                             <a>{{chapter.name}}</a>
                         </li>
@@ -72,12 +72,13 @@
                 <li dropdown>
                     <a dropdownToggle id="navAvatar"></a>
                     <ul dropdownMenu>
-                        <div class = "visitenkarte">
-                            <div class = "header">
-                                <img src="../images/student/superhero-robin-big-active.png" />
+                        <div class="visitenkarte">
+                            <div class="header">
+                                <img *ngIf="checkService.getAvatar() != null"
+                                     src="../..{{checkService.getAvatar().avatarBigUrl}}"
+                                     class="float-image"/>
                             </div>
-                        </div>  
-                        Hier kommen weitere Informationen rein..
+                        </div>
                         <li routerLink="/changeavatar">
                             <a>MEIN PROFILBILD &Auml;NDERN</a>
                         </li>
@@ -92,36 +93,36 @@
                 <li dropdown>
                     <a dropdownToggle id="navSchool"></a>
                     <ul dropdownMenu>
-                        <div class = "visitenkarte">
-                            <div class = "header">
-                                <img src="../images/school/school-yellow-big-active.png"
-                                 class="float-image"/>
+                        <div class="visitenkarte">
+                            <div class="header">
+                                <img *ngIf="checkService.getStudent() != null"
+                                     src="../..{{checkService.getStudent().school.imageUrlBig}}"
+                                     class="float-image"/>
                             </div>
-                        </div>  
-                            Attribute der Schule fehlen noch...
+                        </div>
                     </ul>
                 </li>
                 <li dropdown>
                     <a dropdownToggle id="navClass"></a>
                     <ul dropdownMenu>
-                        <div class = "visitenkarte">
-                            <div class = "header">
+                        <div class="visitenkarte">
+                            <div class="header">
                                 <img src="../images/studyGroup/studyGroup_10a_active-big.png"
-                                 class="float-image"/>
+                                     class="float-image"/>
                             </div>
-                        </div> 
-                        <span>
-                            Hier kommen weitere Informationen rein..
-                        </span>
+                        </div>
                     </ul>
                 </li>
                 <li class="seperator"></li>
                 <li dropdown>
                     <a dropdownToggle id="navHelp"></a>
                     <ul dropdownMenu>
-                        <span>
-                            <img src="../images/help-big.png" class="float-image"/>Brauchst du Hilfe?<Br/><Br/><Br/>
-                        </span>
+                        <div class="visitenkarte">
+                            <div class="header">
+                                <img src="../images/help-big.png" class="float-image"/>
+                                BRAUCHST DU HILFE?
+                            </div>
+                        </div>
                         <li>
                             <a>SO GEHT'S!</a>
                         </li>
@@ -139,10 +140,12 @@
                 <li dropdown>
                     <a dropdownToggle id="navLogout"></a>
                     <ul dropdownMenu>
-                        <span>
-						<img src="../images/logout-big.png"
-                             class="float-image"/>M&Ouml;CHTEST DU CHECK! VERLASSEN? <br/><br/>
-                        </span>
+                        <div class="visitenkarte">
+                            <div class="header">
+                                <img src="../images/logout-big.png" class="float-image"/>
+                                M&Ouml;CHTEST DU CHECK! VERLASSEN?
+                            </div>
+                        </div>
                         <li>
                             <a (click)="checkService.logout()">JA</a>
                         </li>

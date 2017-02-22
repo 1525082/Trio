@@ -12,7 +12,7 @@ import {ChangePwComponent} from './change-pw/change-pw.component';
 import {ChangeAvatarComponent} from './change-avatar/change-avatar.component';
 import {EducationalPlanComponent} from './educational-plan/educational-plan.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
-import {Routes, RouterModule} from "@angular/router";
+import {RouterModule, Routes} from "@angular/router";
 import {CheckDataService} from "./services/check-data.service";
 import {CollapseModule, DropdownModule, ModalModule, TooltipModule, TooltipConfig} from "ng2-bootstrap";
 import {ModalDialogComponent} from './modal-dialog/modal-dialog.component';
@@ -20,20 +20,7 @@ import {ModalMessageService} from "./services/modal-message.service";
 import {TooltipService} from "./services/tooltip.service";
 import {LocationStrategy, HashLocationStrategy} from "@angular/common";
 import { ScrollButtonsComponent } from './scroll-buttons/scroll-buttons.component';
-
-const ROUTES: Routes = [
-    {path: '', component: LoginComponent},
-    {path: 'home', component: ChapterComponent},
-    {path: 'chapter', component: ChapterComponent},
-    {path: 'chapter/:id', component: ChapterComponent},
-    {path: 'educationalPlan/:id', component: EducationalPlanComponent},
-    {path: 'achieved', component: ChapterComponent},
-    {path: 'achieved/:chapterId', component: ChapterComponent},
-    {path: 'changeavatar', component: ChangeAvatarComponent},
-    {path: 'changepw', component: ChangePwComponent},
-    {path: 'deleteprofile', component: DeleteProfileComponent},
-    {path: '**', component: PageNotFoundComponent}
-];
+import {ROUTES} from "./app.routes";
 
 export function getAlertConfig(): TooltipConfig {
     return Object.assign(new TooltipConfig(), {placement: 'right', container: 'body'});

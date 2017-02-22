@@ -1,14 +1,14 @@
 <app-navbar></app-navbar>
 <main class="main">
-    <img *ngIf="checkService.avatar" class="displayedCentralImage icon" id="avatar"
-         src="../..{{checkService.avatar.avatarBigUrl}}"
+    <img *ngIf="selectedAvatar" class="displayedCentralImage icon" id="avatar"
+         src="../..{{selectedAvatar.avatarBigUrl}}"
          alt="Your Avatar">
     <form id="changeAvatar">
         <div class="alignedCenter">
             <label class="headline checkNacht">PROFILBILD &Auml;NDERN</label>
         </div>
         <div class="alignedCenter">
-            <input id="buttonCancel" type="submit" value="ABBRECHEN">
+            <input type="submit" id="buttonCancel" value="ABBRECHEN" (click)="deselectAvatar()">
             <input type="submit" value="SPEICHERN" (click)="updateSelectedAvatar()">
         </div>
     </form>

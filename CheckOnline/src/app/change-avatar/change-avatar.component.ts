@@ -13,12 +13,13 @@ export class ChangeAvatarComponent {
 
     constructor(protected checkService: CheckDataService,
                 protected modalService: ModalMessageService) {
+        this.checkService.subjectAvatar.subscribe(
+            avatar => this.selectAvatar(avatar));
     }
 
     updateSelectedAvatar() {
         if (this.selectedAvatar) {
-            if (this.selectedAvatar._id == this.checkService.avatar._id) {
-                console.log("GLEICHER AVATAR AUSGEWAEHLT!");
+            if (this.selectedAvatar._id == this.checkService.subjectAvatar.getValue()._id) {
                 return;
             }
             this.checkService.updateAvatar(this.selectedAvatar._id)
@@ -36,11 +37,23 @@ export class ChangeAvatarComponent {
         for (var ava of this.checkService.avatare) {
             var elm = document.getElementById("avatar" + ava._id);
             if (ava._id != avatar._id) {
-                elm.setAttribute("style", "background-color: #FFFFFF;");
+                this.setStyle(elm, "style", "background-color: #FFFFFF;");
             } else {
-                elm.setAttribute("style", "background-color: #D3DDF2;");
+                this.setStyle(elm, "style", "background-color: #D3DDF2;");
             }
         }
         this.selectedAvatar = avatar;
+    }
+
+    private setStyle(elm, attr, value) {
+        if(elm) {
+            elm.setAttribute(attr, value);
+        }
+    }
+
+    deselectAvatar() {
+        if (this.checkService.subjectAvatar.getValue() != null) {
+            this.selectAvatar(this.checkService.subjectAvatar.getValue());
+        }
     }
 }

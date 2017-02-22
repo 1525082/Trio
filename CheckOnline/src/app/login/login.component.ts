@@ -4,7 +4,6 @@ import {CheckDataService} from "../services/check-data.service";
 import {Subject} from "rxjs";
 import {TooltipService} from "../services/tooltip.service";
 import {OperationCode} from "../classes/operationCode.enum";
-import {isEmpty} from "rxjs/operator/isEmpty";
 import {isNullOrUndefined} from "util";
 
 @Component({
@@ -35,7 +34,7 @@ export class LoginComponent implements OnInit {
             message => this.handleMessage(message, this.bnTooltip));
         this.pwTooltipMsg.subscribe(
             message => this.handleMessage(message, this.pwTooltip));
-        this.checkService.onAuthenticate.subscribe(
+        this.checkService.subjectAuthentication.subscribe(
             code => code == OperationCode.ERROR ? this.pwTooltipMsg.next(this.msg1) : null
         );
     }

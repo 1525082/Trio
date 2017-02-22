@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import { CheckDataService } from "../services/check-data.service";
+import {CheckDataService} from "../services/check-data.service";
 
 @Component({
     selector: 'app-navbar',
@@ -20,18 +20,19 @@ export class NavbarComponent {
     }
 
     private onAvatarChangedListener() {
-        this.checkService.onUpdateAvatar.subscribe(
+        this.checkService.subjectAvatar.subscribe(
             (avatar) => {
-                let style = document.getElementById("navbarAvatar");
-                style.innerHTML = this.getClass("navAvatar",
-                    avatar.avatarInactiveUrl,
-                    avatar.avatarUrl);
-            }
-        );
+                if (avatar) {
+                    let style = document.getElementById("navbarAvatar");
+                    style.innerHTML = this.getClass("navAvatar",
+                        avatar.avatarInactiveUrl,
+                        avatar.avatarUrl);
+                }
+            });
     }
 
     private onStudentChangedListener() {
-        this.checkService.onUpdateStudent.subscribe(
+        this.checkService.subjectStudent.subscribe(
             (student) => {
                 let style = document.getElementById("navbarSchoolClass");
                 style.innerHTML =
@@ -46,7 +47,7 @@ export class NavbarComponent {
     }
 
     private onChaptersChangedListener() {
-        this.checkService.onUpdateChapters.subscribe(
+        this.checkService.subjectChapters.subscribe(
             (chapters) => {
                 let style = document.getElementById("navbarChapters");
                 style.innerHTML = "";

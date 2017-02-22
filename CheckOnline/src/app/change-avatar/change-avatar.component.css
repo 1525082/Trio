@@ -11,11 +11,54 @@ input[type=submit] {
     border: 0px;
     background-color: white;
     padding: 0px;
+    max-width: 70px;
 }
 
 .avatarListCentered {
-    max-width: 440px;
+    max-width: 70px;
     display: block;
     margin: auto;
     text-align: left;
+}
+
+@media (min-width: 200px) {
+    .avatarListCentered {
+        max-width: 140px;
+    }
+}
+
+@media (min-width: 275px) {
+    .avatarListCentered {
+        max-width: 210px;
+    }
+}
+
+@media (min-width: 350px) {
+    .avatarListCentered {
+        max-width: 280px;
+    }
+}
+
+@media (min-width: 425px) {
+    .avatarListCentered {
+        max-width: 350px;
+    }
+}
+
+@media (min-width: 500px) {
+    .avatarListCentered {
+        max-width: 420px;
+    }
+}
+
+@media (min-width: 575px) {
+    .avatarListCentered {
+        max-width: 490px;
+    }
+}
+
+@media (min-width: 768px) {
+    .avatarListCentered {
+        max-width: 560px;
+    }
 }
