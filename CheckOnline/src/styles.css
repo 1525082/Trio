@@ -51,6 +51,16 @@ a {
     top: 7px;
 }
 
+@media (max-width: 768px) {
+  .inputlabel {
+    position: relative;
+    text-align: center;
+    width: auto;
+    right: 0;
+    top: 0;
+  }
+}
+
 .icon {
     padding-top: 40px;
 }
