@@ -33,10 +33,12 @@
                 <li dropdown>
                     <a dropdownToggle id="navFoerderplan"></a>
                     <ul dropdownMenu>
-                        <span>
-                          <img src="../images/educationalPlan-big.png" class="float-image"/>F&Ouml;DERPLAN
-						</span>
-                        <div>evtl. weitere Informationen...<br/><br/></div>
+                        <div class = "visitenkarte">
+                            <div class = "header">
+                                <img src="../images/educationalPlan-big.png" 
+                                     />F&Ouml;DERPLAN
+                            </div>
+                        </div>  
                         <!-- TODO: Standard CSS-Klasse erstellen -->
                         <li *ngFor="let eduPlan of checkService.educationalPlans"
                             class="" routerLink="/educationalPlan/{{eduPlan._id}}">
@@ -47,10 +49,12 @@
                 <li dropdown>
                     <a dropdownToggle id="navMyCompetences"></a>
                     <ul dropdownMenu>
-                        <span>
-                            <img src="../images/achievedCompetences-big.png"
-                                 class="float-image"/>DAS KANN ICH!<br/><br/><br/>
-                        </span>
+                        <div class = "visitenkarte">
+                            <div class = "header">
+                                <img src="../images/achievedCompetences-big.png"/><span> DAS KANN ICH!</span>
+                            </div>
+                        </div>  
+                        
                         <li routerLink="/achieved/0">
                             <a>ALLE KOMPETENZEN</a>
                         </li>
@@ -68,9 +72,12 @@
                 <li dropdown>
                     <a dropdownToggle id="navAvatar"></a>
                     <ul dropdownMenu>
-                        <span>
-                            Hier kommen weitere Informationen rein..
-                        </span>
+                        <div class = "visitenkarte">
+                            <div class = "header">
+                                <img src="../images/student/superhero-robin-big-active.png" />
+                            </div>
+                        </div>  
+                        Hier kommen weitere Informationen rein..
                         <li routerLink="/changeavatar">
                             <a>MEIN PROFILBILD &Auml;NDERN</a>
                         </li>
@@ -85,14 +92,24 @@
                 <li dropdown>
                     <a dropdownToggle id="navSchool"></a>
                     <ul dropdownMenu>
-                        <span>
-                            Hier kommen weitere Informationen rein..
-                        </span>
+                        <div class = "visitenkarte">
+                            <div class = "header">
+                                <img src="../images/school/school-yellow-big-active.png"
+                                 class="float-image"/>
+                            </div>
+                        </div>  
+                            Attribute der Schule fehlen noch...
                     </ul>
                 </li>
                 <li dropdown>
                     <a dropdownToggle id="navClass"></a>
                     <ul dropdownMenu>
+                        <div class = "visitenkarte">
+                            <div class = "header">
+                                <img src="../images/studyGroup/studyGroup_10a_active-big.png"
+                                 class="float-image"/>
+                            </div>
+                        </div> 
                         <span>
                             Hier kommen weitere Informationen rein..
                         </span>
