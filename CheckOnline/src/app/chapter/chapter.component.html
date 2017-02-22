@@ -1,14 +1,8 @@
 <app-navbar></app-navbar>
 <main class="main">
     <div id="content-container">
-        <div id="content-scrollbar">
-            <a href="#" class="scrollUp">
-                <img src="{{getScrollUpBtnUrl()}}"/>
-            </a>
-            <a href="#" class="scrollDown">
-                <img src="{{getScrollDownBtnUrl()}}"/>
-            </a>
-        </div>
+        <app-scroll-buttons [scrollUpBtnUrl]="getScrollUpBtnUrl()" [scrollDownBtnUrl]="getScrollDownBtnUrl()">
+        </app-scroll-buttons>
         <div class="container-fluid" *ngFor="let compGroup of construction; let i = index">
             <div *ngIf="i == 0">
                 <img src="{{getFlagUrl(selectedID)}}" alt="Chapter Flag">

@@ -10,21 +10,17 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {OperationCode} from "../classes/operationCode.enum";
 import 'rxjs/Rx';
-import {CheckHeaders} from "../classes/checkHeaders.class"; // TODO: remove if IE9 has still problems with promise and add property
+import {CheckHeaders} from "../classes/checkHeaders.class";
 
 @Injectable()
 export class CheckDataService {
-    /*
-    SHIT LÖSUNG!!
-     */
-    public password: string;
-
     public chapters: Chapter[] = [];
     public avatare: Avatar[] = [];
     public student: Student = null;
     public avatar: Avatar = null;
     public competences: Competence[] = [];
     private token: string = "";
+    public password: string;
 
     onUpdateAvatar: EventEmitter<Avatar>;
     onUpdateStudent: EventEmitter<Student>;
@@ -32,7 +28,7 @@ export class CheckDataService {
     onAuthenticate: BehaviorSubject<OperationCode>;
 
     /**
-     * Datenstruktur für gesamten Förderplan
+     * On own created structures for the educational plan and its content.
      */
     public educationalPlans: EducationalPlan[] = [];
     public educationalCompetences: EducationalCompetence[] = [];
@@ -51,8 +47,11 @@ export class CheckDataService {
         this.checkForToken();
     }
 
+    /**
+     * Request all data from the REST-API what is needed for the application.
+     *
+     */
     public preloadData() {
-        console.log("CALL PRELOADING DATA");
         if (this.getToken() && this.getToken() != "") {
             this.requestStudent().subscribe(
                 stud => this.setStudent(stud),
@@ -73,7 +72,7 @@ export class CheckDataService {
              * viewed. So the user don't have to wait again.
              *
              */
-            this.requestCompetences().subscribe( // TODO: sort competences on chapters
+            this.requestCompetences().subscribe(
                 comps => this.setCompetences(comps),
                 this.handleError);
             this.requestEducationalPlans().subscribe(
@@ -94,12 +93,17 @@ export class CheckDataService {
         }
     }
 
+    /**
+     * Select the competences of a educational plan and makes it available for the educational component.
+     *
+     * @param id of the wanted educational plan
+     */
     public selectPlan(id: number) {
         let plan: EducationalPlan = this.educationalPlans.find(plan => plan._id == id);
         if (plan) {
             this.educationalCompetences = plan.educationalContent.competencesForDisplay;
         } else {
-            console.error("KEIN ENTSPRECHENDER PLAN VERFUEGBAR");
+            console.log("AKTUELL IST NOCH KEIN PLAN VERFÜGBAR.");
         }
     }
 
@@ -126,16 +130,8 @@ export class CheckDataService {
         EducationalPlanContent.setCompetencesForDisplay(educationalContent, arr, counter);
     }
 
-    private requestLogin(username, password) {
-        return this.http.put(restUrls.getLoginUrl(),
-            JSON.stringify({username, password}),
-            CheckHeaders.getHeaders())
-            .share()
-            .map((res: Response) => res.json());
-    }
-
     /**
-     * Authenticates a user and gets the token of the user.
+     * Subscribes on a Observable and sets the token and emits a operation code.
      *
      * @param username
      * @param password
@@ -152,13 +148,33 @@ export class CheckDataService {
         );
     }
 
+    /**
+     * Removes the token from the localStorage and navigates to the login page.
+     *
+     */
     public logout() {
         localStorage.removeItem(this.localStorageTokenID);
         this.router.navigate([this.logoutPath]);
     }
 
     /**
+     * Authenticates a user and gets the token of the user.
+     *
+     * @param username
+     * @param password
+     * @returns {Observable<R>}
+     */
+    private requestLogin(username, password) {
+        return this.http.put(restUrls.getLoginUrl(),
+            JSON.stringify({username, password}),
+            CheckHeaders.getHeaders())
+            .share()
+            .map((res: Response) => res.json());
+    }
+
+    /**
      * Get all avatar which are available.
+     *
      * @returns {Observable<R>}
      */
     requestAvatare() {
@@ -170,6 +186,7 @@ export class CheckDataService {
 
     /**
      * Gets an avatar by id.
+     *
      * @param id
      * @returns {Observable<R>}
      */
@@ -182,6 +199,7 @@ export class CheckDataService {
 
     /**
      * Get the information of the student.
+     *
      * @returns {Observable<R>}
      */
     requestStudent() {
@@ -193,6 +211,7 @@ export class CheckDataService {
 
     /**
      * Get the information of all chapters.
+     *
      * @returns {Observable<R>}
      */
     requestChapters() {
@@ -204,6 +223,7 @@ export class CheckDataService {
 
     /**
      * Get the information of a chapter by id.
+     *
      * @param id selected chapter
      * @returns {Observable<R>}
      */
@@ -216,6 +236,7 @@ export class CheckDataService {
 
     /**
      * Get all illustrations of a chapter by id.
+     *
      * @param id selected chapter
      * @returns {Observable<R>}
      */
@@ -228,6 +249,7 @@ export class CheckDataService {
 
     /**
      * Gives all competences.
+     *
      * @returns {Observable<R>}
      */
     requestCompetences() {
@@ -237,6 +259,7 @@ export class CheckDataService {
     /**
      * Gives all competences of a chapter by id. By call with id = 0 it returns
      * the competences of all chapters.
+     *
      * @param id selected chapter
      * @returns {Observable<R>}
      */
@@ -246,6 +269,7 @@ export class CheckDataService {
 
     /**
      * Gives all competences which are achieved.
+     *
      * @returns {Observable<R>}
      */
     requestAchievedCompetences() {
@@ -254,6 +278,7 @@ export class CheckDataService {
 
     /**
      * Gives all competences of a chapter by id which are achieved.
+     *
      * @param id selected chapter
      * @returns {Observable<R>}
      */
@@ -264,6 +289,7 @@ export class CheckDataService {
     /**
      * Gives all competences of a chapter by id. Is id = 0 then it gives all
      * competences.
+     *
      * @param id selected chapter, id = 0 => all competences
      * @param checked false | true => all achieved competences
      * @returns {Observable<R>}
@@ -277,6 +303,7 @@ export class CheckDataService {
 
     /**
      * Gives all educational plans.
+     *
      * @returns {Observable<R>}
      */
     requestEducationalPlans() {
@@ -289,6 +316,7 @@ export class CheckDataService {
     /**
      * Gives the notes to the competences of a educational plan. Includes
      * not the competences. Only the numbers of the competences.
+     *
      * @param id of the educational plan
      * @returns {Observable<R>}
      */
@@ -304,20 +332,27 @@ export class CheckDataService {
      */
 
     /**
+     * Sends the id of the new avatar to the REST-API. The response gives a feedback whether
+     * the avatar has been changed.
      *
-     * @param id
+     * @param id of the new avatar
      * @returns {Observable<R>}
      */
     updateAvatar(id: number) {
-        /*
-         null weil kein body vorhanden, entscheidung welcher Avatar geht ueber URL
-         */
-        return this.http.put(restUrls.getUpdateAvatarUrl(id), null,
+        return this.http.put(restUrls.getUpdateAvatarUrl(id), null, // currently server doesn't handle a body => null
             CheckHeaders.getHeadersWith(this.getToken()))
             .share()
             .map((res: Response) => res.json());
     }
 
+    /**
+     * Send the new password to the REST-API. The response gives a feedback whether the
+     * password has been changed.
+     *
+     * @param curPw the current password
+     * @param newPw the new password
+     * @returns {Observable<R>}
+     */
     updatePassword(curPw: string, newPw: string) {
         return this.http.put(restUrls.getRequestPasswordRecoveryUrl(),
             { password: curPw, newpassword: newPw },
@@ -326,6 +361,12 @@ export class CheckDataService {
             .map((res: Response) => res.json());
     }
 
+    /**
+     * Sends the server the information to "delete" (only deactivation) the user profile.
+     * The response gives a feedback whether the profile has been deleted.
+     *
+     * @returns {Observable<R>}
+     */
     deleteProfile() {
         return this.http.delete(restUrls.getDeleteProfileUrl(),
             CheckHeaders.getHeadersWith(this.getToken()))
@@ -336,6 +377,7 @@ export class CheckDataService {
     /**
      * Prints the error parsed in json and as error message in the
      * console.
+     *
      * @param error the error object, maybe the response error of the server
      */
     private handleError(error: any) {
@@ -361,6 +403,10 @@ export class CheckDataService {
         );
     }
 
+    /**
+     * Checks whether the token is available in the localstorage and if it is available it sets the token.
+     *
+     */
     private checkForToken() {
         let token = localStorage.getItem(this.localStorageTokenID);
         if (token != null) {
@@ -370,7 +416,8 @@ export class CheckDataService {
     }
 
     /*
-     TODO: add more getter and setter
+     *              GETTER && SETTER
+     *-----------------------------------------------
      */
 
     public getToken() {
@@ -441,4 +488,8 @@ export class CheckDataService {
     public getPassword(): string {
         return this.password;
     }
+
+    /*
+     TODO: add more getter and setter
+     */
 }

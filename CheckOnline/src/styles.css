@@ -3,6 +3,10 @@ body {
     font-family: Verdana, sans-serif;
 }
 
+img {
+    max-width: 100%;
+}
+
 #displayedCentral {
     display: block;
     margin: 3.5px auto;

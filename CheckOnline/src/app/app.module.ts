@@ -19,6 +19,7 @@ import {ModalDialogComponent} from './modal-dialog/modal-dialog.component';
 import {ModalMessageService} from "./services/modal-message.service";
 import {TooltipService} from "./services/tooltip.service";
 import {LocationStrategy, HashLocationStrategy} from "@angular/common";
+import { ScrollButtonsComponent } from './scroll-buttons/scroll-buttons.component';
 
 const ROUTES: Routes = [
     {path: '', component: LoginComponent},
@@ -50,7 +51,8 @@ export function getAlertConfig(): TooltipConfig {
         ChangeAvatarComponent,
         EducationalPlanComponent,
         PageNotFoundComponent,
-        ModalDialogComponent
+        ModalDialogComponent,
+        ScrollButtonsComponent
     ],
     imports: [
         BrowserModule,

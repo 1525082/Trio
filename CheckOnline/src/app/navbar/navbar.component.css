@@ -52,7 +52,7 @@
 
 nav li > a {
     background-color: #001a3a;
-    color: #FFF;
+    color: #8da6d6; /* TODO: IN STYLEGUID MANCHMAL AUCH WEISS */
     text-decoration: none;
     font-family: Verdana, sans-serif;
     font-size: 10pt;
