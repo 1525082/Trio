@@ -1,7 +1,7 @@
 import {CheckDataService} from '../services/check-data.service'
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router'
-import {EducationalPlan, EducationalCompetence} from "../classes/educationalPlan.class";
+import {EducationalPlan, EducationalCompetence, EducationalPlanContent} from "../classes/educationalPlan.class";
 
 @Component({
     selector: 'app-educational-plan',
@@ -35,7 +35,7 @@ export class EducationalPlanComponent implements OnInit, OnDestroy {
         let id = scope.getParams().id;
         if (id) {
             this.selectedID = id;
-            this.selectPlan(id);
+            this.selectPlan();
         }
     }
 
@@ -44,13 +44,18 @@ export class EducationalPlanComponent implements OnInit, OnDestroy {
      *
      * @param id of the wanted educational plan
      */
-    private selectPlan(id: number) {
-        this.selectedPlan = this.checkService.educationalPlans.find(plan => plan._id == id);
+    private selectPlan() {
+        this.selectedPlan = this.checkService.educationalPlans.find(plan => plan._id == this.selectedID);
         if (this.selectedPlan) {
-            this.educationalCompetences = this.selectedPlan.educationalContent.competencesForDisplay;
+            this.educationalCompetences = EducationalPlan.getContent(this.selectedPlan).competencesForDisplay;
         } else {
-            // TODO: possible that no plan selectable => add EventEmitter!
-            console.log("ADD EVENTEMITTER");
+            this.checkService.arePlansLoadedAndFiltered.subscribe(
+                filtered => {
+                    if (filtered && this.selectedID != null) {
+                        this.selectPlan()
+                    }
+                }
+            );
         }
     }
 

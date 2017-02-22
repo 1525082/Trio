@@ -18,20 +18,17 @@ export class CheckDataService {
     public avatare: Avatar[] = [];
     public student: Student = null;
     public avatar: Avatar = null;
+    public educationalPlans: EducationalPlan[] = []; // On own created structures for the educational plan and its content.
     public competences: Competence[] = [];
     private token: string = "";
     public password: string;
 
-    onUpdateAvatar: EventEmitter<Avatar>;
-    onUpdateStudent: EventEmitter<Student>;
-    onUpdateChapters: EventEmitter<Chapter[]>;
-    onAuthenticate: BehaviorSubject<OperationCode>;
+    onUpdateAvatar: EventEmitter<Avatar> = new EventEmitter();
+    onUpdateStudent: EventEmitter<Student> = new EventEmitter();
+    onUpdateChapters: EventEmitter<Chapter[]> = new EventEmitter();
+    onAuthenticate: BehaviorSubject<OperationCode> = new BehaviorSubject(OperationCode.NONE);;
+    arePlansLoadedAndFiltered: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    /**
-     * On own created structures for the educational plan and its content.
-     */
-    public educationalPlans: EducationalPlan[] = [];
-    public educationalCompetences: EducationalCompetence[] = [];
 
     private localStorageTokenID = "token";
     private loginPath = "/home";
@@ -39,11 +36,7 @@ export class CheckDataService {
 
     constructor(private http: Http,
                 private router: Router) {
-        this.onUpdateAvatar = new EventEmitter();
-        this.onUpdateStudent = new EventEmitter();
-        this.onUpdateChapters = new EventEmitter();
-        this.onAuthenticate = new BehaviorSubject<OperationCode>(OperationCode.NONE);
-        this.setSubscriptionForAuthentication();
+        //this.setSubscriptionForAuthentication();
         this.checkForToken();
     }
 
@@ -75,22 +68,29 @@ export class CheckDataService {
             this.requestCompetences().subscribe(
                 comps => this.setCompetences(comps),
                 this.handleError);
-            this.requestEducationalPlans().subscribe(
-                plans => {
-                    this.setEducationalPlans(plans);
-                    this.getEducationalPlans().forEach(
-                        (eduPlan: EducationalPlan) => {
-                            this.requestEducationalPlanContentById(eduPlan._id).subscribe(
-                                // TODO: ohne [0] wird der content als Array hinzugefügt. liegt wohl am JSON RESPONSE
-                                content => EducationalPlan.setContent(eduPlan, content[0]),
-                                this.handleError,
-                                () => this.filter(EducationalPlan.getContent(eduPlan as EducationalPlan) as EducationalPlanContent)
-                            );
-                        }
-                    );
-                },
-                this.handleError);
+            this.loadEducationalPlanAndFilter();
         }
+    }
+
+    private loadEducationalPlanAndFilter() {
+        this.requestEducationalPlans().subscribe(
+            plans => {
+                this.setEducationalPlans(plans);
+                this.getEducationalPlans().forEach(
+                    (eduPlan: EducationalPlan) => {
+                        this.requestEducationalPlanContentById(eduPlan._id).subscribe(
+                            // ohne [0] wird der content als Array hinzugefügt. liegt wohl am JSON RESPONSE
+                            content => EducationalPlan.setContent(eduPlan, content[0]),
+                            this.handleError,
+                            () => {
+                                this.filter(EducationalPlan.getContent(eduPlan as EducationalPlan) as EducationalPlanContent);
+                                this.arePlansLoadedAndFiltered.next(true);
+                            }
+                        );
+                    }
+                );
+            },
+            this.handleError);
     }
 
     /**
@@ -128,6 +128,7 @@ export class CheckDataService {
                 this.setPassword(password);
                 this.setToken(obj.token);
                 this.onAuthenticate.next(OperationCode.SUCCESS);
+                this.preloadData();
                 this.router.navigate([this.loginPath]);
             },
             error => this.onAuthenticate.next(OperationCode.ERROR)
@@ -370,6 +371,7 @@ export class CheckDataService {
         console.error("FEHLER:", error);
     }
 
+    /*
     private setSubscriptionForAuthentication() {
         // TODO: remove subscription and do preloading in login and checkForToken methods.
         this.onAuthenticate.subscribe(
@@ -387,7 +389,7 @@ export class CheckDataService {
                 }
             }
         );
-    }
+    }*/
 
     /**
      * Checks whether the token is available in the localstorage and if it is available it sets the token.
@@ -398,6 +400,7 @@ export class CheckDataService {
         if (token != null) {
             this.setToken(token);
             this.onAuthenticate.next(OperationCode.SUCCESS);
+            this.preloadData();
         }
     }
 
@@ -412,7 +415,6 @@ export class CheckDataService {
 
     public setToken(token: string) {
         localStorage.setItem(this.localStorageTokenID, token);
-        console.log(token);
         this.token = token;
     }
 
