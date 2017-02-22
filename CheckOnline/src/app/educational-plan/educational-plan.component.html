@@ -5,14 +5,16 @@
                             [scrollDownBtnUrl]="'../../images/scrollDown.png'">
         </app-scroll-buttons>
         <div class="container-fluid">
-            <div>
-                <img src="../../images/littleChapterFlag1.png" alt="Chapter Flag">
+            <div id="educational-chapter-flag">
+                <p>
+                    {{(selectedPlan) ? selectedPlan.thema : ""}}
+                </p>
             </div>
             <div class="col-sm-4">
                 <!-- TODO: Flagge wurde ausgelassen (dennoch aber in Styleguide) -->
             </div>
             <div class="col-sm-4">
-                <div *ngFor="let comp of checkService.educationalCompetences"
+                <div *ngFor="let comp of educationalCompetences"
                      style="background-image: url('../../images/contentTextBubble.png'); width:369px; height:120px;  margin: auto;">
                     <div style="width: 341px; height: 120px;" tooltip="{{comp.fromDate}}">
                         {{comp.studentText}}<br/>

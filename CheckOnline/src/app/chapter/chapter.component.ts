@@ -183,7 +183,6 @@ export class ChapterComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        // TODO: hintergrundfarbe zurücksetzen
         if (this.getBody()) {
             this.getBody().style.backgroundColor = "#FFFFFF";
         }

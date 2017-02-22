@@ -94,20 +94,6 @@ export class CheckDataService {
     }
 
     /**
-     * Select the competences of a educational plan and makes it available for the educational component.
-     *
-     * @param id of the wanted educational plan
-     */
-    public selectPlan(id: number) {
-        let plan: EducationalPlan = this.educationalPlans.find(plan => plan._id == id);
-        if (plan) {
-            this.educationalCompetences = plan.educationalContent.competencesForDisplay;
-        } else {
-            console.log("AKTUELL IST NOCH KEIN PLAN VERFÜGBAR.");
-        }
-    }
-
-    /**
      * Iterates through the notes of an educational plan and finds the competences to
      * the notes.
      * @param educationalContent plan content to find compentences to notes

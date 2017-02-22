@@ -1,16 +1,20 @@
 import {CheckDataService} from '../services/check-data.service'
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router'
+import {EducationalPlan, EducationalCompetence} from "../classes/educationalPlan.class";
 
 @Component({
     selector: 'app-educational-plan',
     templateUrl: './educational-plan.component.html',
     styleUrls: ['./educational-plan.component.css']
 })
-export class EducationalPlanComponent implements OnInit {
+export class EducationalPlanComponent implements OnInit, OnDestroy {
     private selectedID: number;
     private body: HTMLElement;
     private params;
+
+    protected selectedPlan: EducationalPlan = null;
+    protected educationalCompetences: EducationalCompetence[] = [];
 
     constructor(protected checkService: CheckDataService,
                 private route: ActivatedRoute) {
@@ -31,7 +35,28 @@ export class EducationalPlanComponent implements OnInit {
         let id = scope.getParams().id;
         if (id) {
             this.selectedID = id;
-            this.checkService.selectPlan(id); // TODO: possible that no plan selectable => add EventEmitter!
+            this.selectPlan(id);
+        }
+    }
+
+    /**
+     * Select the competences of a educational plan and makes it available for the educational component.
+     *
+     * @param id of the wanted educational plan
+     */
+    private selectPlan(id: number) {
+        this.selectedPlan = this.checkService.educationalPlans.find(plan => plan._id == id);
+        if (this.selectedPlan) {
+            this.educationalCompetences = this.selectedPlan.educationalContent.competencesForDisplay;
+        } else {
+            // TODO: possible that no plan selectable => add EventEmitter!
+            console.log("ADD EVENTEMITTER");
+        }
+    }
+
+    ngOnDestroy() {
+        if (this.getBody()) {
+            this.getBody().style.backgroundColor = "#FFFFFF";
         }
     }
 

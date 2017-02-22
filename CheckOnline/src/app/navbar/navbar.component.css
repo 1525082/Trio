@@ -26,6 +26,7 @@
     border-bottom: solid 1px #FFFFFF;
     padding: 0px;
     margin: 0px;
+    color: #FFF;
 }
 
 .dropdown-menu > li > a {
@@ -52,9 +53,9 @@
 
 nav li > a {
     background-color: #001a3a;
-    color: #8da6d6; /* TODO: IN STYLEGUID MANCHMAL AUCH WEISS */
+    color: #8da6d6;
     text-decoration: none;
-    font-family: Verdana, sans-serif;
+    /* TODO: font-family: Verdana, sans-serif;*/
     font-size: 10pt;
     font-weight: bold;
     padding-left: 10px;
@@ -70,7 +71,6 @@ nav li > a:hover {
 .visitenkarte {
     height: 125px;
     vertical-align: top;
-    font-family: sans-serif;
     font-weight: bold;
 }
 

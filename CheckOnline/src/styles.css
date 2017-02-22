@@ -1,6 +1,7 @@
 body {
     font-size: 13pt;
-    font-family: Verdana, sans-serif;
+    font-family: "Comic Sans MS", sans-serif, Verdana, sans-serif;
+    /* TODO: font-family: Verdana, sans-serif; */
 }
 
 img {
