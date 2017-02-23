@@ -1,46 +1,71 @@
 body {
   background-color: #f7bed2;
+  overflow-x: hidden;
 }
 
-#representation {
-  width: 1005px;
-  margin: auto;
+main .container-fluid {
+    padding: 0px;
 }
 
-#representationLeftElement {
+.col-sm-4.leftCol {
+    display: none;
+}
+
+.col-sm-4.rightCol {
+    display: none;
+}
+
+.col-sm-4.midCol {
   display: inline-block;
-  width: 340px;
 }
 
-#representationMiddleElement {
-  display: inline-block;
-  vertical-align: top;
-  padding-top: 15px;
-  width: 340px;
-}
+@media (min-width: 768px) {
+    .col-sm-4.leftCol {
+        display: inline-block;
+    }
 
-#representationRightElement {
-  display: inline-block;
-  padding-top: 45px;
-  width: 310px;
-}
+    .col-sm-4.rightCol {
+        display: inline-block;
+    }
 
-.placeholderHeader {
-  width: 100%;
-  height: 60px;
-  background-color: #001a3a;
+    #content-container {
+        max-width: 1080px;
+        overflow: hidden;
+        margin: auto;
+    }
 }
 
 .textbubble {
-  display: block;
-  margin: 5px auto;
+  background-image: url('../images/contentTextBubble.png');
+  width: 369px;
+  height: 120px;
+  color: #001a3a;
+}
+
+.bubbleContent {
+  width: 341px;
+  height: 120px;
+  padding: 20px 15px;
 }
 
 .statusCompetence {
-  display: block;
+  display: inline-block;
   position: absolute;
-  margin-top: -110px;
-  margin-left: 290px;
+  right: 0;
+}
+
+.studentText {
+  display: inline-block;
+  width: 80%;
+  font-size: 12pt;
+}
+
+.number {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: 8pt;
 }
 
 .tooltip .tooltip-inner {
