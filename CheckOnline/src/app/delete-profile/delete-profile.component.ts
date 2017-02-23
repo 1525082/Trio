@@ -44,7 +44,9 @@ export class DeleteProfileComponent implements OnInit {
                 this.checkService.deleteProfile().subscribe(
                     data => {
                         this.userpw = "";
-                        this.modalService.showSuccessMsg("Das Profil wurde gelöscht. | " + data);
+                        if(data.message) {
+                            this.modalService.showSuccessMsg(data.message);
+                        }
                         this.checkService.logout();
                     });
             }

@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ModalMessageService} from "../services/modal-message.service";
 import {ModalDirective} from "ng2-bootstrap";
+import {APP_CONSTS} from "../app.config";
 declare let jQuery: any;
 
 @Component({
@@ -22,11 +23,11 @@ export class ModalDialogComponent implements OnInit {
 
     ngOnInit() {
         this.modalService.sbjInfoMsg.subscribe(
-            () => this.informationModal.show());
+            (msg) => (msg !== APP_CONSTS.EMPTY_STRING) ? this.informationModal.show() : null);
         this.modalService.sbjSuccessMsg.subscribe(
-                () => this.successModal.show());
+                (msg) => (msg !== APP_CONSTS.EMPTY_STRING) ? this.successModal.show() : null);
         this.modalService.sbjErrorMsg.subscribe(
-            () => this.errorModal.show());
+            (msg) => (msg !== APP_CONSTS.EMPTY_STRING) ? this.errorModal.show() : null);
         this.resizingModals();
     }
 

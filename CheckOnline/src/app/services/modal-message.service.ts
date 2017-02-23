@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Subject} from "rxjs";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable()
 export class ModalMessageService {
-    public sbjInfoMsg: Subject<string> = new Subject();
-    public sbjSuccessMsg: Subject<string> = new Subject();
-    public sbjErrorMsg: Subject<string> = new Subject();
+    public sbjInfoMsg: BehaviorSubject<string> = new BehaviorSubject("");
+    public sbjSuccessMsg: BehaviorSubject<string> = new BehaviorSubject("");
+    public sbjErrorMsg: BehaviorSubject<string> = new BehaviorSubject("");
 
     constructor() {
     }
@@ -22,15 +22,15 @@ export class ModalMessageService {
         this.sbjInfoMsg.next(msg);
     }
 
-    public getInfoSubject(): Subject<string> {
+    public getInfoSubject(): BehaviorSubject<string> {
         return this.sbjInfoMsg;
     }
 
-    public getSuccessSubject(): Subject<string> {
+    public getSuccessSubject(): BehaviorSubject<string> {
         return this.sbjSuccessMsg;
     }
 
-    public getErrorSubject(): Subject<string> {
+    public getErrorSubject(): BehaviorSubject<string> {
         return this.sbjErrorMsg;
     }
 }

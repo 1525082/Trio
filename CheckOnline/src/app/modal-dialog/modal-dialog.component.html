@@ -2,11 +2,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closing" data-dismiss="modal"><img src = "../../images/delete.png"></button>
+                <button type="button" class="closing" data-dismiss="modal" (click)="hide(informationModal)">
+                    <img src = "../../images/delete.png" />
+                </button>
                 <img class = "displayedCentralImage" src = "../../images/advice.png">
             </div>
             <div class="modal-body">
-                <p>{{modalService.sbjInfoMsg}}</p>
+                <p>{{modalService.getInfoSubject().getValue()}}</p>
             </div>
             <div class="modal-footer">
             </div>
@@ -17,11 +19,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closing" data-dismiss="modal"><img src = "../../images/delete.png"></button>
+                <button type="button" class="closing" data-dismiss="modal" (click)="hide(errorModal)">
+                    <img src = "../../images/delete.png">
+                </button>
                 <img class = "displayedCentralImage" src = "../../images/warning.png">
             </div>
             <div class="modal-body">
-                <p>{{modalService.sbjErrorMsg}}</p>
+                <p>{{modalService.getErrorSubject().getValue()}}</p>
             </div>
             <div class="modal-footer">
             </div>
@@ -32,11 +36,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closing" data-dismiss="modal"><img src = "../../images/delete.png"></button>
+                <button type="button" class="closing" data-dismiss="modal" (click)="hide(successModal)">
+                    <img src = "../../images/delete.png" />
+                </button>
                 <img class = "displayedCentralImage" src = "../../images/confirmation.png">
             </div>
             <div class="modal-body">
-                <p>{{modalService.sbjSuccessMsg}}</p>
+                <p>{{modalService.getSuccessSubject().getValue()}}</p>
             </div>
             <div class="modal-footer">
             </div>

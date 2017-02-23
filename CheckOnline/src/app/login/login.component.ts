@@ -28,7 +28,8 @@ export class LoginComponent implements OnInit {
     @ViewChild('pwTooltip') pwTooltip: TooltipDirective;
 
     constructor(private checkService: CheckDataService, private modalService: ModalMessageService) {
-      modalService.showSuccessMsg("Text");
+        modalService.showMsg("Sehr geehrter Benutzer, Willkommen bei CHECK!. Aufgrund von mangelnder Erfahrung " +
+            "kann es zu Fehlern oder unvorhergesehenen Vorgängen kommen.");
     }
 
     ngOnInit() {
