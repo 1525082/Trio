@@ -1,0 +1,98 @@
+body {
+  background-color: #f7bed2;
+  overflow-x: hidden;
+}
+
+main .container-fluid {
+    padding: 0px;
+}
+
+.col-sm-4.leftCol {
+    display: none;
+}
+
+.col-sm-4.rightCol {
+    display: none;
+}
+
+.col-sm-4.midCol {
+  display: inline-block;
+  background-color: #000;
+}
+
+@media (min-width: 768px) {
+    .col-sm-4.leftCol {
+        display: inline-block;
+    }
+
+    .col-sm-4.rightCol {
+        display: inline-block;
+    }
+
+    #content-container {
+        max-width: 1080px;
+        overflow: hidden;
+        margin: auto;
+    }
+}
+
+.textbubble {
+  background-image: url('../images/contentTextBubble.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  max-width: 369px;
+  height: 120px;
+  color: #001a3a;
+}
+
+.bubbleContent {
+	position:relative;
+  max-width: 341px;
+  height: 120px;
+  padding: 20px 15px;
+}
+
+.statusCompetence {
+  display: inline-block;
+  position: absolute;
+  right: 10%;
+  top: 10%;
+}
+
+.studentText {
+  display: inline-block;
+  width: 75%;
+  font-size: 10pt;
+}
+
+.number {
+  display: inline-block;
+  position: absolute;
+  left: 5%;
+  bottom: 5%;
+  font-size: 7.5pt;
+}
+
+.tooltip .tooltip-inner {
+  background-color: #001a3a;
+  color: white;
+  text-align: left;
+  padding: 10px 15px;
+  max-width: 250px;
+  min-width: 250px;
+  top: 200px;
+  min-height: 60px;
+  border: 3px solid white;
+  transform: translateY(20%);
+}
+
+.tooltip.right .tooltip-arrow {
+  margin-top: -6px;
+  border-width: 6px 6px 6px 0;
+  border-right-color: white;
+}
+
+.tooltip.right {
+  margin-left: 12px;
+  padding: 0 6px;
+}
