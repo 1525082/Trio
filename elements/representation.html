@@ -6,43 +6,57 @@
   <title>Checkonline Schülerversion</title>
 
   <link rel = "stylesheet" type = "text/css" href = "../dist/css/bootstrap.min.css">
-<!--
   <link rel = "stylesheet" type = "text/css" href = "../dist/css/mycss.css">
--->
   <link rel = "stylesheet" type = "text/css" href = "representation.css">
 </head>
 <body>
   <header class = "placeholderHeader">
   </header>
 
-  <main>
-    <div id = "representation">
-      <div id = "representationLeftElement">
+  <main class = "main">
+  <div id = "content-container">
+    <div class = "container-fluid">
+      <div>
         <img src = "../images/chapter11/littleChapterFlag.png" alt = "Chapter Flag">
+      </div>
+      <div class = "col-sm-4 leftCol">
+
         <img src = "../images/illustrations/illustrationLeft.png" alt = "Illustration Left">
       </div>
 
-      <div id = "representationMiddleElement">
-        <img class = "textbubble" src = "../images/contentTextBubble.png" alt = "Content Text Bubble">
+      <div class = "col-sm-4 midCol">
+        <div class = "textbubble">
+          <div class = "bubbleContent">
+            <img class = "statusCompetence" src = "../images/chapter11/competenceDone.png" data-toggle = "tooltip" data-placement = "right"
+            title = "Du hast diese Kompetenz am 25. Oktober 2016 erreicht!">
+            <span class = "studentText">
+              Symbole sind Bilder,
+              die mir etwas sagen wollen.
+              Ich kann sie verstehen.
+            </span>
+            <span class = "number">11.001</span>
+          </div>
+        </div>
 
-        <img class = "statusCompetence" src = "../images/chapter11/competenceDone.png" data-toggle = "tooltip" data-placement = "right"
-        title = "Du hast diese Kompetenz am 25. Oktober 2016 erreicht!">
-
-        <img class = "textbubble" src = "../images/contentTextBubble.png" alt = "Content Text Bubble">
-
-        <img class = "statusCompetence" src = "../images/educationalPlan-inactive.png" data-toggle = "tooltip" data-placement = "right"
-        title = "An element with position: absolute; is positioned relative to the nearest positioned ancestor (instead of positioned relative to the viewport, like fixed).
-        However; if an absolute positioned element has no positioned ancestors, it uses the document body">
-
-        <img class = "textbubble" src = "../images/contentTextBubble.png" alt = "Content Text Bubble">
-        <img class = "textbubble" src = "../images/contentTextBubble.png" alt = "Content Text Bubble">
-        <img class = "textbubble" src = "../images/contentTextBubble.png" alt = "Content Text Bubble">
+        <div class = "textbubble">
+          <div class = "bubbleContent">
+            <img class = "statusCompetence" src = "../images/educationalPlan-inactive.png" data-toggle = "tooltip" data-placement = "right"
+            title = "An element with position: absolute; is positioned relative to the nearest positioned ancestor (instead of positioned relative to the viewport, like fixed).
+            However; if an absolute positioned element has no positioned ancestors, it uses the document body">
+            <span class = "studentText">
+              Ich kann Silben klatschen
+              oder schwingen.
+            </span>
+            <span class = "number">11.003</span>
+          </div>
+        </div>
       </div>
 
-      <div id = "representationRightElement">
+      <div class = "col-sm-4 rightCol">
         <img src = "../images/illustrations/illustrationRight.png" alt = "Illustration Right">
       </div>
     </div>
+  </div>
   </main>
 
   <footer class = "placeholderFooter">
