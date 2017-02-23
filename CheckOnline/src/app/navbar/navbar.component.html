@@ -14,15 +14,20 @@
         </div>
         <div class="navbar-collapse" [collapse]="isCollapsed">
             <ul class="nav navbar-nav navbar-left col-sm-4">
-                <li dropdown>
+                <li dropdown class="{{nav_url_fragments.ROUTE_CHAPTER_LIST_CLASS}}">
                     <a dropdownToggle id="navCompetences"></a>
                     <ul dropdownMenu>
                         <div class="visitenkarte">
                             <div class="header">
-                                <img src="../../images/confirmation.png"/>
-                                <span>Information</span>
+                                <div class="header-icon">
+                                    <img src="../../images/confirmation.png" />
+                                </div>
+                                <div class="header-text">
+                                    <span>
+                                        KOMPETENZLISTE
+                                    </span>
+                                </div>
                             </div>
-                            evtl. weitere Informationen...
                         </div>
                         <li *ngFor="let chapter of checkService.getChapters()"
                             class="chapter{{chapter._id}}" routerLink="/chapter/{{chapter._id}}">
@@ -30,31 +35,42 @@
                         </li>
                     </ul>
                 </li>
-                <li dropdown>
+                <li dropdown class="{{nav_url_fragments.ROUTE_PLAN_CLASS}}">
                     <a dropdownToggle id="navFoerderplan"></a>
                     <ul dropdownMenu>
                         <div class="visitenkarte">
                             <div class="header">
-                                <img src="../images/educationalPlan-big.png"
-                                />F&Ouml;DERPLAN
+                                <div class="header-icon">
+                                    <img src="../images/educationalPlan-big.png"/>
+                                </div>
+                                <div class="header-text">
+                                    <span>
+                                        F&Ouml;RDERPLAN
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        <!-- TODO: Standard CSS-Klasse erstellen -->
                         <li *ngFor="let eduPlan of checkService.getEducationalPlans()"
                             class="" routerLink="/educationalPlan/{{eduPlan._id}}">
                             <a>{{eduPlan.name}}</a>
                         </li>
                     </ul>
                 </li>
-                <li dropdown>
+                <li dropdown class="{{nav_url_fragments.ROUTE_ACHIEVED_LIST_CLASS}}">
                     <a dropdownToggle id="navMyCompetences"></a>
                     <ul dropdownMenu>
                         <div class="visitenkarte">
                             <div class="header">
-                                <img src="../images/achievedCompetences-big.png"/><span> DAS KANN ICH!</span>
+                                <div class="header-icon">
+                                    <img src="../images/achievedCompetences-big.png" />
+                                </div>
+                                <div class="header-text">
+                                    <span>
+                                        DAS KANN ICH!
+                                    </span>
+                                </div>
                             </div>
                         </div>
-
                         <li routerLink="/achieved/0">
                             <a>ALLE KOMPETENZEN</a>
                         </li>
@@ -69,14 +85,24 @@
                 <img src="../../images/logo.png"/>
             </span>
             <ul class="nav navbar-nav navbar-right col-sm-4" id="right">
-                <li dropdown>
+                <li dropdown class="{{nav_url_fragments.ROUTE_AVATAR_CLASS}}">
                     <a dropdownToggle id="navAvatar"></a>
                     <ul dropdownMenu>
-                        <div class="visitenkarte">
+                        <div class="visitenkarte" *ngIf="checkService.getStudent() != null">
                             <div class="header">
-                                <img *ngIf="checkService.getAvatar() != null"
-                                     src="../..{{checkService.getAvatar().avatarBigUrl}}"
-                                     class="float-image"/>
+                                <div class="header-icon">
+                                    <img *ngIf="checkService.getAvatar() != null"
+                                         src="../..{{checkService.getAvatar().avatarBigUrl}}"/>
+                                </div>
+                                <div class="header-text">
+                                    <span>
+                                        {{checkService.getStudent().forename}}<br/>
+                                        {{checkService.getStudent().surname}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="additional-info">KLASSENLERHER*IN<br/>
+                                {{checkService.getStudent().formteacher}}
                             </div>
                         </div>
                         <li routerLink="/changeavatar">
@@ -93,11 +119,21 @@
                 <li dropdown>
                     <a dropdownToggle id="navSchool"></a>
                     <ul dropdownMenu>
-                        <div class="visitenkarte">
+                        <div class="visitenkarte" *ngIf="checkService.getStudent() != null">
                             <div class="header">
-                                <img *ngIf="checkService.getStudent() != null"
-                                     src="../..{{checkService.getStudent().school.imageUrlBig}}"
-                                     class="float-image"/>
+                                <div class="header-icon">
+                                    <img src="../..{{checkService.getStudent().school.imageUrlBig}}"/>
+                                </div>
+                                <div class="header-text">
+                                    <span>{{checkService.getStudent().school.name}}</span>
+                                </div>
+                            </div>
+                            <div class="additional-info">
+                                {{getStreet()}}<br/>
+                                {{getTown()}}<br/>
+                                {{checkService.getStudent().school.country}}<br/><br/>
+                                {{checkService.getStudent().school.email}}<br/>
+                                {{checkService.getStudent().school.telefon}}
                             </div>
                         </div>
                     </ul>
@@ -105,10 +141,19 @@
                 <li dropdown>
                     <a dropdownToggle id="navClass"></a>
                     <ul dropdownMenu>
-                        <div class="visitenkarte">
+                        <div class="visitenkarte" *ngIf="checkService.getStudent() != null">
                             <div class="header">
-                                <img src="../images/studyGroup/studyGroup_10a_active-big.png"
-                                     class="float-image"/>
+                                <div class="header-icon">
+                                    <img src="../..{{checkService.getStudent().studyGroups.imageUrlBig}}"/>
+                                </div>
+                                <div class="header-text">
+                                    <span>
+                                        KLASSE<br/>
+                                        {{checkService.getStudent().studyGroups.class}}</span>
+                                </div>
+                            </div>
+                            <div class="additional-info">KLASSENLERHER*IN<br/>
+                                {{checkService.getStudent().formteacher}}
                             </div>
                         </div>
                     </ul>
@@ -119,18 +164,26 @@
                     <ul dropdownMenu>
                         <div class="visitenkarte">
                             <div class="header">
-                                <img src="../images/help-big.png" class="float-image"/>
-                                BRAUCHST DU HILFE?
+                                <div class="header-icon">
+                                    <img src="../../images/help-big.png" />
+                                </div>
+                                <div class="header-text">
+                                    <span>
+                                        BRAUCHST DU HILFE?
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <li>
-                            <a href="http://www.check-lehrerzimmer.com/hilfe/erste-schritte/" target="_blank">SO GEHT'S!</a>
+                            <a href="http://www.check-lehrerzimmer.com/hilfe/erste-schritte/" target="_blank">SO
+                                GEHT'S!</a>
                         </li>
                         <li>
                             <a href="http://www.check-lehrerzimmer.com/tutorial/" target="_blank">VIDEO-TUTORIALS</a>
                         </li>
                         <li>
-                            <a href="http://www.check-lehrerzimmer.com/faq/" target="_blank">H&Auml;UFIG GESTELLTE FRAGEN</a>
+                            <a href="http://www.check-lehrerzimmer.com/faq/" target="_blank">H&Auml;UFIG GESTELLTE
+                                FRAGEN</a>
                         </li>
                         <li>
                             <a href="http://www.check-lehrerzimmer.com/contact/" target="_blank">KONTAKT</a>
@@ -142,8 +195,14 @@
                     <ul dropdownMenu>
                         <div class="visitenkarte">
                             <div class="header">
-                                <img src="../images/logout-big.png" class="float-image"/>
-                                M&Ouml;CHTEST DU CHECK! VERLASSEN?
+                                <div class="header-icon">
+                                    <img src="../../images/logout-big.png" />
+                                </div>
+                                <div class="header-text">
+                                    <span>
+                                        M&Ouml;CHTEST DU CHECK! VERLASSEN?
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <li>

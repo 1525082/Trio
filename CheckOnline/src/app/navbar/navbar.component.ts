@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {CheckDataService} from "../services/check-data.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {APP_CONSTS} from "../app.config";
 
 @Component({
     selector: 'app-navbar',
@@ -9,7 +11,16 @@ import {CheckDataService} from "../services/check-data.service";
 export class NavbarComponent {
     public isCollapsed: boolean = true;
 
-    constructor(private checkService: CheckDataService) {
+    nav_url_fragments = {
+        // navigation url fragments
+        ROUTE_CHAPTER_LIST_CLASS: '',
+        ROUTE_PLAN_CLASS: '',
+        ROUTE_ACHIEVED_LIST_CLASS: '',
+        ROUTE_AVATAR_CLASS: ''
+    };
+
+    constructor(private checkService: CheckDataService,
+                private router: Router) {
         this.createEventListeners();
     }
 
@@ -17,6 +28,18 @@ export class NavbarComponent {
         this.onAvatarChangedListener();
         this.onStudentChangedListener();
         this.onChaptersChangedListener();
+        this.router.events.subscribe((e) => {
+            if(e.url.startsWith(APP_CONSTS.CHAPTER_PATH)) {
+                this.nav_url_fragments.ROUTE_CHAPTER_LIST_CLASS = 'isActive';
+            } else if (e.url.startsWith(APP_CONSTS.ACHIEVED_CHAPTER_PATH)) {
+                this.nav_url_fragments.ROUTE_ACHIEVED_LIST_CLASS = 'isActive';
+            } else if(e.url.startsWith(APP_CONSTS.EDUCATIONAL_PLAN_PATH)) {
+                this.nav_url_fragments.ROUTE_PLAN_CLASS = 'isActive';
+            } else if(e.url == APP_CONSTS.CHANGE_AVATAR_PATH || e.url == APP_CONSTS.CHANGE_PASSWORD_PATH
+                || e.url == APP_CONSTS.DELETE_PROFILE_PATH) {
+                this.nav_url_fragments.ROUTE_AVATAR_CLASS = 'isActive';
+            }
+        });
     }
 
     private onAvatarChangedListener() {
@@ -77,7 +100,7 @@ export class NavbarComponent {
             background: url('../..${inactiveUrl}') transparent no-repeat; 
             background-size: 40px 40px;
         }
-        #${elmId}:hover, #${elmId}:focus, .open > #${elmId} {
+        #${elmId}:hover, #${elmId}:focus, .open > #${elmId}, li.isActive > #${elmId} {
             background: url('../..${activeUrl}') transparent no-repeat;
             background-size: 40px 40px;
         }`;
@@ -99,5 +122,13 @@ export class NavbarComponent {
             background-color: ${colorHover} !important;
             color: #FFF !important;
         }`;
+    }
+
+    public getStreet() {
+        return this.checkService.getStudent().school.address.split(", ")[0];
+    }
+
+    public getTown() {
+        return this.checkService.getStudent().school.address.split(", ")[1];
     }
 }

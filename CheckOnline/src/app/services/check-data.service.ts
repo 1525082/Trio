@@ -392,7 +392,7 @@ export class CheckDataService {
         this.subjectStudent.next(student);
     }
 
-    public getStudent() {
+    public getStudent(): Student {
         return this.subjectStudent.getValue();
     }
 
