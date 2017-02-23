@@ -1,6 +1,7 @@
 import {Component, ViewChild, OnInit} from '@angular/core';
 import {TooltipDirective} from "ng2-bootstrap";
 import {CheckDataService} from "../services/check-data.service";
+import {ModalMessageService} from "../services/modal-message.service";
 import {Subject} from "rxjs";
 import {TooltipService} from "../services/tooltip.service";
 import {OperationCode} from "../classes/operationCode.enum";
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit {
     @ViewChild('bnTooltip') bnTooltip: TooltipDirective;
     @ViewChild('pwTooltip') pwTooltip: TooltipDirective;
 
-    constructor(private checkService: CheckDataService) {
+    constructor(private checkService: CheckDataService, private modalService: ModalMessageService) {
+      modalService.showSuccessMsg("Text");
     }
 
     ngOnInit() {
