@@ -132,6 +132,7 @@ nav li > a:hover {
         margin: 0px;
         color: #FFF;
         background-color: #001a3a;
+		margin-top: 12px; /* cause of arrow */
     }
 
     .navbar-collapse {
@@ -171,6 +172,42 @@ nav li > a:hover {
         margin-right: -5px;
         margin-top: 5px;
         background-color: #4565ad;
+    }
+	
+	/*
+		ARROW CSS CLASSES
+	*/
+	.navbar-left .arrow-up {
+            margin-top: -9px;
+          margin-left: 18px;
+    }
+    .navbar-right .arrow-up {
+            margin-top: -9px;
+          margin-left: 219px; /*ändern*/
+    }
+    .arrow-up {
+        width: 0; 
+        height: 0;
+        border-style: solid;
+        border-width: 0 9px 10px 9px;
+        border-color: transparent transparent #001a3a transparent;
+        position:relative;
+    }
+    .navbar-left .arrow-up-back {
+            margin-top: -13px;
+          margin-left: 14px;
+    }
+    .navbar-right .arrow-up-back {
+            margin-top: -13px;
+          margin-left: 215px; /*ändern*/
+    }
+    .arrow-up-back {
+        width: 0; 
+        height: 0;
+        border-style: solid;
+        border-width: 0 13px 13px 13px;
+        border-color: transparent transparent #ffffff transparent;
+        position:relative;
     }
 }
 
