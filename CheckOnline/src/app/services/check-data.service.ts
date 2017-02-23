@@ -21,6 +21,8 @@ export class CheckDataService {
     private token: string = "";
     public password: string;
 
+    subjectEducationalPlans: BehaviorSubject<EducationalPlan[]> = new BehaviorSubject([]);
+    subjectFilteredEducationalPlan: BehaviorSubject<EducationalPlan> = new BehaviorSubject(null);
     subjectStudent: BehaviorSubject<Student> = new BehaviorSubject(null);
     subjectAvatar: BehaviorSubject<Avatar> = new BehaviorSubject(null);
     subjectChapters: BehaviorSubject<Chapter[]> = new BehaviorSubject([]);
@@ -76,6 +78,7 @@ export class CheckDataService {
                             this.handleError,
                             () => {
                                 this.filter(EducationalPlan.getContent(eduPlan as EducationalPlan) as EducationalPlanContent);
+                                this.setFilteredEducationalPlan(eduPlan);
                                 this.arePlansLoadedAndFiltered.next(true);
                             }
                         );
@@ -431,11 +434,21 @@ export class CheckDataService {
     }
 
     public setEducationalPlans(plans: EducationalPlan[]) {
-        this.educationalPlans = plans;
+        this.subjectEducationalPlans.next(plans);
+        //this.educationalPlans = plans;
     }
 
-    public getEducationalPlans() {
-        return this.educationalPlans;
+    public getEducationalPlans(): EducationalPlan[] {
+        return this.subjectEducationalPlans.getValue();
+        //return this.educationalPlans;
+    }
+
+    public setFilteredEducationalPlan(plan: EducationalPlan) {
+        this.subjectFilteredEducationalPlan.next(plan);
+    }
+
+    public getetFilteredEducationalPlan(): EducationalPlan {
+        return this.subjectFilteredEducationalPlan.getValue();
     }
 
     public setPassword(password: string) {

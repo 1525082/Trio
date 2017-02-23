@@ -106,6 +106,7 @@ export class ChapterComponent implements OnInit, OnDestroy {
                             comps => this.setChapterComps(comps),
                             this.handleError,
                             () => {
+                                // TODO: look if competence is in educational plan
                                 this.updateChapterData();
                             });
                     });

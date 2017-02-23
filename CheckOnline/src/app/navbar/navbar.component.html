@@ -40,7 +40,7 @@
                             </div>
                         </div>
                         <!-- TODO: Standard CSS-Klasse erstellen -->
-                        <li *ngFor="let eduPlan of checkService.educationalPlans"
+                        <li *ngFor="let eduPlan of checkService.getEducationalPlans()"
                             class="" routerLink="/educationalPlan/{{eduPlan._id}}">
                             <a>{{eduPlan.name}}</a>
                         </li>

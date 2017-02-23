@@ -45,14 +45,16 @@ export class EducationalPlanComponent implements OnInit, OnDestroy {
      * @param id of the wanted educational plan
      */
     private selectPlan() {
-        this.selectedPlan = this.checkService.educationalPlans.find(plan => plan._id == this.selectedID);
+        this.selectedPlan = this.checkService.getEducationalPlans().find(plan => plan._id == this.selectedID);
         if (this.selectedPlan) {
             this.educationalCompetences = EducationalPlan.getContent(this.selectedPlan).competencesForDisplay;
         } else {
-            this.checkService.arePlansLoadedAndFiltered.subscribe(
-                filtered => {
-                    if (filtered && this.selectedID != null) {
-                        this.selectPlan()
+            this.checkService.subjectFilteredEducationalPlan.subscribe(
+                plan => {
+                    if(plan && this.selectedID) {
+                        if(plan._id == this.selectedID) {
+                            this.selectPlan();
+                        }
                     }
                 }
             );
