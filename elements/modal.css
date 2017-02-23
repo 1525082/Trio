@@ -7,8 +7,19 @@
 }
 
 .modal-content {
+    border: 2px solid white;
+}
+
+#errorModal > .modal-dialog > .modal-content {
   background-color: #b71967;
-  border: 2px solid white;
+}
+
+#infoModal > .modal-dialog > .modal-content {
+  background-color: #001a3a;
+}
+
+#successModal > .modal-dialog > .modal-content {
+  background-color: #76b82d;
 }
 
 .modal-backdrop {
@@ -31,6 +42,8 @@ Im HTML: zuerst das Image warning/advice/confirmation mit Klasse displayedCentra
   margin: auto;
   padding: 0px;
   color: white;
+  font-size: 8pt;
+  text-align: center;
 }
 
 /*
