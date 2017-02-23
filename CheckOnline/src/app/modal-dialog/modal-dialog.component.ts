@@ -5,7 +5,8 @@ declare let jQuery: any;
 
 @Component({
     selector: 'app-modal-dialog',
-    templateUrl: './modal-dialog.component.html'
+    templateUrl: './modal-dialog.component.html',
+	styleUrls: ['./modal-dialog.component.css']
 })
 export class ModalDialogComponent implements OnInit {
 
