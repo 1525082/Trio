@@ -162,6 +162,16 @@ nav li > a:hover {
     .show-mobile {
         display: none;
     }
+
+    #seperator {
+        display: inline-block;
+        width: 1px;
+        height: 30px;
+        margin-left: 5px;
+        margin-right: -5px;
+        margin-top: 5px;
+        background-color: #4565ad;
+    }
 }
 
 #navCompetences {
