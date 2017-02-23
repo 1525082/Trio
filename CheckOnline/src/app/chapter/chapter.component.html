@@ -11,22 +11,26 @@
                 <img src="../..{{compGroup.illustration.illustrationLeft}}" alt="Illustration Left">
             </div>
             <div class="col-sm-4">
-                <div *ngFor="let comp of compGroup.competences; let j = index"
-                     style="background-image: url('../../images/contentTextBubble.png'); width:369px; height:120px; margin: auto;">
-                    <div *ngIf="comp.checked" style="width: 341px; height: 120px;" tooltip="Die Kompetenz wurde am {{comp.fromDate}} erreicht.">
-                        {{comp.studentText}}<br/>
-                        <img src="../../images/chapter{{getFolderNrForComp(comp.chapterId)}}/competenceDone.png" /><br/>
-                        {{comp.number}} unten Links (klein)
+                <div class="textbubble" *ngFor="let comp of compGroup.competences; let j = index">
+                    <div class="bubbleContent" *ngIf="comp.checked">
+                        <img class="statusCompetence"
+                             src="../../images/chapter{{getFolderNrForComp(comp.chapterId)}}/competenceDone.png"
+                             tooltip="Die Kompetenz wurde am {{comp.fromDate}} erreicht." />
+                        <span class="studentText">{{comp.studentText}}</span>
+                        <span class="number">{{comp.number}}</span>
                     </div>
-                    <div *ngIf="comp.isInEducationalPlan && !comp.checked" style="width: 341px; height: 120px;" tooltip="{{comp.note}}">
-                        {{comp.studentText}}<br/>
-                        <img src="../../images/isInEducationalPlan.png" /><br/>
-                        {{comp.number}} unten Links (klein)
+                    <div class="bubbleContent" *ngIf="comp.isInEducationalPlan && !comp.checked">
+                        <img class="statusCompetence"
+                             src="../../images/isInEducationalPlan.png"
+                             tooltip="{{comp.note}}" />
+                        <span class="studentText">{{comp.studentText}}</span>
+                        <span class="number">{{comp.number}}</span>
                     </div>
-                    <div *ngIf="!comp.isInEducationalPlan && !comp.checked" style="width: 341px; height: 120px;" >
-                        {{comp.studentText}}<br/>
-                        <img src="../../images/chapter{{getFolderNrForComp(comp.chapterId)}}/competenceUndone.png" /><br/>
-                        {{comp.number}} unten Links (klein)
+                    <div class="bubbleContent" *ngIf="!comp.isInEducationalPlan && !comp.checked">
+                        <img class="statusCompetence"
+                             src="../../images/chapter{{getFolderNrForComp(comp.chapterId)}}/competenceUndone.png" />
+                        <span class="studentText">{{comp.studentText}}</span>
+                        <span class="number">{{comp.number}}</span>
                     </div>
                 </div>
             </div>

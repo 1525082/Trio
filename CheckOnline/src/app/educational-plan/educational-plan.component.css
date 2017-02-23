@@ -27,6 +27,49 @@ main .container-fluid {
     padding: 10px 0px 0px 20px;
 }
 
+.textbubble {
+    background: url("../../images/contentTextBubble.png") transparent no-repeat;
+    background-size: 100% 100%;
+    max-width: 369px;
+    height: 120px;
+    color: #001a3a;
+    margin: auto;
+}
+
+.bubbleContent {
+    position:relative;
+    max-width: 341px;
+    height: 120px;
+    padding: 20px 15px;
+}
+
+.statusCompetence {
+    display: inline-block;
+    position: absolute;
+    right: 10%;
+    top: 10%;
+}
+
+.studentText {
+    display: inline-block;
+    width: 75%;
+    font-size: 10pt;
+}
+
+.number {
+    display: inline-block;
+    position: absolute;
+    left: 5%;
+    bottom: 5%;
+    font-size: 7.5pt;
+}
+
+@media (min-width: 390px) {
+    .statusCompetence {
+        right: 12px;
+    }
+}
+
 @media (min-width: 768px) {
     .col-sm-4.leftCol {
         display: inline-block;
@@ -40,5 +83,9 @@ main .container-fluid {
         max-width: 1080px;
         overflow: hidden;
         margin: auto;
+    }
+
+    .statusCompetence {
+        right: 10%;
     }
 }
