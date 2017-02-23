@@ -34,14 +34,16 @@ export class NavbarComponent {
     private onStudentChangedListener() {
         this.checkService.subjectStudent.subscribe(
             (student) => {
-                let style = document.getElementById("navbarSchoolClass");
-                style.innerHTML =
-                    this.getClass("navSchool",
-                        student.school.imageUrlInactive,
-                        student.school.imageUrl)
-                    + this.getClass("navClass",
-                        student.studyGroups.imageUrlInactive,
-                        student.studyGroups.imageUrl);
+                if (student) {
+                    let style = document.getElementById("navbarSchoolClass");
+                    style.innerHTML =
+                        this.getClass("navSchool",
+                            student.school.imageUrlInactive,
+                            student.school.imageUrl)
+                        + this.getClass("navClass",
+                            student.studyGroups.imageUrlInactive,
+                            student.studyGroups.imageUrl);
+                }
             }
         );
     }
@@ -49,14 +51,16 @@ export class NavbarComponent {
     private onChaptersChangedListener() {
         this.checkService.subjectChapters.subscribe(
             (chapters) => {
-                let style = document.getElementById("navbarChapters");
-                style.innerHTML = "";
-                chapters.forEach(chapter => {
-                    // generate style for navigation items
-                    style.innerHTML += this.getNavCompetenceClass(chapter._id,
-                        chapter.strongcolor,
-                        chapter.weakcolor);
-                });
+                if (chapters) {
+                    let style = document.getElementById("navbarChapters");
+                    style.innerHTML = "";
+                    chapters.forEach(chapter => {
+                        // generate style for navigation items
+                        style.innerHTML += this.getNavCompetenceClass(chapter._id,
+                            chapter.strongcolor,
+                            chapter.weakcolor);
+                    });
+                }
             }
         );
     }
