@@ -16,7 +16,6 @@ import {APP_CONSTS} from "../app.config";
 @Injectable()
 export class CheckDataService {
     public avatare: Avatar[] = [];
-    public educationalPlans: EducationalPlan[] = []; // On own created structures for the educational plan and its content.
     public competences: Competence[] = [];
     private token: string = "";
     public password: string;
@@ -435,19 +434,17 @@ export class CheckDataService {
 
     public setEducationalPlans(plans: EducationalPlan[]) {
         this.subjectEducationalPlans.next(plans);
-        //this.educationalPlans = plans;
     }
 
     public getEducationalPlans(): EducationalPlan[] {
         return this.subjectEducationalPlans.getValue();
-        //return this.educationalPlans;
     }
 
     public setFilteredEducationalPlan(plan: EducationalPlan) {
         this.subjectFilteredEducationalPlan.next(plan);
     }
 
-    public getetFilteredEducationalPlan(): EducationalPlan {
+    public getFilteredEducationalPlan(): EducationalPlan {
         return this.subjectFilteredEducationalPlan.getValue();
     }
 

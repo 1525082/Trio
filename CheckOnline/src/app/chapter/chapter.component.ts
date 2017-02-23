@@ -5,6 +5,8 @@ import {ChapterIllustration} from '../classes/chapterIllustration.class'
 import {ChapterData} from '../classes/chapterData.class'
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router'
+import {EducationalPlan} from "../classes/educationalPlan.class";
+import {isNullOrUndefined} from "util";
 
 @Component({
     selector: 'app-chapter',
@@ -15,7 +17,7 @@ export class ChapterComponent implements OnInit, OnDestroy {
     private chapter: Chapter;
     private chapterIllus: ChapterIllustration[] = [];
     private chapterComps: Competence[] = [];
-    private construction: ChapterData[] = null;
+    private construction: ChapterData[] = [];
 
     private params;
     private selectedID: number;
@@ -106,7 +108,7 @@ export class ChapterComponent implements OnInit, OnDestroy {
                             comps => this.setChapterComps(comps),
                             this.handleError,
                             () => {
-                                // TODO: look if competence is in educational plan
+                                this.checkCompsInEduPlan();
                                 this.updateChapterData();
                             });
                     });
@@ -116,6 +118,27 @@ export class ChapterComponent implements OnInit, OnDestroy {
     public setStyle(color: string) {
         if (this.getBody()) {
             this.getBody().setAttribute("style", "background-color: " + color);
+        }
+    }
+
+    private checkCompsInEduPlan(): void {
+        if (this.checkService.arePlansLoadedAndFiltered.getValue()) {
+            let comps: Competence[] = this.getChapterComps()
+            let plans: EducationalPlan[] = this.checkService.getEducationalPlans();
+            if(isNullOrUndefined(comps) || isNullOrUndefined(plans)) {
+                return;
+            }
+            comps.forEach(comp =>
+                plans.forEach(plan =>
+                    plan.educationalContent.competences.forEach(compNote => {
+                        if (comp.id == compNote.competenceId) {
+                            comp.isInEducationalPlan = true;
+                            comp.note = compNote.note;
+                        }
+                    })));
+        } else {
+            this.checkService.arePlansLoadedAndFiltered.subscribe(
+                filtered => filtered ? this.checkCompsInEduPlan() : null);
         }
     }
 
@@ -143,7 +166,7 @@ export class ChapterComponent implements OnInit, OnDestroy {
     }
 
     public getFlagUrl(chapterId: number) {
-        if(chapterId != 0) {
+        if (chapterId != 0) {
             return "../../images/chapter" + this.getFolderNrForComp(chapterId) + "/littleChapterFlag.png";
         } else {
             return "../../images/littleChapterFlag2.png";
@@ -151,7 +174,7 @@ export class ChapterComponent implements OnInit, OnDestroy {
     }
 
     private getScrollButtonUrl() {
-        if(this.getSelectedId() > 0) {
+        if (this.getSelectedId() > 0) {
             return "../../images/chapter" + this.getFolderNrForComp(this.getSelectedId());
         } else {
             return "../../images";
@@ -160,7 +183,7 @@ export class ChapterComponent implements OnInit, OnDestroy {
 
     public getScrollUpBtnUrl() {
         var imageName = "/scrollUp.png";
-        if(this.getSelectedId() == 0) {
+        if (this.getSelectedId() == 0) {
             imageName = "/scrollUp.png";
         }
         return this.getScrollButtonUrl() + imageName;
@@ -168,19 +191,10 @@ export class ChapterComponent implements OnInit, OnDestroy {
 
     public getScrollDownBtnUrl() {
         var imageName = "/scrollDown.png";
-        if(this.getSelectedId() == 0) {
+        if (this.getSelectedId() == 0) {
             imageName = "/scrollDown.png";
         }
         return this.getScrollButtonUrl() + imageName;
-    }
-
-    getImageUrl(checked: boolean, chapterId: number) {
-        var folder = "../../images/chapter" + this.getFolderNrForComp(chapterId) + "/";
-        if (checked) {
-            return folder + "competenceDone.png";
-        } else {
-            return folder + "competenceUndone.png";
-        }
     }
 
     ngOnDestroy() {

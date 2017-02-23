@@ -5,6 +5,8 @@ export class Competence {
                 public studentText: string,
                 public number: number,
                 public checked: boolean,
-                public fromDate: string) {
+                public fromDate: string,
+                public isInEducationalPlan: boolean = false,
+                public note: string = "") {
     }
 }

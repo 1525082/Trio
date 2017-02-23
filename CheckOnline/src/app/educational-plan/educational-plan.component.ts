@@ -1,7 +1,7 @@
 import {CheckDataService} from '../services/check-data.service'
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router'
-import {EducationalPlan, EducationalCompetence, EducationalPlanContent} from "../classes/educationalPlan.class";
+import {EducationalPlan, EducationalCompetence} from "../classes/educationalPlan.class";
 
 @Component({
     selector: 'app-educational-plan',
